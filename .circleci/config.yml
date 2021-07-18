@@ -1,0 +1,32 @@
+version: 2.1
+orbs:
+  node: circleci/node@4.5.1
+
+jobs:
+  build:
+    executor:
+      name: node/default
+      tag: '14.17.0'
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run: yarn build
+  lint:
+    executor:
+      name: node/default
+      tag: '14.17.0'
+    steps:
+      - checkout
+      - node/install-packages:
+          pkg-manager: yarn
+      - run: yarn lint
+
+workflows:
+  version: 2
+  ci:
+    jobs:
+      - build
+      - lint:
+          requires:
+            - build
