@@ -7,6 +7,11 @@ module.exports = {
     'plugin:react/recommended',
     'google',
   ],
+  settings: {
+    react: {
+      version: 'detect',
+    },
+  },
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
