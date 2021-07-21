@@ -19,7 +19,7 @@ jobs:
       - slack/notify:
           event: fail
           template: basic_fail_1
-          memtion: '@U01UFTNHPKQ'
+          mention: '@U01UFTNHPKQ'
   lint:
     executor:
       name: node/default
