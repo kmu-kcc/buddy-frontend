@@ -16,7 +16,15 @@ export const Header: React.FC<Props> = (props) => {
   const {...styles} = props;
   return (
     <Wrapper {...styles}>
-      <h1>국민대 KCC</h1>
+      <h1 style={
+        {
+          marginTop: '50px',
+          color: '#207eba',
+          fontSize: '30px',
+          fontFamily: '고딕',
+          fontWeight: 1000,
+        }
+      }>국민대 KCC</h1>
     </Wrapper>
   );
 };

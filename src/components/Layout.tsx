@@ -4,7 +4,8 @@ import {Layout as LayoutWrapper} from 'antd';
 import {Header} from './Header';
 
 const Content = styled.div`
-    display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 interface LayoutProps {
