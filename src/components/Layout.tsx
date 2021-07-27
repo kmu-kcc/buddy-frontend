@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Layout as LayoutWrapper} from 'antd';
 import {Header} from './Header';
 
-const Wrapper = styled(LayoutWrapper)`
+const Wrapper = styled.div`
   min-height: 100vh;
   background-color: #fff;
 `;
