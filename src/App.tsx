@@ -8,8 +8,8 @@ const App: React.FC = () => {
     <BrowserRouter>
       <Layout>
         <Switch>
-          <Route path="/" exact component={pages.Landing} />
-          <Route path="/test" component={pages.Test} />
+          <Route path='/' exact component={pages.Landing} />
+          <Route path='/test' component={pages.Test} />
         </Switch>
       </Layout>
     </BrowserRouter>
