@@ -1,1 +1,2 @@
-export {default as Landing} from './Landing';
+export {Landing} from './Landing';
+export {Test} from './Test';
