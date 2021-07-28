@@ -1,2 +1,4 @@
-export {default as Layout} from './Layout';
 export {Navbar} from './Navbar';
+export {Box} from './Box';
+export {Button} from './Button';
+export {Layout} from './Layout';
