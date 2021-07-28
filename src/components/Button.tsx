@@ -16,6 +16,7 @@ const Wrapper = styled.button<SpaceProps & {isClicked: boolean;}>`
   font-weight: 700;
   line-height: 23px;
   cursor: pointer;
+  transition: all 0.15s ease-out;
   ${space}
 
   :focus,:hover {
