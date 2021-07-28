@@ -13,7 +13,7 @@ const App: React.FC = () => {
           <Route path='/test' component={pages.Test} />
         </Switch>
       </Layout>
-      <Navbar/>
+      <Navbar />
     </BrowserRouter>
   );
 };
