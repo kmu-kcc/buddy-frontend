@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {SpaceProps} from 'styled-system';
+import {space, SpaceProps} from 'styled-system';
 
 const Text = styled.span`
   height: 11px;
@@ -21,12 +21,14 @@ const Checkbox = styled.div<{isChecked: boolean;}>`
   background-color: ${({isChecked}) => isChecked ? '#6D48E5' : '#fff'};
 `;
 
-const Wrapper = styled.div<{isChecked: boolean;}>`
+const Wrapper = styled.div<SpaceProps & {isChecked: boolean;}>`
+  ${space}
   user-select: none;
   width: fit-content;
-  display: flex;
+  display: inline-flex;
   align-items: flex-start;
   cursor: pointer;
+
 
   :hover {
     > div {
@@ -44,9 +46,9 @@ interface Props extends SpaceProps {
 }
 
 export const Check = (props: Props) => {
-  const {label, onCheck, checked} = props;
+  const {label, onCheck, checked, ...styles} = props;
   return (
-    <Wrapper isChecked={checked} onClick={onCheck}>
+    <Wrapper isChecked={checked} onClick={onCheck} {...styles}>
       <Checkbox isChecked={checked} />
       <Text>{label}</Text>
     </Wrapper>

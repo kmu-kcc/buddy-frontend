@@ -27,6 +27,10 @@ export const Test = () => {
   const handleCheck = useCallback(() => {
     setChecked(!checked);
   }, [checked, setChecked]);
+  const [checked1, setChecked1] = useState(false);
+  const handleChc = useCallback(() => {
+    setChecked1(!checked1);
+  }, [checked, setChecked1]);
   return (
     <Wrapper>
       <h2>Box</h2>
@@ -79,7 +83,8 @@ export const Test = () => {
       <h2>Icon</h2>
       <Arrow scale={1} cursor='pointer' />
       <h2>Check</h2>
-      <Check onCheck={handleCheck} label='check' checked={checked} />
+      <Check mr='4px' onCheck={handleCheck} label='check' checked={checked} />
+      <Check mr='4px' onCheck={handleChc} label='adding' checked={checked1} />
     </Wrapper>
   );
 };
