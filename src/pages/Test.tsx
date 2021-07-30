@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
-import {Button, Box} from '../components';
+import {Button, Box, Check} from '../components';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -12,6 +12,10 @@ export const Test = () => {
   const handleClick = useCallback(() => {
     setCount(count + 1);
   }, [count, setCount]);
+  const [checked, setChecked] = useState(false);
+  const handleCheck = useCallback(() => {
+    setChecked(!checked);
+  }, [checked, setChecked]);
   return (
     <Wrapper>
       <h2>Box</h2>
@@ -31,6 +35,8 @@ export const Test = () => {
       <h2>Button</h2>
       <Button mr='8px'>Button 1</Button>
       <Button onClick={handleClick}>{count} time clicked</Button>
+      <h2>Check</h2>
+      <Check onCheck={handleCheck} label='check' checked={checked} />
     </Wrapper>
   );
 };
