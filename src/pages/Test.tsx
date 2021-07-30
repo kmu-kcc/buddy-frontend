@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
-import {Button, Box, Textarea, Input, Select} from '../components';
+import {Button, Box, Check, Textarea, Input, Select} from '../components';
 import {Arrow} from '../components/icons';
 
 const Wrapper = styled.div`
@@ -23,6 +23,10 @@ export const Test = () => {
   useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setInputTextValue(event.target.value);
   }, [setInputTextValue]);
+  const [checked, setChecked] = useState(false);
+  const handleCheck = useCallback(() => {
+    setChecked(!checked);
+  }, [checked, setChecked]);
   return (
     <Wrapper>
       <h2>Box</h2>
@@ -74,6 +78,8 @@ export const Test = () => {
       </Select>
       <h2>Icon</h2>
       <Arrow scale={1} cursor='pointer' />
+      <h2>Check</h2>
+      <Check onCheck={handleCheck} label='check' checked={checked} />
     </Wrapper>
   );
 };
