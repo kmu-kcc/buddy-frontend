@@ -18,7 +18,7 @@ const Wrapper = styled.div<SpaceProps & WidthProps & MaxWidthProps & MinWidthPro
   ${space}
 `;
 
-const SelectionWrapper = styled.div<{open: boolean;}>`
+const SelectionWrapper = styled.div<{selected: boolean;}>`
   display: flex;
   flex: 1;
   height: 48px;
@@ -26,26 +26,27 @@ const SelectionWrapper = styled.div<{open: boolean;}>`
   font-size: 18px;
   font-weight: 500;
   line-height: 23px;
-  color: #CBC8BE;
+  color: ${({selected}) => selected ? '#454440' : '#CBC8BE'};
   padding-left:24px;
   background-color: #fff;
   border-radius: 15px;
-  border: 1px solid ${({open}) => open ? '#CEC2F6' : '#CBC8BE'};
+  border: 1px solid #CBC8BE;
   cursor: pointer;
 
   :hover {
     border-color: #CEC2F6;
   }
-  `;
+`;
 
 const OptionWrapper = styled.div`
-  width: 100%;
   position: absolute;
   top: 58px;
+  left: 0;
+  right: 0;
   z-index: 1;
   background-color: #fff;
   border-radius: 15px;
-  border: 1px solid #CBC8BE;
+  border: 1px solid #E5E5E5;
   overflow: hidden;
   filter: drop-shadow(0px 5px 9px #E5E5E5);
 `;
@@ -61,6 +62,8 @@ const OptionItem = styled.option<BorderProps & {selected: boolean;}>`
   padding: 12px 0;
   cursor: pointer;
   transition: all, 0.15s ease-out;
+  margin-top: -1px;
+  border-top: 1px solid #E5E5E5;
   color: ${({selected}) => selected ? '#6D48E5' : '#65635D'};
   background-color: ${({selected}) => selected ? '#EFEBFC' : '#fff'};
 
@@ -95,7 +98,7 @@ export const Select = (props: Props) => {
 
   return (
     <Wrapper {...styles}>
-      <SelectionWrapper open={isOpen} onClick={handleSelectionClick}>
+      <SelectionWrapper selected={selected >= 0} onClick={handleSelectionClick}>
         {selected === -1 ? placeholder : children[selected].props.children}
       </SelectionWrapper>
       {isOpen ? (
