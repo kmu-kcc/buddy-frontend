@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
 import {
   border, BorderProps,
@@ -92,6 +92,7 @@ export const Select = (props: Props) => {
   const {children, placeholder, onSelect, ...styles} = props;
   const [selected, setSelected] = useState(-1);
   const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
   const handleSelectionClick = useCallback(() => {
     setOpen(!open);
@@ -105,8 +106,22 @@ export const Select = (props: Props) => {
     }
   }, [setSelected, setOpen, onSelect]);
 
+  const handleOutsideClick = useCallback((event: MouseEvent) => {
+    //  outside click
+    if (ref && !ref.current?.contains(event.target as any)) {
+      setOpen(false);
+    }
+  }, [ref]);
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []);
+
   return (
-    <Wrapper {...styles}>
+    <Wrapper ref={ref} {...styles}>
       <SelectionWrapper selected={selected >= 0} onClick={handleSelectionClick}>
         <span>{selected === -1 ? placeholder : children[selected].props.children}</span>
         <Arrow rotate={open ? 180 : 0} />
