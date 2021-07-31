@@ -1,12 +1,13 @@
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import {space, SpaceProps} from 'styled-system';
+import {background, BackgroundProps, space, SpaceProps} from 'styled-system';
 
-const Wrapper = styled.button<SpaceProps & {isClicked: boolean;}>`
+const Wrapper = styled.button<SpaceProps & BackgroundProps>`
   height: 48px;
-  color: #8D8C85;
-  background-color: ${({isClicked}) => isClicked ? '#6D48E5' : '#fff'};
-  border: 2px solid #8D8C85;
+  ${space}
+  ${background}
+  color: #fff;
+  border: 2px solid #6D48E5;
   border-radius: 37px;
   padding-top: 12px;
   padding-bottom: 13px;
@@ -17,31 +18,22 @@ const Wrapper = styled.button<SpaceProps & {isClicked: boolean;}>`
   line-height: 23px;
   cursor: pointer;
   transition: all 0.15s ease-out;
-  ${space}
 
-  :focus,:hover {
-    border-color: #6D48E5;
-    color: ${({isClicked}) => isClicked ? '#fff' : '#6D48E5'};
+  :focus, :hover {
+    filter: brightness(115%);
   }
 `;
 
-interface Props extends SpaceProps {
+interface Props extends SpaceProps, BackgroundProps {
   children?: React.ReactNode;
   onClick?: () => void;
 }
 
 export const Button = (props: Props) => {
-  const {children, onClick, ...styles} = props;
+  const {children, background, onClick, ...styles} = props;
 
-  const [isClicked, setClicked] = useState(false);
-  const toggleClicked = useCallback((state: boolean) => () => {
-    setClicked(state);
-  }, [setClicked]);
   return (
-    <Wrapper
-      onMouseDown={toggleClicked(true)}
-      onMouseUp={toggleClicked(false)}
-      onClick={onClick} {...styles} isClicked={isClicked}>
+    <Wrapper background={background ?? '#6D48E5'} onClick={onClick} {...styles}>
       {children}
     </Wrapper>
   );
