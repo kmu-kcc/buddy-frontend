@@ -1,6 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
-import {Button, Box} from '../components';
+import {Button, Box, Select} from '../components';
+import {Arrow} from '../components/icons';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -31,6 +32,30 @@ export const Test = () => {
       <h2>Button</h2>
       <Button mr='8px'>Button 1</Button>
       <Button onClick={handleClick}>{count} time clicked</Button>
+      <h2>Select</h2>
+      <Select width='200px' placeholder='Select 1'>
+        <option>Selection 1</option>
+        <option>Selection 2</option>
+        <option>Selection 3</option>
+        <option>Selection 3</option>
+        <option>Selection 3</option>
+        <option>Selection 3</option>
+        <option>Selection 3</option>
+        <option>Selection 3</option>
+        <option>Selection 3</option>
+        <option>Selection 3</option>
+      </Select>
+      <Select ml='4px' width='200px' placeholder='Long Long Long Select 2'>
+        <option>Selection 1</option>
+        <option>Selection 2</option>
+      </Select>
+      <Select ml='4px' width='200px' placeholder='Select 3' initialSelection={2}>
+        <option>Selection 1</option>
+        <option>Selection 2</option>
+        <option>Selection 3</option>
+      </Select>
+      <h2>Icon</h2>
+      <Arrow scale={1} cursor='pointer' />
     </Wrapper>
   );
 };
