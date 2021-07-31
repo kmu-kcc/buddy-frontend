@@ -1,6 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
-import {Button, Box, Check} from '../components';
+import {Button, Box, Check, Select} from '../components';
+import {Arrow} from '../components/icons';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -42,6 +43,30 @@ export const Test = () => {
       <h2>Check</h2>
       <Check mr='4px' onCheck={handleCheck} label='check' checked={checked} />
       <Check mr='4px' onCheck={handleChc} label='adding' checked={checked1} />
+      <h2>Select</h2>
+      <Select width='200px' placeholder='Select 1'>
+        <option>Selection 1</option>
+        <option>Selection 2</option>
+        <option>Selection 3</option>
+        <option>Selection 3</option>
+        <option>Selection 3</option>
+        <option>Selection 3</option>
+        <option>Selection 3</option>
+        <option>Selection 3</option>
+        <option>Selection 3</option>
+        <option>Selection 3</option>
+      </Select>
+      <Select ml='4px' width='200px' placeholder='Long Long Long Select 2'>
+        <option>Selection 1</option>
+        <option>Selection 2</option>
+      </Select>
+      <Select ml='4px' width='200px' placeholder='Select 3' initialSelection={2}>
+        <option>Selection 1</option>
+        <option>Selection 2</option>
+        <option>Selection 3</option>
+      </Select>
+      <h2>Icon</h2>
+      <Arrow scale={1} cursor='pointer' />
     </Wrapper>
   );
 };
