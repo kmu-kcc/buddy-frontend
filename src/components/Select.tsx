@@ -7,6 +7,7 @@ import {
   maxWidth, MaxWidthProps,
   minWidth, MinWidthProps,
 } from 'styled-system';
+import {Arrow} from './icons';
 
 const Wrapper = styled.div<SpaceProps & WidthProps & MaxWidthProps & MinWidthProps>`
   display: inline-block;
@@ -27,7 +28,8 @@ const SelectionWrapper = styled.div<{selected: boolean;}>`
   font-weight: 500;
   line-height: 23px;
   color: ${({selected}) => selected ? '#454440' : '#CBC8BE'};
-  padding-left:24px;
+  padding-left: 24px;
+  padding-right: 18px;
   background-color: #fff;
   border-radius: 15px;
   border: 1px solid #CBC8BE;
@@ -35,6 +37,13 @@ const SelectionWrapper = styled.div<{selected: boolean;}>`
 
   :hover {
     border-color: #CEC2F6;
+  }
+
+  > span {
+    flex: 1;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
 `;
 
@@ -82,11 +91,11 @@ interface Props extends SpaceProps, WidthProps, MaxWidthProps, MinWidthProps {
 export const Select = (props: Props) => {
   const {children, placeholder, onSelect, ...styles} = props;
   const [selected, setSelected] = useState(-1);
-  const [isOpen, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const handleSelectionClick = useCallback(() => {
-    setOpen(!isOpen);
-  }, [isOpen, setOpen]);
+    setOpen(!open);
+  }, [open, setOpen]);
 
   const handleOptionClick = useCallback((index: number) => () => {
     setSelected(index);
@@ -99,9 +108,10 @@ export const Select = (props: Props) => {
   return (
     <Wrapper {...styles}>
       <SelectionWrapper selected={selected >= 0} onClick={handleSelectionClick}>
-        {selected === -1 ? placeholder : children[selected].props.children}
+        <span>{selected === -1 ? placeholder : children[selected].props.children}</span>
+        <Arrow rotate={open ? 180 : 0} />
       </SelectionWrapper>
-      {isOpen ? (
+      {open ? (
         <OptionWrapper>
           {children.map((option, i) => (
             <OptionItem key={i} selected={selected === i} onClick={handleOptionClick(i)}>
