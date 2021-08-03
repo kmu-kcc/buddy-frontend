@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
-import {Button, Box, Select} from '../components';
+import {Button, Box, Select, ToggleSwitch} from '../components';
 import {Arrow} from '../components/icons';
 
 const Wrapper = styled.div`
@@ -56,6 +56,8 @@ export const Test = () => {
       </Select>
       <h2>Icon</h2>
       <Arrow scale={1} cursor='pointer' />
+      <h2>Toggle</h2>
+      <ToggleSwitch />
     </Wrapper>
   );
 };
