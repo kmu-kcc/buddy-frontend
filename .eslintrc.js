@@ -26,6 +26,7 @@ module.exports = {
     '@typescript-eslint',
   ],
   rules: {
+    'max-len': 'off',
     'require-jsdoc': 'off',
     'linebreak-style': 'off',
     'jsx-quotes': ['warn', 'prefer-single'],
