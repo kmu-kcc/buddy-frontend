@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
 import {Button, Box, Check, Textarea, Input, Select} from '../components';
-import {Arrow} from '../components/icons';
+import {Arrow, Check as CheckIcon} from '../components/icons';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -81,10 +81,14 @@ export const Test = () => {
         <option>Selection 3</option>
       </Select>
       <h2>Icon</h2>
-      <Arrow scale={1} cursor='pointer' />
-      <h2>Check</h2>
-      <Check mr='4px' onCheck={handleCheck} label='check' checked={checked} />
-      <Check mr='4px' onCheck={handleChc} label='adding' checked={checked1} />
+      <Box isInlineFlex minWidth='100px' height='70px' flexDirection='column' alignItems='center'>
+        <Arrow scale={1.5} color='#000' />
+        <p>Arrow (1.5x)</p>
+      </Box>
+      <Box isInlineFlex minWidth='100px' height='70px' flexDirection='column' alignItems='center'>
+        <CheckIcon scale={3} color='#000' />
+        <p>Check (3x)</p>
+      </Box>
     </Wrapper>
   );
 };
