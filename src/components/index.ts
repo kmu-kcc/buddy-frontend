@@ -3,5 +3,6 @@ export {Button} from './Button';
 export {Icon} from './Icon';
 export {Select} from './Select';
 export {Layout} from './Layout';
+export {Check} from './Check';
 export {Textarea} from './Textarea';
 export {Input} from './Input';
