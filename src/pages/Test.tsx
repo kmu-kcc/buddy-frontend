@@ -23,14 +23,15 @@ export const Test = () => {
   useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setInputTextValue(event.target.value);
   }, [setInputTextValue]);
-  const [checked, setChecked] = useState(false);
+  const [check, setCheck] = useState(false);
   const handleCheck = useCallback(() => {
-    setChecked(!checked);
-  }, [checked, setChecked]);
-  const [checked1, setChecked1] = useState(false);
-  const handleChc = useCallback(() => {
-    setChecked1(!checked1);
-  }, [checked, setChecked1]);
+    setCheck(!check);
+  }, [check, setCheck]);
+  const [secondCheck, setSecondCheck] = useState(false);
+  const handleSecondCheck = useCallback(() => {
+    setSecondCheck(!secondCheck);
+  }, [secondCheck, setSecondCheck]);
+
   return (
     <Wrapper>
       <h2>Box</h2>
@@ -50,6 +51,9 @@ export const Test = () => {
       <h2>Button</h2>
       <Button mr='8px'>Button 1</Button>
       <Button onClick={handleClick}>{count} time clicked</Button>
+      <h2>Check</h2>
+      <Check mr='8px' onCheck={handleCheck} label='check' checked={check} />
+      <Check onCheck={handleSecondCheck} label='adding' checked={secondCheck} />
       <h2>Textarea</h2>
       <Textarea onChange={handleTextareaChange} mr='8px'
         value={textValue} placeholder='Textarea 1' />
