@@ -52,8 +52,8 @@ export const Test = () => {
       <Button mr='8px'>Button 1</Button>
       <Button onClick={handleClick}>{count} time clicked</Button>
       <h2>Check</h2>
-      <Check mr='8px' onCheck={handleCheck} label='check' checked={check} />
-      <Check onCheck={handleSecondCheck} label='adding' checked={secondCheck} />
+      <Check boxShape='rectangle' mr='8px' onCheck={handleCheck} label='check' checked={check} />
+      <Check boxShape='circle' onCheck={handleSecondCheck} label='adding' checked={secondCheck} />
       <h2>Textarea</h2>
       <Textarea onChange={handleTextareaChange} mr='8px'
         value={textValue} placeholder='Textarea 1' />

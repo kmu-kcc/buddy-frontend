@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {space, SpaceProps} from 'styled-system';
 import {Check as CheckIcon} from './icons/Check';
 
-const Wrapper = styled.div<SpaceProps & {checked: boolean;}>`
+const Wrapper = styled.div<{shape: 'circle' | 'rectangle'} & SpaceProps & {checked: boolean;}>`
   ${space}
   width: fit-content;
   display: inline-flex;
@@ -16,6 +16,10 @@ const Wrapper = styled.div<SpaceProps & {checked: boolean;}>`
       border-color: #6D48E5;
       background-color: ${({checked}) => checked ? '#6D48E5' : '#EFEBFC'};
     }
+  }
+
+  > div {
+    border-radius: ${({shape}) => shape === 'rectangle' ? '1px' : '50%'};
   }
 
   > div {
@@ -48,6 +52,7 @@ const Text = styled.span`
 `;
 
 interface Props extends SpaceProps {
+  boxShape: 'circle' | 'rectangle';
   checked: boolean;
   label?: String;
   children?: React.ReactNode;
@@ -55,9 +60,9 @@ interface Props extends SpaceProps {
 }
 
 export const Check = (props: Props) => {
-  const {label, onCheck, checked, ...styles} = props;
+  const {label, onCheck, checked, boxShape, ...styles} = props;
   return (
-    <Wrapper checked={checked} onClick={onCheck} {...styles}>
+    <Wrapper checked={checked} onClick={onCheck} shape={boxShape} {...styles}>
       <Box>
         <CheckIcon color='#fff' />
       </Box>
