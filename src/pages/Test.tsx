@@ -13,14 +13,15 @@ export const Test = () => {
   const handleClick = useCallback(() => {
     setCount(count + 1);
   }, [count, setCount]);
-  const [checked, setChecked] = useState(false);
+  const [check, setCheck] = useState(false);
   const handleCheck = useCallback(() => {
-    setChecked(!checked);
-  }, [checked, setChecked]);
-  const [checked1, setChecked1] = useState(false);
-  const handleChc = useCallback(() => {
-    setChecked1(!checked1);
-  }, [checked, setChecked1]);
+    setCheck(!check);
+  }, [check, setCheck]);
+  const [secondCheck, setSecondCheck] = useState(false);
+  const handleSecondCheck = useCallback(() => {
+    setSecondCheck(!secondCheck);
+  }, [secondCheck, setSecondCheck]);
+
   return (
     <Wrapper>
       <h2>Box</h2>
@@ -41,8 +42,8 @@ export const Test = () => {
       <Button mr='8px'>Button 1</Button>
       <Button onClick={handleClick}>{count} time clicked</Button>
       <h2>Check</h2>
-      <Check mr='4px' onCheck={handleCheck} label='check' checked={checked} />
-      <Check mr='4px' onCheck={handleChc} label='adding' checked={checked1} />
+      <Check mr='8px' onCheck={handleCheck} label='check' checked={check} />
+      <Check onCheck={handleSecondCheck} label='adding' checked={secondCheck} />
       <h2>Select</h2>
       <Select width='200px' placeholder='Select 1'>
         <option>Selection 1</option>
