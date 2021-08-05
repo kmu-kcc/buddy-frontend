@@ -85,7 +85,7 @@ interface Props extends SpaceProps, WidthProps, MaxWidthProps, MinWidthProps {
   children: JSX.Element[];
   placeholder?: string;
   initialSelection?: number;
-  onSelect?: (index: number) => void;
+  onSelect?: (index: number, value: string) => void;
 }
 
 export const Select = (props: Props) => {
@@ -98,11 +98,11 @@ export const Select = (props: Props) => {
     setOpen(!open);
   }, [open, setOpen]);
 
-  const handleOptionClick = useCallback((index: number) => () => {
+  const handleOptionClick = useCallback((index: number, value: string) => () => {
     setSelected(index);
     setOpen(false);
     if (onSelect) {
-      onSelect(index);
+      onSelect(index, value);
     }
   }, [setSelected, setOpen, onSelect]);
 
@@ -129,7 +129,7 @@ export const Select = (props: Props) => {
       {open ? (
         <OptionWrapper>
           {children.map((option, i) => (
-            <OptionItem key={i} selected={selected === i} onClick={handleOptionClick(i)}>
+            <OptionItem key={i} selected={selected === i} onClick={handleOptionClick(i, option.props.children)}>
               {option.props.children}
             </OptionItem>
           ))}
