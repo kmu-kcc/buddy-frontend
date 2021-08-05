@@ -13,6 +13,11 @@ export const Test = () => {
   const handleClick = useCallback(() => {
     setCount(count + 1);
   }, [count, setCount]);
+  const [isToggle, setToggle]= useState(false);
+  const handleToggleChange = useCallback(() => {
+    setToggle(!isToggle);
+  }, [isToggle, setToggle]);
+
   return (
     <Wrapper>
       <h2>Box</h2>
@@ -57,7 +62,7 @@ export const Test = () => {
       <h2>Icon</h2>
       <Arrow scale={1} cursor='pointer' />
       <h2>Toggle</h2>
-      <ToggleSwitch />
+      <ToggleSwitch handleToggleClick={handleToggleChange} />
     </Wrapper>
   );
 };
