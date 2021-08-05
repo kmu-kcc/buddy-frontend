@@ -12,25 +12,28 @@ export const Test = () => {
   const [count, setCount] = useState(0);
   const [textValue, setTextValue] = useState('');
   const [inputTextValue, setInputTextValue] = useState('');
+  const [check, setCheck] = useState(false);
+  const [secondCheck, setSecondCheck] = useState(false);
+  const [selected, setSelected] = useState('none');
+
   const handleClick = useCallback(() => {
     setCount(count + 1);
   }, [count, setCount]);
-  const handleTextareaChange =
-  useCallback((event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleTextareaChange = useCallback((event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTextValue(event.target.value);
   }, [setTextValue]);
-  const handleInputChange =
-  useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setInputTextValue(event.target.value);
   }, [setInputTextValue]);
-  const [check, setCheck] = useState(false);
   const handleCheck = useCallback(() => {
     setCheck(!check);
   }, [check, setCheck]);
-  const [secondCheck, setSecondCheck] = useState(false);
   const handleSecondCheck = useCallback(() => {
     setSecondCheck(!secondCheck);
   }, [secondCheck, setSecondCheck]);
+  const handleSelect = useCallback((index: number, value: string) => {
+    setSelected(value);
+  }, [setSelected]);
 
   return (
     <Wrapper>
@@ -63,7 +66,7 @@ export const Test = () => {
         value={inputTextValue} placeholder='Input 1' />
       <Input mr='8px' value='' error />
       <h2>Select</h2>
-      <Select width='200px' placeholder='Select 1'>
+      <Select width='200px' placeholder='Select 1' onSelect={handleSelect}>
         <option>Selection 1</option>
         <option>Selection 2</option>
         <option>Selection 3</option>
@@ -84,6 +87,9 @@ export const Test = () => {
         <option>Selection 2</option>
         <option>Selection 3</option>
       </Select>
+      <Box>
+        <p>Select 1 selected value is <span style={{color: '#f00'}}>{selected}</span></p>
+      </Box>
       <h2>Icon</h2>
       <Box isInlineFlex minWidth='100px' height='70px' flexDirection='column' alignItems='center'>
         <Arrow scale={1.5} color='#000' />
