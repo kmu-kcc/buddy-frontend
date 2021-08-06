@@ -1,11 +1,15 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
 import {Button, Box, Check, Textarea, Input, Select} from '../components';
-import {Arrow, Check as CheckIcon} from '../components/icons';
+import {Arrow, Check as CheckIcon, Buddy} from '../components/icons';
 
 const Wrapper = styled.div`
   width: 100%;
   padding: 16px 24px;
+`;
+
+const Label = styled.p`
+  margin: 0;
 `;
 
 export const Test = () => {
@@ -91,13 +95,19 @@ export const Test = () => {
         <p>Select 1 selected value is <span style={{color: '#f00'}}>{selected}</span></p>
       </Box>
       <h2>Icon</h2>
-      <Box isInlineFlex minWidth='100px' height='70px' flexDirection='column' alignItems='center'>
-        <Arrow scale={1.5} color='#000' />
-        <p>Arrow (1.5x)</p>
-      </Box>
-      <Box isInlineFlex minWidth='100px' height='70px' flexDirection='column' alignItems='center'>
-        <CheckIcon scale={3} color='#000' />
-        <p>Check (3x)</p>
+      <Box>
+        <Box isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+          <Arrow mb='8px' scale={1.5} color='#000' />
+          <Label>Arrow (1.5x)</Label>
+        </Box>
+        <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+          <CheckIcon mb='8px' scale={3} color='#000' />
+          <Label>Check (3x)</Label>
+        </Box>
+        <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+          <Buddy mb='8px' width={30} height={30} color='#000' />
+          <Label>Buddy Icon (30x30)</Label>
+        </Box>
       </Box>
     </Wrapper>
   );
