@@ -10,6 +10,7 @@ const App: React.FC = () => {
         <Switch>
           <Route path='/' exact component={pages.Landing} />
           <Route path='/test' component={pages.Test} />
+          <Route path='/Login' component={pages.Login} />
         </Switch>
       </Layout>
     </BrowserRouter>
