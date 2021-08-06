@@ -1,28 +1,44 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
-import {Button, Box, Textarea, Input, Select} from '../components';
-import {Arrow} from '../components/icons';
+import {Button, Box, Check, Textarea, Input, Select} from '../components';
+import {Arrow, Check as CheckIcon, Buddy} from '../components/icons';
 
 const Wrapper = styled.div`
   width: 100%;
   padding: 16px 24px;
 `;
 
+const Label = styled.p`
+  margin: 0;
+`;
+
 export const Test = () => {
   const [count, setCount] = useState(0);
   const [textValue, setTextValue] = useState('');
   const [inputTextValue, setInputTextValue] = useState('');
+  const [check, setCheck] = useState(false);
+  const [secondCheck, setSecondCheck] = useState(false);
+  const [selected, setSelected] = useState('none');
+
   const handleClick = useCallback(() => {
     setCount(count + 1);
   }, [count, setCount]);
-  const handleTextareaChange =
-  useCallback((event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleTextareaChange = useCallback((event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTextValue(event.target.value);
   }, [setTextValue]);
-  const handleInputChange =
-  useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setInputTextValue(event.target.value);
   }, [setInputTextValue]);
+  const handleCheck = useCallback(() => {
+    setCheck(!check);
+  }, [check, setCheck]);
+  const handleSecondCheck = useCallback(() => {
+    setSecondCheck(!secondCheck);
+  }, [secondCheck, setSecondCheck]);
+  const handleSelect = useCallback((index: number, value: string) => {
+    setSelected(value);
+  }, [setSelected]);
+
   return (
     <Wrapper>
       <h2>Box</h2>
@@ -42,6 +58,9 @@ export const Test = () => {
       <h2>Button</h2>
       <Button mr='8px'>Button 1</Button>
       <Button onClick={handleClick}>{count} time clicked</Button>
+      <h2>Check</h2>
+      <Check boxShape='rectangle' mr='8px' onCheck={handleCheck} label='check' checked={check} />
+      <Check boxShape='circle' onCheck={handleSecondCheck} label='adding' checked={secondCheck} />
       <h2>Textarea</h2>
       <Textarea onChange={handleTextareaChange} mr='8px'
         value={textValue} placeholder='Textarea 1' />
@@ -51,7 +70,7 @@ export const Test = () => {
         value={inputTextValue} placeholder='Input 1' />
       <Input mr='8px' value='' error />
       <h2>Select</h2>
-      <Select width='200px' placeholder='Select 1'>
+      <Select width='200px' placeholder='Select 1' onSelect={handleSelect}>
         <option>Selection 1</option>
         <option>Selection 2</option>
         <option>Selection 3</option>
@@ -72,8 +91,24 @@ export const Test = () => {
         <option>Selection 2</option>
         <option>Selection 3</option>
       </Select>
+      <Box>
+        <p>Select 1 selected value is <span style={{color: '#f00'}}>{selected}</span></p>
+      </Box>
       <h2>Icon</h2>
-      <Arrow scale={1} cursor='pointer' />
+      <Box>
+        <Box isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+          <Arrow mb='8px' scale={1.5} color='#000' />
+          <Label>Arrow (1.5x)</Label>
+        </Box>
+        <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+          <CheckIcon mb='8px' scale={3} color='#000' />
+          <Label>Check (3x)</Label>
+        </Box>
+        <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+          <Buddy mb='8px' width={30} height={30} color='#000' />
+          <Label>Buddy Icon (30x30)</Label>
+        </Box>
+      </Box>
     </Wrapper>
   );
 };
