@@ -5,6 +5,8 @@ module.exports = {
   },
   extends: [
     'plugin:react/recommended',
+    'plugin:import/recommended',
+    'plugin:import/typescript',
     'google',
   ],
   settings: {
@@ -23,6 +25,7 @@ module.exports = {
   plugins: [
     'react',
     'react-hooks',
+    'import',
     '@typescript-eslint',
   ],
   rules: {
