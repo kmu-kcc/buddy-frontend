@@ -16,7 +16,7 @@ export const Header: React.FC<Props> = (props) => {
   const {...styles} = props;
   return (
     <Wrapper {...styles}>
-      <h1>국민대 KCC</h1>
+      <h1>Buddy</h1>
     </Wrapper>
   );
 };
