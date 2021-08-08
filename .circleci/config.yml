@@ -8,6 +8,8 @@ jobs:
     executor:
       name: node/default
       tag: '14.17.0'
+    environment:
+      REACT_APP_ENV: production
     steps:
       - checkout
       - node/install-packages:
