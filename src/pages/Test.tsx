@@ -51,8 +51,7 @@ export const Test = () => {
         <StateLabel active={env === 'production'}>production</StateLabel>
       </p>
       <h2>Box</h2>
-      <Box mb='4px' isFlex alignItems='center' justifyContent='center'
-        color='#000' bg='#eee'>
+      <Box mb='4px' isFlex alignItems='center' justifyContent='center' color='#000' bg='#eee'>
         Basic Flex Box
       </Box>
       <Box isInlineBlock bg='#aaa' p='4px'>
@@ -71,12 +70,10 @@ export const Test = () => {
       <Check boxShape='rectangle' mr='8px' onCheck={handleCheck} label='check' checked={check} />
       <Check boxShape='circle' onCheck={handleSecondCheck} label='adding' checked={secondCheck} />
       <h2>Textarea</h2>
-      <Textarea onChange={handleTextareaChange} mr='8px'
-        value={textValue} placeholder='Textarea 1' />
+      <Textarea onChange={handleTextareaChange} mr='8px' value={textValue} placeholder='Textarea 1' />
       <Textarea mr='8px' value='' error />
       <h2>Input</h2>
-      <Input onChange={handleInputChange} mr='8px'
-        value={inputTextValue} placeholder='Input 1' />
+      <Input onChange={handleInputChange} mr='8px' value={inputTextValue} placeholder='Input 1' />
       <Input mr='8px' value='' error />
       <h2>Select</h2>
       <Select width='200px' placeholder='Select 1' onSelect={handleSelect}>
