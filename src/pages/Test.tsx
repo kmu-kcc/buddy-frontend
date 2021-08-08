@@ -11,6 +11,7 @@ const StateLabel = styled.span<{active: boolean;}>`
   padding: 2px 6px;
   color: ${({active}) => active ? '#fff' : '#000'};
   ${({active}) => active ? 'background-color: #3399cc;' : ''}
+  border: 1px solid #3399cc;
 `;
 
 export const Test = () => {
@@ -45,8 +46,8 @@ export const Test = () => {
     <Box width='100%' p='16px 24px'>
       <p>
         deployed channel&nbsp;&nbsp;
-        <StateLabel active={env === 'localhost'}>localhost</StateLabel>&nbsp;
-        <StateLabel active={env === 'development'}>development</StateLabel>&nbsp;
+        <StateLabel active={env === 'localhost'}>localhost</StateLabel>
+        <StateLabel active={env === 'development'}>development</StateLabel>
         <StateLabel active={env === 'production'}>production</StateLabel>
       </p>
       <h2>Box</h2>
