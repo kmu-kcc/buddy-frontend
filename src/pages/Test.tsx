@@ -1,15 +1,16 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useMemo} from 'react';
 import styled from 'styled-components';
 import {Button, Box, Check, Textarea, Input, Select} from '../components';
 import {Arrow, Check as CheckIcon, Buddy} from '../components/icons';
 
-const Wrapper = styled.div`
-  width: 100%;
-  padding: 16px 24px;
-`;
-
 const Label = styled.p`
   margin: 0;
+`;
+
+const StateLabel = styled.span<{active: boolean;}>`
+  padding: 2px 6px;
+  color: ${({active}) => active ? '#fff' : '#000'};
+  ${({active}) => active ? 'background-color: #3399cc;' : ''}
 `;
 
 export const Test = () => {
@@ -38,9 +39,16 @@ export const Test = () => {
   const handleSelect = useCallback((index: number, value: string) => {
     setSelected(value);
   }, [setSelected]);
+  const env = useMemo(() => process.env.REACT_APP_ENV, []);
 
   return (
-    <Wrapper>
+    <Box width='100%' p='16px 24px'>
+      <p>
+        deployed channel&nbsp;&nbsp;
+        <StateLabel active={env === 'localhost'}>localhost</StateLabel>&nbsp;
+        <StateLabel active={env === 'development'}>development</StateLabel>&nbsp;
+        <StateLabel active={env === 'production'}>production</StateLabel>
+      </p>
       <h2>Box</h2>
       <Box mb='4px' isFlex alignItems='center' justifyContent='center'
         color='#000' bg='#eee'>
@@ -109,6 +117,6 @@ export const Test = () => {
           <Label>Buddy Icon (30x30)</Label>
         </Box>
       </Box>
-    </Wrapper>
+    </Box>
   );
 };
