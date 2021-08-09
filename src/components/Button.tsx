@@ -1,18 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
-import {background, BackgroundProps, space, SpaceProps} from 'styled-system';
+import {
+  background, BackgroundProps,
+  color, ColorProps,
+  height, HeightProps,
+  space, SpaceProps,
+  width, WidthProps,
+} from 'styled-system';
 
-const Wrapper = styled.button<SpaceProps & BackgroundProps>`
-  height: 48px;
+type StyleProps = BackgroundProps & ColorProps & HeightProps & SpaceProps & WidthProps;
+
+const Wrapper = styled.button<StyleProps>`
+  ${width}
+  ${height}
   ${space}
   ${background}
-  color: #fff;
+  ${color}
   border: 2px solid #6D48E5;
   border-radius: 37px;
-  padding-top: 12px;
-  padding-bottom: 13px;
-  padding-left: 47px;
-  padding-right: 47px;
   font-size: 18px;
   font-weight: 700;
   line-height: 23px;
@@ -24,17 +29,29 @@ const Wrapper = styled.button<SpaceProps & BackgroundProps>`
   }
 `;
 
-interface Props extends SpaceProps, BackgroundProps {
+interface ButtonProps extends StyleProps {
   children?: React.ReactNode;
   onClick?: () => void;
 }
 
+const defaultProps = {
+  background: '#6D48E5',
+  color: '#fff',
+  height: '48px',
+  px: '47px',
+  py: '12px',
+};
+
+type Props = ButtonProps & typeof defaultProps;
+
 export const Button = (props: Props) => {
-  const {children, background, onClick, ...styles} = props;
+  const {children, onClick, ...styles} = props;
 
   return (
-    <Wrapper background={background ?? '#6D48E5'} onClick={onClick} {...styles}>
+    <Wrapper onClick={onClick} {...styles}>
       {children}
     </Wrapper>
   );
 };
+
+Button.defaultProps = defaultProps;
