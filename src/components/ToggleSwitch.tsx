@@ -1,23 +1,14 @@
 import React, {useState, useCallback} from 'react';
 import styled from 'styled-components';
-import {
-  space, SpaceProps,
-  width, WidthProps,
-  maxWidth, MaxWidthProps,
-  minWidth, MinWidthProps,
-} from 'styled-system';
+import {space, SpaceProps} from 'styled-system';
 
-const Wrapper = styled.div<SpaceProps & WidthProps & MaxWidthProps & MinWidthProps>`
+const Wrapper = styled.div`
   display: inline-block;
   position: relative;
   user-select: none;
-  ${width}
-  ${maxWidth}
-  ${minWidth}
-  ${space}
 `;
 
-const Toggle = styled.div<{isToggle: boolean;}>`
+const Toggle = styled.div<SpaceProps & {isToggle: boolean;}>`
   display: flex;
   width: 42px;
   height: 18px;
@@ -25,7 +16,9 @@ const Toggle = styled.div<{isToggle: boolean;}>`
   border-radius: 15px;
   cursor: pointer;
   background-color: ${({isToggle}) => isToggle ? '#E5E5E5': '#6D48E5'};
-  transition : 0.2s;
+  transition: all 0.2s ease 0s;
+  ${space}
+
   &::after {
     content: "";
     display: block;
@@ -33,26 +26,30 @@ const Toggle = styled.div<{isToggle: boolean;}>`
     width: 14px;
     height: 14px;
     background: #ffffff;
-    box-shadow: 1px 3px 3px 1px rgba(0, 0, 0, 0.2);
     transform: ${({isToggle}) => isToggle ? 'translateX(10%)': 'translateX(185%)'};
-    transition: all 0.2s 0s;
+    transition: all 0.2s ease 0s;
   }
 `;
 
-interface Props extends SpaceProps, WidthProps, MaxWidthProps, MinWidthProps {
-    children?: JSX.Element;
-    handleToggleClick?: () => void;
+interface Props extends SpaceProps{
+  ontoggleClick?: (Toggled : boolean) => void;
 }
 
+
 export const ToggleSwitch = (props: Props) => {
-  const {...styles} = props;
-  const [isToggle, setToggle] = useState(false);
+  const {ontoggleClick, ...styles} = props;
+  const [Active, setToggle] = useState(false);
   const handleToggleClick = useCallback(() => {
-    setToggle(!isToggle);
-  }, [isToggle, setToggle]);
+    setToggle(!Active);
+    if (ontoggleClick) {
+      ontoggleClick(!Active);
+    }
+  }, [Active, setToggle, ontoggleClick]);
   return (
-    <Wrapper {...styles}>
-      <Toggle isToggle={isToggle} onClick={handleToggleClick} />
+    <Wrapper>
+      <Toggle
+        isToggle={Active} {...styles} onClick={handleToggleClick}>
+      </Toggle>
     </Wrapper>
   );
 };
