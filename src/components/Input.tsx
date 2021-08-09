@@ -5,8 +5,7 @@ import {space, SpaceProps} from 'styled-system';
 
 const Wrapper = styled.input<SpaceProps & Props>`
   box-sizing: border-box;
-  width: 390px;
-  height: 63px;
+  height: 48px;
   border: 1px solid ${({error, empty}) => error ?
   '#FF9A83' : empty ? '#CBC8BE' : '#8D71EB'};
   padding: 12px 24px;
