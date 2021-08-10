@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "react-scripts start",
+    "start": "cross-env REACT_APP_ENV=localhost react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "lint": "eslint . --ext ts,tsx,js,jsx"
@@ -30,6 +30,7 @@
     "@types/styled-system": "^5.1.11",
     "@typescript-eslint/eslint-plugin": "^4.29.0",
     "@typescript-eslint/parser": "^4.29.0",
+    "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
     "eslint-config-google": "^0.14.0",
     "eslint-plugin-import": "^2.23.4",
