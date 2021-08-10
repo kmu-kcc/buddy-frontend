@@ -62,9 +62,8 @@ export const Test = () => {
       <Check boxShape='rectangle' mr='8px' onCheck={handleCheck} label='check' checked={check} />
       <Check boxShape='circle' onCheck={handleSecondCheck} label='adding' checked={secondCheck} />
       <h2>Textarea</h2>
-      <Textarea onChange={handleTextareaChange} mr='8px'
-        value={textValue} placeholder='Textarea 1' />
-      <Textarea mr='8px' value='' error />
+      <Textarea onChange={handleTextareaChange} mr='8px' value={textValue} placeholder='Textarea 1' />
+      <Textarea value='' placeholder='error textarea' error />
       <h2>Input</h2>
       <Input onChange={handleInputChange} mr='8px' value={inputTextValue} placeholder='Input 1' />
       <Input value='' placeholder='error input' error />
