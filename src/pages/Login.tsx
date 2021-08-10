@@ -37,9 +37,9 @@ export const Login = () => {
         </Box>
         <Input width='100%' value={id} onChange={handleInputChange(setId)} placeholder='아이디' />
         <Input mt='20px' width='100%' value={password} onChange={handleInputChange(setPassword)} placeholder='비밀번호' />
-        <Check mt='16px' mr='auto' boxShape='circle' size='20px' fontSize='16px' lineHeight='19px' onCheck={handleCheck} label='아이디 저장' checked={idSaved} />
-        <Button mt='45px' mb='40px' width='100%'>로그인</Button>
-        <Box isFlex width='100%'>
+        <Button mt='65px' width='100%' height='70px'>로그인</Button>
+        <Check mt='24px' mr='auto' boxShape='circle' size='20px' fontSize='16px' lineHeight='19px' onCheck={handleCheck} label='아이디 저장' checked={idSaved} />
+        <Box isFlex mt='40px' width='100%'>
           <LinkText to='/signup' color='#6D48E5'>회원가입</LinkText>
           <LinkText to='/test' ml='auto'>아이디 찾기</LinkText>
           <LinkText to='/test' ml='16px'>비밀번호 찾기</LinkText>
