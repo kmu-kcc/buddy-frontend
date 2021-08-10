@@ -1,15 +1,19 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
-import {space, SpaceProps} from 'styled-system';
+import {color, ColorProps, space, SpaceProps} from 'styled-system';
 import {Link} from 'react-router-dom';
 import {Input, Button, Box, Check} from '../components';
 import {Buddy} from '../components/icons';
 
-const LinkText = styled(Link)<SpaceProps>`
-  color:#363634;
+const LinkText = styled(Link)<SpaceProps & ColorProps>`
   text-decoration: none;
   ${space}
+  ${color}
 `;
+
+LinkText.defaultProps = {
+  color: '#363634',
+};
 
 export const Login = () => {
   const [id, setId] = useState('');
@@ -36,7 +40,7 @@ export const Login = () => {
         <Check mt='16px' mr='auto' boxShape='circle' size='20px' fontSize='16px' lineHeight='19px' onCheck={handleCheck} label='아이디 저장' checked={idSaved} />
         <Button mt='45px' mb='40px' width='100%'>로그인</Button>
         <Box isFlex width='100%'>
-          <LinkText to='/signup'>회원가입</LinkText>
+          <LinkText to='/signup' color='#6D48E5'>회원가입</LinkText>
           <LinkText to='/test' ml='auto'>아이디 찾기</LinkText>
           <LinkText to='/test' ml='16px'>비밀번호 찾기</LinkText>
         </Box>
