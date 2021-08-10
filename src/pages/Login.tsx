@@ -31,12 +31,12 @@ export const Login = () => {
 
   return (
     <Box isFlex width='100%' justifyContent='center'>
-      <Box isFlex width='338px' flexDirection='column' alignItems='center' pt='120px'>
+      <Box isFlex width='338px' flexDirection='column' alignItems='center' pt='96px'>
         <Box isBlock mb='64px' >
           <Buddy width='70px' height='106px' color='#6D48E5' />
         </Box>
-        <Input width='100%' value={id} onChange={handleInputChange(setId)} placeholder='아이디' />
-        <Input mt='20px' width='100%' value={password} onChange={handleInputChange(setPassword)} placeholder='비밀번호' />
+        <Input width='100%' height='63px' value={id} onChange={handleInputChange(setId)} placeholder='아이디' />
+        <Input mt='20px' type='password' width='100%' height='63px' value={password} onChange={handleInputChange(setPassword)} placeholder='비밀번호' />
         <Button mt='65px' width='100%' height='70px'>로그인</Button>
         <Check mt='24px' mr='auto' boxShape='circle' size='20px' fontSize='16px' lineHeight='19px' onCheck={handleCheck} label='아이디 저장' checked={idSaved} />
         <Box isFlex mt='40px' width='100%'>
