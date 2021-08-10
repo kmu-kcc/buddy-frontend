@@ -66,9 +66,8 @@ export const Test = () => {
         value={textValue} placeholder='Textarea 1' />
       <Textarea mr='8px' value='' error />
       <h2>Input</h2>
-      <Input onChange={handleInputChange} mr='8px'
-        value={inputTextValue} placeholder='Input 1' />
-      <Input mr='8px' value='' error />
+      <Input onChange={handleInputChange} mr='8px' value={inputTextValue} placeholder='Input 1' />
+      <Input value='' placeholder='error input' error />
       <h2>Select</h2>
       <Select width='200px' placeholder='Select 1' onSelect={handleSelect}>
         <option>Selection 1</option>
