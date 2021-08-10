@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Header} from './Header';
 
 const Wrapper = styled.div`
   min-height: 100vh;
@@ -19,7 +18,6 @@ export const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
   const {children} = props;
   return (
     <Wrapper>
-      <Header />
       <Content>
         {children}
       </Content>
