@@ -56,7 +56,3 @@ export const Box = styled.div<Props>`
     }
   }}
 `;
-
-Box.defaultProps = {
-  display: 'block',
-};
