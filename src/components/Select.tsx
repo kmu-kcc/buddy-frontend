@@ -1,28 +1,19 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
-import {
-  border, BorderProps,
-  space, SpaceProps,
-  width, WidthProps,
-  maxWidth, MaxWidthProps,
-  minWidth, MinWidthProps,
-} from 'styled-system';
+import {SpaceProps, WidthProps, HeightProps} from 'styled-system';
+import {Box} from './Box';
 import {Arrow} from './icons';
 
-const Wrapper = styled.div<SpaceProps & WidthProps & MaxWidthProps & MinWidthProps>`
+const Wrapper = styled(Box)`
   display: inline-block;
   position: relative;
   user-select: none;
-  ${width}
-  ${maxWidth}
-  ${minWidth}
-  ${space}
 `;
 
-const SelectionWrapper = styled.div<{selected: boolean;}>`
+const SelectionWrapper = styled(Box)<{selected: boolean;}>`
   display: flex;
   flex: 1;
-  height: 48px;
+  height: 100%;
   align-items: center;
   font-size: 18px;
   font-weight: 500;
@@ -47,9 +38,10 @@ const SelectionWrapper = styled.div<{selected: boolean;}>`
   }
 `;
 
-const OptionWrapper = styled.div`
+const OptionWrapper = styled(Box)`
+  height: auto;
   position: absolute;
-  top: 58px;
+  top: ${({height}) => `calc(${height} + 10px)`};
   left: 0;
   right: 0;
   z-index: 1;
@@ -60,8 +52,7 @@ const OptionWrapper = styled.div`
   filter: drop-shadow(0px 5px 9px #E5E5E5);
 `;
 
-const OptionItem = styled.option<BorderProps & {selected: boolean;}>`
-  ${border}
+const OptionItem = styled.option<{selected: boolean;}>`
   width: 100%;
   display: flex;
   align-items: center;
@@ -81,15 +72,21 @@ const OptionItem = styled.option<BorderProps & {selected: boolean;}>`
   }
 `;
 
-interface Props extends SpaceProps, WidthProps, MaxWidthProps, MinWidthProps {
+interface SelectProps extends SpaceProps, WidthProps, HeightProps {
   children: JSX.Element[];
   placeholder?: string;
   initialSelection?: number;
-  onSelect?: (index: number) => void;
+  onSelect?: (index: number, value: string) => void;
 }
 
+const defaultProps = {
+  height: '48px',
+};
+
+type Props = SelectProps & typeof defaultProps;
+
 export const Select = (props: Props) => {
-  const {children, placeholder, onSelect, ...styles} = props;
+  const {children, height, placeholder, onSelect, ...styles} = props;
   const [selected, setSelected] = useState(-1);
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -98,11 +95,11 @@ export const Select = (props: Props) => {
     setOpen(!open);
   }, [open, setOpen]);
 
-  const handleOptionClick = useCallback((index: number) => () => {
+  const handleOptionClick = useCallback((index: number, value: string) => () => {
     setSelected(index);
     setOpen(false);
     if (onSelect) {
-      onSelect(index);
+      onSelect(index, value);
     }
   }, [setSelected, setOpen, onSelect]);
 
@@ -118,18 +115,18 @@ export const Select = (props: Props) => {
     return () => {
       document.removeEventListener('mousedown', handleOutsideClick);
     };
-  }, []);
+  }, [handleOutsideClick]);
 
   return (
-    <Wrapper ref={ref} {...styles}>
+    <Wrapper ref={ref} height={height} {...styles}>
       <SelectionWrapper selected={selected >= 0} onClick={handleSelectionClick}>
         <span>{selected === -1 ? placeholder : children[selected].props.children}</span>
         <Arrow rotate={open ? 180 : 0} />
       </SelectionWrapper>
       {open ? (
-        <OptionWrapper>
+        <OptionWrapper height={height}>
           {children.map((option, i) => (
-            <OptionItem key={i} selected={selected === i} onClick={handleOptionClick(i)}>
+            <OptionItem key={i} selected={selected === i} onClick={handleOptionClick(i, option.props.children)}>
               {option.props.children}
             </OptionItem>
           ))}
@@ -138,3 +135,5 @@ export const Select = (props: Props) => {
     </Wrapper>
   );
 };
+
+Select.defaultProps = defaultProps;

@@ -10,11 +10,9 @@ const Svg = styled.svg`
   transition: all 0.15s ease-out;
 `;
 
-// type SvgProps = typeof styled.svg;
-
 export interface IconProps extends SpaceProps, CursorProps {
-  width: number;
-  height: number;
+  width: string;
+  height: string;
   viewBox?: string;
   fill?: string;
   children?: React.ReactNode;

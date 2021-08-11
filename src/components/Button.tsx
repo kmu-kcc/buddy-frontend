@@ -1,47 +1,57 @@
-import React, {useCallback, useState} from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import {space, SpaceProps} from 'styled-system';
+import {
+  background, BackgroundProps,
+  color, ColorProps,
+  height, HeightProps,
+  space, SpaceProps,
+  width, WidthProps,
+} from 'styled-system';
 
-const Wrapper = styled.button<SpaceProps & {isClicked: boolean;}>`
-  height: 48px;
-  color: #8D8C85;
-  background-color: ${({isClicked}) => isClicked ? '#6D48E5' : '#fff'};
-  border: 2px solid #8D8C85;
+type StyleProps = BackgroundProps & ColorProps & HeightProps & SpaceProps & WidthProps;
+
+const Wrapper = styled.button<StyleProps>`
+  ${width}
+  ${height}
+  ${space}
+  ${background}
+  ${color}
+  border: 2px solid #6D48E5;
   border-radius: 37px;
-  padding-top: 12px;
-  padding-bottom: 13px;
-  padding-left: 47px;
-  padding-right: 47px;
   font-size: 18px;
   font-weight: 700;
   line-height: 23px;
   cursor: pointer;
-  ${space}
+  transition: all 0.15s ease-out;
 
-  :focus,:hover {
-    border-color: #6D48E5;
-    color: ${({isClicked}) => isClicked ? '#fff' : '#6D48E5'};
+  :focus, :hover {
+    filter: brightness(115%);
   }
 `;
 
-interface Props extends SpaceProps {
+interface ButtonProps extends StyleProps {
   children?: React.ReactNode;
   onClick?: () => void;
 }
 
+const defaultProps = {
+  background: '#6D48E5',
+  color: '#fff',
+  height: '48px',
+  px: '47px',
+  py: '12px',
+};
+
+type Props = ButtonProps & typeof defaultProps;
+
 export const Button = (props: Props) => {
   const {children, onClick, ...styles} = props;
 
-  const [isClicked, setClicked] = useState(false);
-  const toggleClicked = useCallback((state: boolean) => () => {
-    setClicked(state);
-  }, [setClicked]);
   return (
-    <Wrapper
-      onMouseDown={toggleClicked(true)}
-      onMouseUp={toggleClicked(false)}
-      onClick={onClick} {...styles} isClicked={isClicked}>
+    <Wrapper onClick={onClick} {...styles}>
       {children}
     </Wrapper>
   );
 };
+
+Button.defaultProps = defaultProps;

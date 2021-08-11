@@ -1,45 +1,47 @@
-# KMU KCC react boilerplate [![CircleCI](https://img.shields.io/circleci/build/github/kmu-kcc/react-boilerplate?style=flat-square&token=a68fcf4b8b73c90d2e3a661269f8ffaa4ca12c3d)](https://circleci.com/gh/kmu-kcc/react-boilerplate/tree/master)
+# Buddy Frontend [![CircleCI](https://img.shields.io/circleci/build/github/kmu-kcc/buddy-frontend?style=flat-square&token=2b92ec0c979a18bfa9ee11dbfc414a27958aec12)](https://circleci.com/gh/kmu-kcc/buddy-frontend/tree/master)
 
 
-This is a boilerplate project for KMU KCC React based frontend project.
+This repo is frontend project of Buddy
 
-## Get started
-
-Anyone can easily use it for your own project.
+## Start local development
 
 ### Clone this project
 
 ```sh
-git clone https://github.com/kmu-kcc/react-boilerplate.git
+git clone https://github.com/kmu-kcc/buddy-frontend.git
 ```
 
 ### Install project dependencies
 
 ```sh
-cd react-boilerplate
+# Move to project directory
+cd buddy-frontend
+
+# Install project dependencies
 yarn
 ```
 
-### Just start it!
+### Start local development server
 
 ```sh
 yarn start
 ```
 
-### Open browser and check what it is
+### Open browser and develop
 
 open <localhost:2107> using your browser
 
 ## About default configurations
 
-### Port
+| port | 2107 |
+|------|------|
+| lint rule | google |
 
-2107 (because this project started in 2021-07)
+## Authors
 
-### Lint rule
+**KMU KCC**
 
-**Google** JavaScript style
-
-## Author
-
-- [Jaewook Ahn](ajw4586@gmail.com)
+- [Seonil Kim](https://github.com/Seonkkim)
+- [Jia Kwon](https://github.com/jia5232)
+- [Soyang Baek](https://github.com/GoRyne)
+- [Jaewook Ahn](https://github.com/Jaewoook)
