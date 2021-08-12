@@ -21,13 +21,14 @@ export const Test = () => {
   const [check, setCheck] = useState(false);
   const [secondCheck, setSecondCheck] = useState(false);
   const [selected, setSelected] = useState('none');
+  const [isToggle, setToggle] = useState(false);
 
   const handleClick = useCallback(() => {
     setCount(count + 1);
   }, [count, setCount]);
-  const [isToggle, setToggle]= useState(false);
-  const handleToggleChange = useCallback((Toggle:boolean) => {
-    setToggle(!isToggle);
+  const handleToggleChange = useCallback((toggle: boolean) => {
+    setToggle(toggle);
+    console.log(`current toggle state: ${isToggle} change toggle state: ${toggle}`);
   }, [isToggle, setToggle]);
   const handleTextareaChange = useCallback((event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTextValue(event.target.value);
@@ -44,6 +45,7 @@ export const Test = () => {
   const handleSelect = useCallback((index: number, value: string) => {
     setSelected(value);
   }, [setSelected]);
+
   const env = useMemo(() => process.env.REACT_APP_ENV, []);
 
   return (
@@ -105,7 +107,8 @@ export const Test = () => {
         <p>Select 1 selected value is <span style={{color: '#f00'}}>{selected}</span></p>
       </Box>
       <h2>Toggle</h2>
-      <ToggleSwitch ontoggleClick={handleToggleChange}></ToggleSwitch>
+      <ToggleSwitch onToggleClick={handleToggleChange} />
+      <ToggleSwitch ml='4px' onToggleClick={handleToggleChange} />
       <h2>Icon</h2>
       <Box>
         <Box isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>

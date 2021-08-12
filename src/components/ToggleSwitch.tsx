@@ -2,54 +2,52 @@ import React, {useState, useCallback} from 'react';
 import styled from 'styled-components';
 import {space, SpaceProps} from 'styled-system';
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<SpaceProps>`
   display: inline-block;
   position: relative;
   user-select: none;
+  ${space}
 `;
 
-const Toggle = styled.div<SpaceProps & {isToggle: boolean;}>`
+const Toggle = styled.div<{toggled: boolean;}>`
   display: flex;
   width: 42px;
   height: 18px;
   align-items: center;
   border-radius: 15px;
   cursor: pointer;
-  background-color: ${({isToggle}) => isToggle ? '#E5E5E5': '#6D48E5'};
-  transition: all 0.2s ease 0s;
-  ${space}
+  background-color: ${({toggled}) => toggled ? '#E5E5E5': '#6D48E5'};
+  transition: all 0.2s ease;
 
   &::after {
-    content: "";
+    content: '';
     display: block;
     border-radius: 50%;
     width: 14px;
     height: 14px;
     background: #ffffff;
-    transform: ${({isToggle}) => isToggle ? 'translateX(10%)': 'translateX(185%)'};
-    transition: all 0.2s ease 0s;
+    transform: ${({toggled}) => toggled ? 'translateX(10%)': 'translateX(185%)'};
+    transition: all 0.2s ease;
   }
 `;
 
-interface Props extends SpaceProps{
-  ontoggleClick?: (Toggled : boolean) => void;
+interface Props extends SpaceProps {
+  onToggleClick?: (Toggled: boolean) => void;
 }
 
-
 export const ToggleSwitch = (props: Props) => {
-  const {ontoggleClick, ...styles} = props;
-  const [Active, setToggle] = useState(false);
+  const {onToggleClick, ...styles} = props;
+  const [active, setToggle] = useState(false);
   const handleToggleClick = useCallback(() => {
-    setToggle(!Active);
-    if (ontoggleClick) {
-      ontoggleClick(!Active);
+    setToggle(!active);
+    if (onToggleClick) {
+      onToggleClick(!active);
     }
-  }, [Active, setToggle, ontoggleClick]);
+  }, [active, setToggle, onToggleClick]);
+
   return (
-    <Wrapper>
-      <Toggle
-        isToggle={Active} {...styles} onClick={handleToggleClick}>
-      </Toggle>
+    <Wrapper {...styles}>
+      <Toggle toggled={active} onClick={handleToggleClick} />
     </Wrapper>
   );
 };
