@@ -11,6 +11,7 @@ const App: React.FC = () => {
           <Route path='/' exact component={pages.Landing} />
           <Route path='/test' component={pages.Test} />
           <Route path='/groupmanagelist' component={pages.GroupManageList} />
+          <Route path='/login' component={pages.Login} />
         </Switch>
       </Layout>
     </BrowserRouter>
