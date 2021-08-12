@@ -6,3 +6,4 @@ export {Layout} from './Layout';
 export {Check} from './Check';
 export {Textarea} from './Textarea';
 export {Input} from './Input';
+export {MemberCard} from './MemberCard';

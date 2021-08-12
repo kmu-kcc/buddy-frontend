@@ -67,14 +67,14 @@ export const Test = () => {
       <Button mr='8px'>Button 1</Button>
       <Button onClick={handleClick}>{count} time clicked</Button>
       <h2>Check</h2>
-      <Check boxShape='rectangle' mr='8px' onCheck={handleCheck} label='check' checked={check} />
-      <Check boxShape='circle' onCheck={handleSecondCheck} label='adding' checked={secondCheck} />
+      <Check mr='16px' boxShape='rectangle' size='14px' fontSize='16px' label='check' checked={check} onCheck={handleCheck} />
+      <Check boxShape='circle' size='14px' fontSize='14px' fontWeight={500} color='#00f' label='adding' checked={secondCheck} onCheck={handleSecondCheck} />
       <h2>Textarea</h2>
       <Textarea onChange={handleTextareaChange} mr='8px' value={textValue} placeholder='Textarea 1' />
-      <Textarea mr='8px' value='' error />
+      <Textarea value='' placeholder='error textarea' error />
       <h2>Input</h2>
       <Input onChange={handleInputChange} mr='8px' value={inputTextValue} placeholder='Input 1' />
-      <Input mr='8px' value='' error />
+      <Input value='' placeholder='error input' error />
       <h2>Select</h2>
       <Select width='200px' placeholder='Select 1' onSelect={handleSelect}>
         <option>Selection 1</option>
@@ -103,15 +103,15 @@ export const Test = () => {
       <h2>Icon</h2>
       <Box>
         <Box isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
-          <Arrow mb='8px' scale={1.5} color='#000' />
+          <Arrow mb='8px' color='#000' />
           <Label>Arrow (1.5x)</Label>
         </Box>
         <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
-          <CheckIcon mb='8px' scale={3} color='#000' />
+          <CheckIcon mb='8px' color='#000' />
           <Label>Check (3x)</Label>
         </Box>
         <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
-          <Buddy mb='8px' width={30} height={30} color='#000' />
+          <Buddy mb='8px' width='30px' height='30px' color='#000' />
           <Label>Buddy Icon (30x30)</Label>
         </Box>
       </Box>
