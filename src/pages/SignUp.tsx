@@ -27,28 +27,30 @@ export const SignUp: React.FC = () => {
   return (
     <Box isFlex width='100%' justifyContent='center'>
       <Box isFlex flexDirection='column' justifyContent='center' alignItems='center'>
-        <Buddy mb='100px' width={248} height={140} />
+        <Box mt='100px'>
+          <Buddy mb='100px' width='248px' height='140px' />
+        </Box>
         <Box isFlex>
           <Box>
-            <Input value={studentNumber} onChange={handleInputChange(setStudentNumber)} placeholder='학번 (ID)' />
+            <Input width='390px' height='63px' value={studentNumber} onChange={handleInputChange(setStudentNumber)} placeholder='학번 (ID)' />
             <Text>영어와 숫자만 8~9자</Text>
           </Box>
           <Box ml='174px'>
-            <Input value={email} onChange={handleInputChange(setEmail)} placeholder='이메일' />
+            <Input width='390px' height='63px' value={email} onChange={handleInputChange(setEmail)} type='email' placeholder='이메일' />
           </Box>
         </Box>
         <Box isFlex>
           <Box width='400px'>
-            <Input value={password} onChange={handleInputChange(setPassword)} placeholder='비밀번호' />
+            <Input width='390px' height='63px' value={password} onChange={handleInputChange(setPassword)} type='password' placeholder='비밀번호' />
             <Text>영어 대문자,숫자,특수문자 각 1개 이상 혼용, 전체 8글자 이상</Text>
           </Box>
           <Box ml='164px'>
-            <Input value={passwordCheck} onChange={handleInputChange(setPasswordCheck)} placeholder='비밀번호 체크' />
+            <Input width='390px' height='63px' value={passwordCheck} onChange={handleInputChange(setPasswordCheck)} type='password' placeholder='비밀번호 확인' />
           </Box>
         </Box>
         <Box isFlex>
           <Box>
-            <Select placeholder='소속대학' width='390px'>
+            <Select placeholder='소속대학' width='390px' height='63px'>
               <option value='글로벌인문지역대학'>글로벌인문지역대학</option>
               <option value='사회과학대학'>사회과학대학</option>
               <option value='법과대학'>법과대학</option>
@@ -65,23 +67,23 @@ export const SignUp: React.FC = () => {
             </Select>
           </Box>
           <Box ml='174px'>
-            <Input value={major} onChange={handleInputChange(setMajor)} placeholder='소속학과' />
+            <Input width='390px' height='63px' value={major} onChange={handleInputChange(setMajor)} placeholder='소속학과' />
             <Text>한글만, 최대 15자</Text>
           </Box>
         </Box>
         <Box isFlex>
           <Box>
-            <Input value={id} onChange={handleInputChange(setId)} placeholder='이름' />
+            <Input width='390px' height='63px' value={id} onChange={handleInputChange(setId)} placeholder='이름' />
             <Text>한글만,최대10자</Text>
           </Box>
           <Box ml='174px'>
-            <Input value={phoneNumber} onChange={handleInputChange(setPhoneNumber)} placeholder='휴대전화번호' />
+            <Input width='390px' height='63px' value={phoneNumber} onChange={handleInputChange(setPhoneNumber)} type='tel' placeholder='휴대전화번호' />
             <Text>예) 01012345678</Text>
           </Box>
         </Box>
         <Box isFlex>
           <Box isFlex height='63px'>
-            <Select placeholder='재학여부' width='390px'>
+            <Select placeholder='재학여부' width='390px' height='63px'>
               <option>재학</option>
               <option>휴학</option>
               <option>졸업</option>
@@ -89,7 +91,7 @@ export const SignUp: React.FC = () => {
             </Select>
           </Box>
           <Box ml='174px'>
-            <Select placeholder='학년' width='390px'>
+            <Select placeholder='학년' width='390px' height='63px'>
               <option>1</option>
               <option>2</option>
               <option>3</option>
