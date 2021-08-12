@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
-import {Input, Select, Button, Box} from '../components';
 import styled from 'styled-components';
+import {Input, Select, Button, Box} from '../components';
 import {Buddy} from '../components/icons';
 
 const Text = styled.p`
@@ -8,6 +8,7 @@ const Text = styled.p`
   font-size: 16px;
   font-weight: 300;
   line-height: 20px;
+  white-space: nowrap;
 `;
 
 export const SignUp: React.FC = () => {
@@ -40,9 +41,9 @@ export const SignUp: React.FC = () => {
           </Box>
         </Box>
         <Box isFlex>
-          <Box width='400px'>
+          <Box width='390px'>
             <Input width='390px' height='63px' value={password} onChange={handleInputChange(setPassword)} type='password' placeholder='비밀번호' />
-            <Text>영어 대문자,숫자,특수문자 각 1개 이상 혼용, 전체 8글자 이상</Text>
+            <Text>영어 대문자, 숫자, 특수문자 각 1개 이상 혼용, 전체 8글자 이상</Text>
           </Box>
           <Box ml='164px'>
             <Input width='390px' height='63px' value={passwordCheck} onChange={handleInputChange(setPasswordCheck)} type='password' placeholder='비밀번호 확인' />
@@ -74,10 +75,10 @@ export const SignUp: React.FC = () => {
         <Box isFlex>
           <Box>
             <Input width='390px' height='63px' value={id} onChange={handleInputChange(setId)} placeholder='이름' />
-            <Text>한글만,최대10자</Text>
+            <Text>한글만, 최대 10자</Text>
           </Box>
           <Box ml='174px'>
-            <Input width='390px' height='63px' value={phoneNumber} onChange={handleInputChange(setPhoneNumber)} type='tel' placeholder='휴대전화번호' />
+            <Input width='390px' height='63px' value={phoneNumber} onChange={handleInputChange(setPhoneNumber)} type='tel' placeholder='전화번호' />
             <Text>예) 01012345678</Text>
           </Box>
         </Box>
@@ -104,7 +105,7 @@ export const SignUp: React.FC = () => {
         <Box isFlex mt='71px' height='20px'>
           <Text></Text>
         </Box>
-        <Button mt='30px'>회원가입하기</Button>
+        <Button mt='30px'>회원가입</Button>
       </Box>
     </Box>
   );
