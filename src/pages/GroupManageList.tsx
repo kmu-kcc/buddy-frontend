@@ -116,7 +116,7 @@ export const GroupManageList = () => {
 
   return (
     <Box width='100%' py='48px' px='60px'>
-      <Text fontSize='40px' fontWeight={700} lineHeight='50px'>조직관리</Text>
+      <Text color='#454440' fontSize='40px' fontWeight={700} lineHeight='50px'>조직관리</Text>
       <Box isFlex width='100%' mt='32px' alignItems='flex-end' justifyContent='space-between'>
         <Tab tabs={['동아리원 목록', '입부 신청내역', '퇴부 신청내역']} />
         <SearchInput onChange={handleInputChange} value={InputTextValue} placeholder='search' />
