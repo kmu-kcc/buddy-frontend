@@ -1,6 +1,6 @@
 import React, {useCallback, useState, useMemo} from 'react';
 import styled from 'styled-components';
-import {Button, Box, Check, Textarea, ToggleSwitch, Input, Select} from '../components';
+import {Button, Box, Check, Textarea, ToggleSwitch, Input, Select, PopUp} from '../components';
 import {Arrow, Check as CheckIcon, Buddy} from '../components/icons';
 
 const Label = styled.p`
@@ -122,6 +122,15 @@ export const Test = () => {
         <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
           <Buddy mb='8px' width='30px' height='30px' color='#000' />
           <Label>Buddy Icon (30x30)</Label>
+        </Box>
+      </Box>
+      <h2>PopUp</h2>
+      <Box isFlex>
+        <Box>
+          <PopUp popupType='입부' name='홍길동' />
+        </Box>
+        <Box ml='20px'>
+          <PopUp popupType='퇴부' name='홍길동' />
         </Box>
       </Box>
     </Box>
