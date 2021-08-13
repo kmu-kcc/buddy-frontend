@@ -1,6 +1,6 @@
 import React, {useCallback, useState, useMemo} from 'react';
 import styled from 'styled-components';
-import {Button, Box, Check, Span, Text, Textarea, ToggleSwitch, Input, Select} from '../components';
+import {Button, Box, Check, Span, Tab, Text, Textarea, ToggleSwitch, Input, Select} from '../components';
 import {Arrow, Check as CheckIcon, Buddy} from '../components/icons';
 
 const StateLabel = styled.span<{active: boolean;}>`
@@ -18,6 +18,7 @@ export const Test = () => {
   const [secondCheck, setSecondCheck] = useState(false);
   const [selected, setSelected] = useState('none');
   const [isToggle, setToggle] = useState(false);
+  const [activeTab, setActiveTab] = useState(1);
 
   const handleClick = useCallback(() => {
     setCount(count + 1);
@@ -41,7 +42,11 @@ export const Test = () => {
   const handleSelect = useCallback((index: number, value: string) => {
     setSelected(value);
   }, [setSelected]);
+  const handleTabChange = useCallback((index: number) => {
+    setActiveTab(index);
+  }, [setActiveTab]);
 
+  const tabs = useMemo(() => ['Tab 1', 'Tab 2', 'Tab 3'], []);
   const env = useMemo(() => process.env.REACT_APP_ENV, []);
 
   return (
@@ -119,6 +124,11 @@ export const Test = () => {
           <Buddy mb='8px' width='30px' height='30px' color='#000' />
           <Span>Buddy Icon (30x30)</Span>
         </Box>
+      </Box>
+      <h2>Tab</h2>
+      <Box>
+        <Tab tabs={tabs} initialTab={1} onTabChange={handleTabChange} />
+        <Text mt='12px'>current active tab is index <Span color='#f00'>{activeTab}</Span></Text>
       </Box>
     </Box>
   );
