@@ -31,7 +31,7 @@ export const Mypage = () => {
   }, [history]);
 
   return (
-    <Box width='100%' pl='60px' pt='32px' pb='48px' position='relative'>
+    <Box width='100%' pl='60px' pt='48px' pb='48px' position='relative'>
       <Text mb='48px' fontSize='40px' fontWeight={700} lineHeight='50px' color='#454440'>마이페이지</Text>
       {/* 이름 */}
       <Box isFlex>
