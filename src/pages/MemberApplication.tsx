@@ -1,13 +1,19 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
 import {Box, MemberCard, Input, Button} from '../components';
-import {color, typography, TypographyProps, layout} from 'styled-system';
+import {color, typography, TypographyProps, layout, HeightProps, SpaceProps, WidthProps} from 'styled-system';
 
 const ReverseButton = styled(Button)`
-
+  background: #FF6845;
+  border: 2px solid #FF6845;
 `;
 
-const Text = styled.span<TypographyProps>`
+const UnderBar = styled.div`
+  border: 1px solid #E5E5E5;
+  width:  383px;
+`;
+
+const Text = styled.span<TypographyProps & HeightProps & SpaceProps & WidthProps>`
   ${color}
   ${typography}
   ${layout}
@@ -24,25 +30,31 @@ export const MemberApplication: React.FC = () =>{
   }, []);
   return (
     <div>
-      <Box mt='60px' mb='58px' isFlex>
-        <Text color='#454440;' fontSize={40}>조직관리</Text>
-      </Box>
-      <Box isFlex>
-        <Box>
-          <Text color='#B8B6B0;' fontSize={25}>입/퇴부 신청내역</Text>
+      <Box isFlex flexDirection='column' width='100%' ml='67px'>
+        <Box mt='60px' mb='58px' isFlex>
+          <Text color='#454440;' fontSize={40}>조직관리</Text>
         </Box>
-        <Box ml='639px'>
-          <Input value={Search} onChange={handleInputChange(setSearch)}></Input>
+        <Box isFlex flexDirection='row-reverse'>
+          <Box mr='114px' ml='auto'>
+            <Input height='59px' width='433px' value={Search} onChange={handleInputChange(setSearch)} placeholder='Search' />
+          </Box>
+          <Box isFlex width='500px' height='48px'>
+            <Text width='500px' height='48px' color='#B8B6B0;' fontSize={20}>입 / 퇴부 신청내역</Text>
+          </Box>
         </Box>
-      </Box>
-      <Box>
-        <Button>승인</Button>
-        <ReverseButton>거부</ReverseButton>
-      </Box>
-      <Box isFlex >
-        <MemberCard />
-        <MemberCard />
-        <MemberCard />
+        <UnderBar />
+        <Box isFlex flexDirection='row-reverse' mt='36px'>
+          <ReverseButton mr='114px' ml='21px' width='149px' height='54px'>거부</ReverseButton>
+          <Button width='149px' height='54px'>승인</Button>
+        </Box>
+        <Box isFlex mt='33px' mb='50px' flexWrap='wrap' maxWidth='1302px'>
+          <MemberCard />
+          <MemberCard />
+          <MemberCard />
+          <MemberCard />
+          <MemberCard />
+          <MemberCard />
+        </Box>
       </Box>
     </div>
   );
