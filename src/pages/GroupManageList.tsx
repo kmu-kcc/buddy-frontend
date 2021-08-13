@@ -80,9 +80,9 @@ const CardWrapper = styled.div<SpaceProps & BorderProps>`
   ${space}
   background: #FFFFFF;
   box-sizing: border-box;
-  margin: 15px 10px; 
+  margin: 15px 10px;
   margin-bottom: 38px;
-  
+
 `;
 
 interface MemberCardProps {
@@ -103,7 +103,7 @@ const MemberCard = (MemberCardProps: MemberCardProps) => {
       <Box isInlineBlock position='absolute' ml='192px' mr='37px' mt='49px' mb='217px' fontSize='14px' color='#CBC8BE'>{date}</Box>
       <CardLine />
       <Box position='absolute' mt='104px' mb='104px'>
-        <Box mt='4px'/>
+        <Box mt='4px' />
         <Box>
           <Box position='absolute' isInlineBlock ml='45px' mr='213px' mt='12px' mb='12px'>이름</Box><Box isInlineBlock ml='152px' mt='12px' mb='12px'>{username}</Box>
         </Box>
@@ -130,13 +130,13 @@ export const GroupManageList = () => {
 
   const CardListAdmin = UserProfile.map((info, idx) => (
     <CardWrapper border='2px solid #6D48E5' borderRadius='37px' key={idx}>
-      <MemberCard group='운영자' username={info.username} univnumber={info.univnumber} major={info.major} date={info.date}/>
+      <MemberCard group='운영자' username={info.username} univnumber={info.univnumber} major={info.major} date={info.date} />
     </CardWrapper>
   ));
 
   const CardListMember = UserProfile.map((info, idx) => (
     <CardWrapper border='2px solid #FFD646' borderRadius='37px' key={idx}>
-      <MemberCard group='동아리원' username={info.username} univnumber={info.univnumber} major={info.major} date={info.date}/>
+      <MemberCard group='동아리원' username={info.username} univnumber={info.univnumber} major={info.major} date={info.date} />
     </CardWrapper>
   ));
   return (

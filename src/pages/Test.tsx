@@ -1,11 +1,7 @@
 import React, {useCallback, useState, useMemo} from 'react';
 import styled from 'styled-components';
-import {Button, Box, Check, Textarea, Input, Select} from '../components';
+import {Button, Box, Check, Span, Tab, Text, Textarea, ToggleSwitch, Input, Select} from '../components';
 import {Arrow, Check as CheckIcon, Buddy} from '../components/icons';
-
-const Label = styled.p`
-  margin: 0;
-`;
 
 const StateLabel = styled.span<{active: boolean;}>`
   padding: 2px 6px;
@@ -21,10 +17,16 @@ export const Test = () => {
   const [check, setCheck] = useState(false);
   const [secondCheck, setSecondCheck] = useState(false);
   const [selected, setSelected] = useState('none');
+  const [isToggle, setToggle] = useState(false);
+  const [activeTab, setActiveTab] = useState(1);
 
   const handleClick = useCallback(() => {
     setCount(count + 1);
   }, [count, setCount]);
+  const handleToggleChange = useCallback((toggle: boolean) => {
+    setToggle(toggle);
+    console.log(`current toggle state: ${isToggle} change toggle state: ${toggle}`);
+  }, [isToggle, setToggle]);
   const handleTextareaChange = useCallback((event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTextValue(event.target.value);
   }, [setTextValue]);
@@ -40,16 +42,21 @@ export const Test = () => {
   const handleSelect = useCallback((index: number, value: string) => {
     setSelected(value);
   }, [setSelected]);
+  const handleTabChange = useCallback((index: number) => {
+    setActiveTab(index);
+  }, [setActiveTab]);
+
+  const tabs = useMemo(() => ['Tab 1', 'Tab 2', 'Tab 3'], []);
   const env = useMemo(() => process.env.REACT_APP_ENV, []);
 
   return (
     <Box width='100%' p='16px 24px'>
-      <p>
+      <Text>
         deployed channel&nbsp;&nbsp;
         <StateLabel active={env === 'localhost'}>localhost</StateLabel>
         <StateLabel active={env === 'development'}>development</StateLabel>
         <StateLabel active={env === 'production'}>production</StateLabel>
-      </p>
+      </Text>
       <h2>Box</h2>
       <Box mb='4px' isFlex alignItems='center' justifyContent='center' color='#000' bg='#eee'>
         Basic Flex Box
@@ -98,22 +105,30 @@ export const Test = () => {
         <option>Selection 3</option>
       </Select>
       <Box>
-        <p>Select 1 selected value is <span style={{color: '#f00'}}>{selected}</span></p>
+        <Text>Select 1 selected value is <Span color='#f00'>{selected}</Span></Text>
       </Box>
+      <h2>Toggle</h2>
+      <ToggleSwitch onToggleClick={handleToggleChange} />
+      <ToggleSwitch ml='4px' onToggleClick={handleToggleChange} />
       <h2>Icon</h2>
       <Box>
         <Box isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
           <Arrow mb='8px' color='#000' />
-          <Label>Arrow (1.5x)</Label>
+          <Span>Arrow (1.5x)</Span>
         </Box>
         <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
           <CheckIcon mb='8px' color='#000' />
-          <Label>Check (3x)</Label>
+          <Span>Check (3x)</Span>
         </Box>
         <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
           <Buddy mb='8px' width='30px' height='30px' color='#000' />
-          <Label>Buddy Icon (30x30)</Label>
+          <Span>Buddy Icon (30x30)</Span>
         </Box>
+      </Box>
+      <h2>Tab</h2>
+      <Box>
+        <Tab tabs={tabs} initialTab={1} onTabChange={handleTabChange} />
+        <Text mt='12px'>current active tab is index <Span color='#f00'>{activeTab}</Span></Text>
       </Box>
     </Box>
   );
