@@ -15,7 +15,6 @@ const Wrapper = styled.input<SpaceProps & Props>`
   font-size: 18px;
   line-height: 23px;
   float: right;
-  margin-bottom: 100px;
   color: #CBC8BE;
   ::placeholder {
     color: #CBC8BE;
