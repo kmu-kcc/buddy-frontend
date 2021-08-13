@@ -1,13 +1,15 @@
 import React, {useCallback, useState} from 'react';
-import {Input, Select, Button, Box} from '../components';
 import styled from 'styled-components';
+import {Input, Select, Button, Box} from '../components';
 import {Buddy} from '../components/icons';
 
 const Text = styled.p`
+  margin-left: 19px;
   color: #6D48E5;
   font-size: 16px;
   font-weight: 300;
   line-height: 20px;
+  white-space: nowrap;
 `;
 
 export const SignUp: React.FC = () => {
@@ -25,9 +27,9 @@ export const SignUp: React.FC = () => {
   }, []);
 
   return (
-    <Box isFlex width='100%' justifyContent='center'>
+    <Box isFlex width='100%' pt='100px' pb='96px' justifyContent='center'>
       <Box isFlex flexDirection='column' justifyContent='center' alignItems='center'>
-        <Box mt='100px'>
+        <Box>
           <Buddy mb='100px' width='248px' height='140px' />
         </Box>
         <Box isFlex>
@@ -40,12 +42,22 @@ export const SignUp: React.FC = () => {
           </Box>
         </Box>
         <Box isFlex>
-          <Box width='400px'>
+          <Box width='390px'>
             <Input width='390px' height='63px' value={password} onChange={handleInputChange(setPassword)} type='password' placeholder='비밀번호' />
-            <Text>영어 대문자,숫자,특수문자 각 1개 이상 혼용, 전체 8글자 이상</Text>
+            <Text>영어 대문자, 숫자, 특수문자 각 1개 이상 혼용, 전체 8글자 이상</Text>
           </Box>
-          <Box ml='164px'>
+          <Box ml='174px'>
             <Input width='390px' height='63px' value={passwordCheck} onChange={handleInputChange(setPasswordCheck)} type='password' placeholder='비밀번호 확인' />
+          </Box>
+        </Box>
+        <Box isFlex>
+          <Box>
+            <Input width='390px' height='63px' value={id} onChange={handleInputChange(setId)} placeholder='이름' />
+            <Text>한글만, 최대 10자</Text>
+          </Box>
+          <Box ml='174px'>
+            <Input width='390px' height='63px' value={phoneNumber} onChange={handleInputChange(setPhoneNumber)} type='tel' placeholder='전화번호' />
+            <Text>예) 01012345678</Text>
           </Box>
         </Box>
         <Box isFlex>
@@ -72,16 +84,6 @@ export const SignUp: React.FC = () => {
           </Box>
         </Box>
         <Box isFlex>
-          <Box>
-            <Input width='390px' height='63px' value={id} onChange={handleInputChange(setId)} placeholder='이름' />
-            <Text>한글만,최대10자</Text>
-          </Box>
-          <Box ml='174px'>
-            <Input width='390px' height='63px' value={phoneNumber} onChange={handleInputChange(setPhoneNumber)} type='tel' placeholder='휴대전화번호' />
-            <Text>예) 01012345678</Text>
-          </Box>
-        </Box>
-        <Box isFlex>
           <Box isFlex height='63px'>
             <Select placeholder='재학여부' width='390px' height='63px'>
               <option>재학</option>
@@ -104,7 +106,7 @@ export const SignUp: React.FC = () => {
         <Box isFlex mt='71px' height='20px'>
           <Text></Text>
         </Box>
-        <Button mt='30px'>회원가입하기</Button>
+        <Button mt='30px' width='388px' height='70px'>회원가입</Button>
       </Box>
     </Box>
   );

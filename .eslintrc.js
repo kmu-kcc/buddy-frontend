@@ -24,15 +24,19 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: [
+    '@typescript-eslint',
     'react',
     'react-hooks',
     'import',
-    '@typescript-eslint',
   ],
   rules: {
     'max-len': 'off',
     'require-jsdoc': 'off',
     'linebreak-style': 'off',
+    'brace-style': 'off',
+    '@typescript-eslint/brace-style': ['error'],
+    '@typescript-eslint/type-annotation-spacing': ['warn'],
+    '@typescript-eslint/consistent-type-definitions': ['error', 'interface'],
     'jsx-quotes': ['warn', 'prefer-single'],
     'react/jsx-space-before-closing': ['warn', 'always'],
     'react/function-component-definition': ['error', {
