@@ -1,7 +1,8 @@
 import React, {useMemo} from 'react';
 import styled from 'styled-components';
 import {
-  color, ColorProps,
+  compose, color, ColorProps,
+  flex, FlexProps,
   height, HeightProps,
   space, SpaceProps,
   typography, TypographyProps,
@@ -10,11 +11,14 @@ import {
 
 const Wrapper = styled.textarea<TextareaProps>`
   box-sizing: border-box;
-  ${color}
-  ${width}
-  ${height}
-  ${space}
-  ${typography}
+  ${compose(
+      color,
+      flex,
+      width,
+      height,
+      space,
+      typography,
+  )}
   resize: none;
   background: #fff;
   border: 1px solid ${({error, empty}) => error ? '#FF9A83' : empty ? '#CBC8BE' : '#8D71EB'};
@@ -30,7 +34,7 @@ const Wrapper = styled.textarea<TextareaProps>`
   }
 `;
 
-interface TextareaProps extends ColorProps, SpaceProps, HeightProps, WidthProps, TypographyProps {
+interface TextareaProps extends ColorProps, FlexProps, SpaceProps, HeightProps, WidthProps, TypographyProps {
   value: string;
   error?: boolean;
   empty?: boolean;
