@@ -49,7 +49,7 @@ export const Navigation = () => {
   const hidden = useMemo(() => {
     const pathname = history.location.pathname;
 
-    if (pathname === '/login' || pathname === '/signup') {
+    if (pathname.match(/\/login/gi) || pathname.match(/\/signup/gi)) {
       return true;
     }
     return false;
