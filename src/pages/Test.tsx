@@ -1,11 +1,7 @@
 import React, {useCallback, useState, useMemo} from 'react';
 import styled from 'styled-components';
-import {Button, Box, Check, Textarea, ToggleSwitch, Input, Select} from '../components';
+import {Button, Box, Check, Span, Text, Textarea, ToggleSwitch, Input, Select} from '../components';
 import {Arrow, Check as CheckIcon, Buddy} from '../components/icons';
-
-const Label = styled.p`
-  margin: 0;
-`;
 
 const StateLabel = styled.span<{active: boolean;}>`
   padding: 2px 6px;
@@ -50,12 +46,12 @@ export const Test = () => {
 
   return (
     <Box width='100%' p='16px 24px'>
-      <p>
+      <Text>
         deployed channel&nbsp;&nbsp;
         <StateLabel active={env === 'localhost'}>localhost</StateLabel>
         <StateLabel active={env === 'development'}>development</StateLabel>
         <StateLabel active={env === 'production'}>production</StateLabel>
-      </p>
+      </Text>
       <h2>Box</h2>
       <Box mb='4px' isFlex alignItems='center' justifyContent='center' color='#000' bg='#eee'>
         Basic Flex Box
@@ -104,7 +100,7 @@ export const Test = () => {
         <option>Selection 3</option>
       </Select>
       <Box>
-        <p>Select 1 selected value is <span style={{color: '#f00'}}>{selected}</span></p>
+        <Text>Select 1 selected value is <Span color='#f00'>{selected}</Span></Text>
       </Box>
       <h2>Toggle</h2>
       <ToggleSwitch onToggleClick={handleToggleChange} />
@@ -113,15 +109,15 @@ export const Test = () => {
       <Box>
         <Box isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
           <Arrow mb='8px' color='#000' />
-          <Label>Arrow (1.5x)</Label>
+          <Span>Arrow (1.5x)</Span>
         </Box>
         <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
           <CheckIcon mb='8px' color='#000' />
-          <Label>Check (3x)</Label>
+          <Span>Check (3x)</Span>
         </Box>
         <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
           <Buddy mb='8px' width='30px' height='30px' color='#000' />
-          <Label>Buddy Icon (30x30)</Label>
+          <Span>Buddy Icon (30x30)</Span>
         </Box>
       </Box>
     </Box>
