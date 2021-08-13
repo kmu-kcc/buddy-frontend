@@ -1,7 +1,8 @@
 import React, {useMemo} from 'react';
 import styled from 'styled-components';
 import {
-  color, ColorProps,
+  compose, color, ColorProps,
+  flex, FlexProps,
   height, HeightProps,
   space, SpaceProps,
   typography, TypographyProps,
@@ -10,11 +11,14 @@ import {
 
 const Wrapper = styled.input<InputProps>`
   box-sizing: border-box;
-  ${color}
-  ${space}
-  ${height}
-  ${width}
-  ${typography}
+  ${compose(
+      color,
+      flex,
+      space,
+      height,
+      width,
+      typography,
+  )}
   border: 1px solid ${({error, empty}) => error ? '#FF9A83' : empty ? '#CBC8BE' : '#8D71EB'};
   border-radius: 15px;
 
@@ -28,7 +32,7 @@ const Wrapper = styled.input<InputProps>`
   }
 `;
 
-interface InputProps extends ColorProps, SpaceProps, HeightProps, WidthProps, TypographyProps {
+interface InputProps extends ColorProps, FlexProps, SpaceProps, HeightProps, WidthProps, TypographyProps {
   type?: string;
   disabled?: boolean;
   value: string;

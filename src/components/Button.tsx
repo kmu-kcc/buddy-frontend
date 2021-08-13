@@ -1,26 +1,30 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
-  background, BackgroundProps,
+  compose, background, BackgroundProps,
   border, BorderProps,
   color, ColorProps,
+  flex, FlexProps,
   height, HeightProps,
   space, SpaceProps,
   typography, TypographyProps,
   width, WidthProps,
 } from 'styled-system';
 
-type StyleProps = BorderProps & BackgroundProps & ColorProps & HeightProps & SpaceProps & TypographyProps & WidthProps;
+type StyleProps = BorderProps & BackgroundProps & ColorProps & FlexProps & HeightProps & SpaceProps & TypographyProps & WidthProps;
 
 const Wrapper = styled.button<StyleProps>`
   box-sizing: border-box;
-  ${width}
-  ${height}
-  ${space}
-  ${background}
-  ${color}
-  ${typography}
-  ${border}
+  ${compose(
+      width,
+      height,
+      flex,
+      space,
+      background,
+      color,
+      typography,
+      border,
+  )}
   cursor: pointer;
   transition: all 0.15s ease-out;
 

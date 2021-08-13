@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
-import {SpaceProps, WidthProps, HeightProps} from 'styled-system';
+import {SpaceProps, FlexProps, WidthProps, HeightProps} from 'styled-system';
 import {Box} from './Box';
 import {Arrow} from './icons';
 
@@ -85,7 +85,7 @@ const OptionItem = styled.option<{selected: boolean;}>`
   }
 `;
 
-interface SelectProps extends SpaceProps, WidthProps, HeightProps {
+interface SelectProps extends SpaceProps, FlexProps, WidthProps, HeightProps {
   children: JSX.Element[];
   placeholder?: string;
   initialSelection?: number;

@@ -2,13 +2,14 @@ import styled from 'styled-components';
 import {
   compose, background, BackgroundProps,
   color, ColorProps,
+  flex, FlexProps,
   typography, TypographyProps,
   width, WidthProps,
   height, HeightProps,
   space, SpaceProps,
 } from 'styled-system';
 
-type StyleProps = BackgroundProps & ColorProps & TypographyProps & WidthProps & HeightProps & SpaceProps;
+type StyleProps = BackgroundProps & ColorProps & FlexProps & TypographyProps & WidthProps & HeightProps & SpaceProps;
 
 export const Text = styled.p<StyleProps>`
   margin-block-start: 0;
@@ -16,6 +17,7 @@ export const Text = styled.p<StyleProps>`
   ${compose(
       background,
       color,
+      flex,
       typography,
       width,
       height,
