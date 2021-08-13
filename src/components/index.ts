@@ -7,4 +7,5 @@ export {ToggleSwitch} from './ToggleSwitch';
 export {Check} from './Check';
 export {Textarea} from './Textarea';
 export {Input} from './Input';
+export {Text, Span} from './Text';
 export {MemberCard} from './MemberCard';
