@@ -1,5 +1,5 @@
 import React, {useState, useCallback} from 'react';
-import {Box, SearchInput, Button} from '../components';
+import {Box, SearchInput, Button, Text} from '../components';
 import styled from 'styled-components';
 import {background, BackgroundProps, border, BorderProps, space, SpaceProps} from 'styled-system';
 
@@ -18,15 +18,13 @@ const SelectLine = styled.div`
 `;
 
 const CardLine = styled.div`
-  position: absolute;
   width: 231px;
   height: 0px;
   background-color: #E5E5E5;
   border: 1px solid #E5E5E5;
-  margin-top: 76px;
   margin-left: 36px;
-  margin-right: 36px;
-`;
+  margin-top: 8px;
+  `;
 
 const GroupNameShadow = styled.div<BackgroundProps>`
   position: absolute;
@@ -97,25 +95,33 @@ interface MemberCardProps {
 const MemberCard = (MemberCardProps: MemberCardProps) => {
   const {group, children, username, univnumber, major, date} = MemberCardProps;
   return (
-    <Box>
+    <Box isFlex flexDirection='column'>
       {children}
-      <Box isInlineBlock position='absolute' mt='45px' mb='8px' ml='41px' mr='242px'>{group}</Box>
-      <Box isInlineBlock position='absolute' ml='192px' mr='37px' mt='49px' mb='217px' fontSize='14px' color='#CBC8BE'>{date}</Box>
-      <CardLine />
-      <Box position='absolute' mt='104px' mb='104px'>
-        <Box mt='4px' />
-        <Box>
-          <Box position='absolute' isInlineBlock ml='45px' mr='213px' mt='12px' mb='12px'>이름</Box><Box isInlineBlock ml='152px' mt='12px' mb='12px'>{username}</Box>
+      <Box isFlex flexDirection='column'>
+        <Box isFlex mt='45px' ml='41px'>
+          <Box>{group}</Box>
+          <Box ml='101px'><Text color='#CBC8BE;'>{date}</Text></Box>
         </Box>
-        <Box>
-          <Box position='absolute' isInlineBlock ml='45px' mr='213px' mt='12px' mb='12px'>학번</Box><Box isInlineBlock ml='152px' mt='12px' mb='12px'>{univnumber}</Box>
-        </Box>
-        <Box>
-          <Box position='absolute' isInlineBlock ml='45px' mr='213px' mt='12px' mb='12px'>학과</Box><Box isInlineBlock ml='152px' mt='12px' mb='12px'>{major}</Box>
-        </Box>
+        <CardLine />
       </Box>
-      <Box position='absolute' mr='46px' ml='46px' mt='239px' mb='35px'>
-        <Button>자세히보기</Button>
+      <Box isFlex mt='28px' ml='44px'>
+        <Box isFlex flexDirection='column'>
+          <Box isFlex height='20px'>
+            <Box >이름</Box>
+            <Box ml='62px' flex={1}>{username}</Box>
+          </Box>
+          <Box isFlex mt='24px' height='20px'>
+            <Box >학번</Box>
+            <Box ml='62px' flex={1}>{univnumber}</Box>
+          </Box>
+          <Box isFlex mt='24px' height='20px'>
+            <Box >학과</Box>
+            <Box ml='62px' flex={1}>{major}</Box>
+          </Box>
+          <Box mt='30px'>
+            <Button py='0' width='211px' height='40px'>자세히보기</Button>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );
