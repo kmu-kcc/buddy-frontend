@@ -13,6 +13,8 @@ const App: React.FC = () => {
           <Route path='/' exact component={pages.Landing} />
           <Route path='/test' component={pages.Test} />
           <Route path='/login' component={pages.Login} />
+          <Route path='/modifyMypage' component={pages.ModifyMypage} />
+          <Route path='/mypage' component={pages.Mypage} />
         </Switch>
       </Layout>
     </BrowserRouter>
