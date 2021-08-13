@@ -5,10 +5,11 @@ import {
   color, ColorProps,
   height, HeightProps,
   space, SpaceProps,
+  typography, TypographyProps,
   width, WidthProps,
 } from 'styled-system';
 
-type StyleProps = BackgroundProps & ColorProps & HeightProps & SpaceProps & WidthProps;
+type StyleProps = BackgroundProps & ColorProps & HeightProps & SpaceProps & TypographyProps & WidthProps;
 
 const Wrapper = styled.button<StyleProps>`
   ${width}
@@ -16,11 +17,9 @@ const Wrapper = styled.button<StyleProps>`
   ${space}
   ${background}
   ${color}
+  ${typography}
   border: 2px solid #6D48E5;
   border-radius: 37px;
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 23px;
   cursor: pointer;
   transition: all 0.15s ease-out;
 
@@ -38,6 +37,9 @@ const defaultProps = {
   background: '#6D48E5',
   color: '#fff',
   height: '48px',
+  fontSize: '18px',
+  fontWeight: 700,
+  lineHeight: '23px',
   px: '47px',
   py: '12px',
 };
