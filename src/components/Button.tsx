@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {
   background, BackgroundProps,
+  border, BorderProps,
   color, ColorProps,
   height, HeightProps,
   space, SpaceProps,
@@ -9,17 +10,17 @@ import {
   width, WidthProps,
 } from 'styled-system';
 
-type StyleProps = BackgroundProps & ColorProps & HeightProps & SpaceProps & TypographyProps & WidthProps;
+type StyleProps = BorderProps & BackgroundProps & ColorProps & HeightProps & SpaceProps & TypographyProps & WidthProps;
 
 const Wrapper = styled.button<StyleProps>`
+  box-sizing: border-box;
   ${width}
   ${height}
   ${space}
   ${background}
   ${color}
   ${typography}
-  border: 2px solid #6D48E5;
-  border-radius: 37px;
+  ${border}
   cursor: pointer;
   transition: all 0.15s ease-out;
 
@@ -35,6 +36,8 @@ interface ButtonProps extends StyleProps {
 
 const defaultProps = {
   background: '#6D48E5',
+  border: '2px solid #6D48E5',
+  borderRadius: '37px',
   color: '#fff',
   height: '48px',
   fontSize: '18px',
