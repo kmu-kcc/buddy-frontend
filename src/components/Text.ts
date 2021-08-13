@@ -11,6 +11,8 @@ import {
 type StyleProps = BackgroundProps & ColorProps & TypographyProps & WidthProps & HeightProps & SpaceProps;
 
 export const Text = styled.p<StyleProps>`
+  margin-block-start: 0;
+  margin-block-end: 0;
   ${compose(
       background,
       color,
