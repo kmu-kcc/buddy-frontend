@@ -15,7 +15,7 @@ LinkText.defaultProps = {
   color: '#363634',
 };
 
-export const Login = () => {
+export const SignIn = () => {
   const [id, setId] = useState('');
   const [password, setPassword] = useState('');
   const handleInputChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
