@@ -5,7 +5,7 @@ import {MemberRequests} from './MemberRequests';
 
 export const Organization = () => (
   <>
-    <Route component={Members} />
-    <Route component={MemberRequests} />
+    <Route path='/organization/members' component={Members} />
+    <Route path='/organization/members/request' component={MemberRequests} />
   </>
 );
