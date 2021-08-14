@@ -1,7 +1,7 @@
 import React, {useCallback} from 'react';
 import styled from 'styled-components';
 import {useHistory} from 'react-router-dom';
-import {Button, Box, Text} from '../components';
+import {Button, Box, Text} from '../../components';
 
 const Key = styled.span`
   float: left;
@@ -24,7 +24,7 @@ const FloatButton = styled(Button)`
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
 `;
 
-export const Mypage = () => {
+export const Profile = () => {
   const history = useHistory();
   const handleClick = useCallback(() => {
     history.push('/ModifyMypage');
