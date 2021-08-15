@@ -27,7 +27,7 @@ const FloatButton = styled(Button)`
 export const Profile = () => {
   const history = useHistory();
   const handleClick = useCallback(() => {
-    history.push('/ModifyMypage');
+    history.push('/user/settings');
   }, [history]);
 
   return (
