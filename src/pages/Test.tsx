@@ -11,6 +11,7 @@ const StateLabel = styled.span<{active: boolean;}>`
 `;
 
 export const Test = () => {
+  const [error, setError] = useState(false);
   const [count, setCount] = useState(0);
   const [textValue, setTextValue] = useState('');
   const [inputTextValue, setInputTextValue] = useState('');
@@ -45,9 +46,17 @@ export const Test = () => {
   const handleTabChange = useCallback((index: number) => {
     setActiveTab(index);
   }, [setActiveTab]);
+  const handleErrorClick = useCallback(() => {
+    console.log('error button clicked');
+    setError(true);
+  }, [setError]);
 
   const tabs = useMemo(() => ['Tab 1', 'Tab 2', 'Tab 3'], []);
   const env = useMemo(() => process.env.REACT_APP_ENV, []);
+
+  if (error) {
+    throw new Error();
+  }
 
   return (
     <Box width='100%' p='16px 24px'>
@@ -72,7 +81,8 @@ export const Test = () => {
       </Box>
       <h2>Button</h2>
       <Button mr='8px'>Button 1</Button>
-      <Button onClick={handleClick}>{count} time clicked</Button>
+      <Button mr='8px' onClick={handleClick}>{count} time clicked</Button>
+      <Button onClick={handleErrorClick}>Click to occur error</Button>
       <h2>Check</h2>
       <Check mr='16px' boxShape='rectangle' size='14px' fontSize='16px' label='check' checked={check} onCheck={handleCheck} />
       <Check boxShape='circle' size='14px' fontSize='14px' fontWeight={500} color='#00f' label='adding' checked={secondCheck} onCheck={handleSecondCheck} />
