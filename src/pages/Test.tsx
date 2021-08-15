@@ -22,6 +22,7 @@ export const Test = () => {
   const [secondCheck, setSecondCheck] = useState(false);
   const [selected, setSelected] = useState('none');
   const [isToggle, setToggle] = useState(false);
+  const [Yes, setYes] = useState(false);
 
   const handleClick = useCallback(() => {
     setCount(count + 1);
@@ -45,9 +46,10 @@ export const Test = () => {
   const handleSelect = useCallback((index: number, value: string) => {
     setSelected(value);
   }, [setSelected]);
-
+  const handleYes = useCallback(() => {
+    setYes(!Yes);
+  }, [Yes, setYes]);
   const env = useMemo(() => process.env.REACT_APP_ENV, []);
-
   return (
     <Box width='100%' p='16px 24px'>
       <p>
@@ -127,7 +129,7 @@ export const Test = () => {
       <h2>PopUp</h2>
       <Box isFlex>
         <Box>
-          <PopUp popupType='입부' name='홍길동' />
+          <PopUp onYes={handleYes} popupType='입부' name='홍길동' />
         </Box>
         <Box ml='20px'>
           <PopUp popupType='퇴부' name='홍길동' />
