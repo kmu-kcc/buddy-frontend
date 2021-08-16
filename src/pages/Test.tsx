@@ -1,6 +1,6 @@
 import React, {useCallback, useState, useMemo} from 'react';
 import styled from 'styled-components';
-import {Button, Box, Check, Span, Tab, Text, Textarea, ToggleSwitch, Input, PopUp, Select} from '../components';
+import {Button, Box, Check, Span, Tab, Text, Textarea, ToggleSwitch, Input, Popup, Select} from '../components';
 import {Arrow, Check as CheckIcon, Buddy} from '../components/icons';
 
 const StateLabel = styled.span<{active: boolean;}>`
@@ -19,9 +19,9 @@ export const Test = () => {
   const [secondCheck, setSecondCheck] = useState(false);
   const [selected, setSelected] = useState('none');
   const [isToggle, setToggle] = useState(false);
-  const [Yes, setYes] = useState(false);
-  const [No, setNo] = useState(false);
   const [activeTab, setActiveTab] = useState(1);
+  const [withdrawalPopupShow, setWithdrawalPopupShow] = useState(false);
+  const [signUpPopupShow, setSignUpPopupShow] = useState(false);
 
   const handleClick = useCallback(() => {
     setCount(count + 1);
@@ -45,12 +45,18 @@ export const Test = () => {
   const handleSelect = useCallback((index: number, value: string) => {
     setSelected(value);
   }, [setSelected]);
-  const handleYes = useCallback(() => {
-    setYes(!Yes);
-  }, [Yes, setYes]);
-  const handleNo = useCallback(() => {
-    setNo(!No);
-  }, [No, setNo]);
+  const handleWithdrawalConfirm = useCallback(() => {
+    setWithdrawalPopupShow(false);
+  }, [setWithdrawalPopupShow]);
+  const handleWithdrawalCancel = useCallback(() => {
+    setWithdrawalPopupShow(false);
+  }, [setWithdrawalPopupShow]);
+  const handleSignUpConfirm = useCallback(() => {
+    setSignUpPopupShow(false);
+  }, [setSignUpPopupShow]);
+  const handleSignUpCancel = useCallback(() => {
+    setSignUpPopupShow(false);
+  }, [setSignUpPopupShow]);
   const handleTabChange = useCallback((index: number) => {
     setActiveTab(index);
   }, [setActiveTab]);
@@ -58,6 +64,12 @@ export const Test = () => {
     console.log('error button clicked');
     setError(true);
   }, [setError]);
+  const handleWSignUpRequestPopupClick = useCallback(() => {
+    setSignUpPopupShow(true);
+  }, [setSignUpPopupShow]);
+  const handleWithdrawalRequestPopupClick = useCallback(() => {
+    setWithdrawalPopupShow(true);
+  }, [setWithdrawalPopupShow]);
 
   const tabs = useMemo(() => ['Tab 1', 'Tab 2', 'Tab 3'], []);
   const env = useMemo(() => process.env.REACT_APP_ENV, []);
@@ -163,10 +175,16 @@ export const Test = () => {
         <h2>PopUp</h2>
         <Box isFlex>
           <Box>
-            <PopUp onYes={handleYes} onNo={handleNo} popupType='입부' name='홍길동' />
+            <Button onClick={handleWSignUpRequestPopupClick}>Click to open popup</Button>
+            <Popup type='primary' onConfirm={handleSignUpConfirm} onCancel={handleSignUpCancel} confirmLabel='승인' cancelLabel='거절' show={signUpPopupShow}>
+              <Text fontSize='20px' lineHeight='25px'>홍길동님의 <Span fontWeight={700}>입부</Span>를 승인하시겠습니까?</Text>
+            </Popup>
           </Box>
           <Box ml='20px'>
-            <PopUp onYes={handleYes} onNo={handleNo} popupType='퇴부' name='홍길동' />
+            <Button onClick={handleWithdrawalRequestPopupClick}>Click to open popup</Button>
+            <Popup type='danger' onConfirm={handleWithdrawalConfirm} onCancel={handleWithdrawalCancel} confirmLabel='승인' cancelLabel='거절' show={withdrawalPopupShow}>
+              <Text fontSize='20px' lineHeight='25px'>홍길동님의 <Span fontWeight={700}>퇴부</Span>를 승인하시겠습니까?</Text>
+            </Popup>
           </Box>
         </Box>
       </Box>
