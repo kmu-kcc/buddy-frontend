@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
-import {SpaceProps, WidthProps, HeightProps} from 'styled-system';
+import {SpaceProps, FlexProps, WidthProps, HeightProps} from 'styled-system';
 import {Box} from './Box';
 import {Arrow} from './icons';
 
@@ -40,16 +40,29 @@ const SelectionWrapper = styled(Box)<{selected: boolean;}>`
 
 const OptionWrapper = styled(Box)`
   height: auto;
+  max-height: 264px;
   position: absolute;
   top: ${({height}) => `calc(${height} + 10px)`};
   left: 0;
   right: 0;
   z-index: 1;
+  overflow-y: overlay;
   background-color: #fff;
   border-radius: 15px;
   border: 1px solid #E5E5E5;
-  overflow: hidden;
   filter: drop-shadow(0px 5px 9px #E5E5E5);
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border: 4px solid transparent;
+    border-top-width: 14px;
+    border-bottom-width: 14px;
+    background-color: #CBC8BE;
+    background-clip: padding-box;
+  }
 `;
 
 const OptionItem = styled.option<{selected: boolean;}>`
@@ -72,7 +85,7 @@ const OptionItem = styled.option<{selected: boolean;}>`
   }
 `;
 
-interface SelectProps extends SpaceProps, WidthProps, HeightProps {
+interface SelectProps extends SpaceProps, FlexProps, WidthProps, HeightProps {
   children: JSX.Element[];
   placeholder?: string;
   initialSelection?: number;

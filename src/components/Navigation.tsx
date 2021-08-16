@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo} from 'react';
 import styled from 'styled-components';
-import {useHistory} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 import {Box} from './Box';
 import {Buddy} from './icons/Buddy';
 
@@ -45,15 +45,16 @@ const Logo = () => {
 };
 
 export const Navigation = () => {
-  const history = useHistory();
+  const location = useLocation();
   const hidden = useMemo(() => {
-    const pathname = history.location.pathname;
+    const pathname = location.pathname;
+    console.log('pathname updated', pathname);
 
-    if (pathname === '/login' || pathname === '/signup') {
+    if (pathname.match(/\/signin/gi) || pathname.match(/\/signup/gi)) {
       return true;
     }
     return false;
-  }, [history.location.pathname]);
+  }, [location.pathname]);
 
   return (
     <Wrapper display={hidden ? 'none' : 'block'}>
