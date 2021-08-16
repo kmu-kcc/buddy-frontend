@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
 import {color, typography, TypographyProps, layout, HeightProps, SpaceProps, WidthProps} from 'styled-system';
-import {Box, Input, Button, MemberCard, Tab} from '../../components';
+import {Box, Input, Button, MemberCard, Tab, Popup, Span} from '../../components';
 
 const ReverseButton = styled(Button)`
   background: #FF6845;
@@ -67,9 +67,32 @@ export const MemberRequests: React.FC = () =>{
       setState(event.target.value);
     };
   }, []);
-  const handleCheck = useCallback() => {
-    useState()
-  }
+
+  const [check, setCheck] = useState(false);
+  const handleCheck = useCallback(() => {
+    setCheck(!check);
+  }, [check, setCheck]);
+
+  const [withdrawalPopupShow, setWithdrawalPopupShow] = useState(false);
+  const [signUpPopupShow, setSignUpPopupShow] = useState(false);
+  const handleWSignUpRequestPopupClick = useCallback(() => {
+    setSignUpPopupShow(true);
+  }, [setSignUpPopupShow]);
+  const handleWithdrawalRequestPopupClick = useCallback(() => {
+    setWithdrawalPopupShow(true);
+  }, [setWithdrawalPopupShow]);
+  const handleWithdrawalConfirm = useCallback(() => {
+    setWithdrawalPopupShow(false);
+  }, [setWithdrawalPopupShow]);
+  const handleWithdrawalCancel = useCallback(() => {
+    setWithdrawalPopupShow(false);
+  }, [setWithdrawalPopupShow]);
+  const handleSignUpConfirm = useCallback(() => {
+    setSignUpPopupShow(false);
+  }, [setSignUpPopupShow]);
+  const handleSignUpCancel = useCallback(() => {
+    setSignUpPopupShow(false);
+  }, [setSignUpPopupShow]);
 
   const CardList = UserProfile.map((u) => {
     return {
@@ -78,7 +101,7 @@ export const MemberRequests: React.FC = () =>{
     };
   }).map((info, idx) => (
     <Box key={idx} mr='30px' mb='30px'>
-      <MemberCard group='입부 신청' username={info.username} univnumber={info.univnumber} major={info.major} date={info.date} phone={info.phone} checked={info.checked} onCheck={handleCheck} />
+      <MemberCard group='입부 신청' username={info.username} univnumber={info.univnumber} major={info.major} date={info.date} phone={info.phone} checked={check} onCheck={handleCheck} />
     </Box>
   ));
 
@@ -97,8 +120,18 @@ export const MemberRequests: React.FC = () =>{
           </Box>
         </Box>
         <Box isFlex flexDirection='row-reverse' mt='36px'>
-          <ReverseButton mr='114px' ml='21px' width='149px' height='54px'>거부</ReverseButton>
-          <Button width='149px' height='54px'>승인</Button>
+          <Box>
+            <ReverseButton mr='114px' ml='21px' width='149px' height='54px' onClick={handleWithdrawalRequestPopupClick}>거부</ReverseButton>
+            <Popup type='danger' onConfirm={handleWithdrawalConfirm} onCancel={handleWithdrawalCancel} confirmLabel='거절' cancelLabel='닫기' show={withdrawalPopupShow}>
+              <Text fontSize='20px' lineHeight='25px'>홍길동님의 <Span fontWeight={700}>입부</Span>를 거절하시겠습니까?</Text>
+            </Popup>
+          </Box>
+          <Box>
+            <Button width='149px' height='54px' onClick={handleWSignUpRequestPopupClick}>승인</Button>
+            <Popup type='primary' onConfirm={handleSignUpConfirm} onCancel={handleSignUpCancel} confirmLabel='승인' cancelLabel='닫기' show={signUpPopupShow}>
+              <Text fontSize='20px' lineHeight='25px'>홍길동님의 <Span fontWeight={700}>입부</Span>를 승인하시겠습니까?</Text>
+            </Popup>
+          </Box>
         </Box>
         <Box isFlex mt='33px' mb='50px' flexWrap='wrap'>
           {CardList}
