@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
 import {CSSTransition} from 'react-transition-group';
 import {Box, Button, ModalPortal} from '.';
@@ -66,6 +66,7 @@ interface PopupProps {
 export const Popup = (props: PopupProps) => {
   const {type, children, onConfirm, onCancel, onClose, confirmLabel, cancelLabel} = props;
   const [show, setShow] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   const close = useCallback(() => {
     onClose();
@@ -86,20 +87,27 @@ export const Popup = (props: PopupProps) => {
   }, [onCancel, close]);
   const handleTransitionEnd = useCallback((node, done) => {
   }, []);
-
   const handleEscKey = useCallback((event: KeyboardEvent) => {
     if (event.key === 'Escape') {
       close();
     }
   }, [close]);
+  const handleOutsideClick = useCallback((event: MouseEvent) => {
+    if (contentRef && !contentRef.current?.contains(event.target as Node)) {
+      close();
+    }
+  }, [contentRef, close]);
 
+  //  effect hook for keyboard event listener
   useEffect(() => {
     if (show) {
       document.addEventListener('keydown', handleEscKey);
+      document.addEventListener('mousedown', handleOutsideClick);
     } else {
       document.removeEventListener('keydown', handleEscKey);
+      document.removeEventListener('mousedown', handleOutsideClick);
     }
-  }, [show, handleEscKey]);
+  }, [show, handleEscKey, handleOutsideClick]);
 
   useEffect(() => {
     setShow(props.show);
@@ -109,7 +117,7 @@ export const Popup = (props: PopupProps) => {
     <ModalPortal>
       <CSSTransition in={show} timeout={300} classNames={fadeTransition} addEndListener={handleTransitionEnd}>
         <BackgroundWrapper>
-          <PopupWrapper type={type}>
+          <PopupWrapper type={type} ref={contentRef}>
             <Box isFlex alignItems='center' justifyContent='center' mb='52px'>
               {children}
             </Box>
