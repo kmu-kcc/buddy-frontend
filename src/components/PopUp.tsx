@@ -2,6 +2,7 @@ import React, {useState, useCallback} from 'react';
 import styled from 'styled-components';
 import {color, typography, TypographyProps, layout, HeightProps, SpaceProps, WidthProps} from 'styled-system';
 import {Box, Button} from '../components';
+import {ModalPortal} from '../ModalPortal';
 
 const AcceptButton = styled(Button)<{popupType: '입부' | '퇴부'}>`
   background-color: ${({popupType}) => popupType === '입부' ? '#6D48E5' : '#FF6845'};
@@ -75,7 +76,7 @@ export const PopUp = (Props: PopupProps) => {
     }
   }, [Yes, setYes, onYes]);
   return (
-    <div>
+    <ModalPortal>
       <BackgroundWrapper Yesed={Yes} onClick={handleYes} >
         <PopupWrapper popupType={popupType}>
           <Box isFlex flexDirection='column' alignItems='center'>
@@ -93,6 +94,6 @@ export const PopUp = (Props: PopupProps) => {
           </Box>
         </PopupWrapper>
       </BackgroundWrapper>
-    </div>
+    </ModalPortal>
   );
 };
