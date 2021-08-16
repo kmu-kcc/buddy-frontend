@@ -1,104 +1,94 @@
-import React, {useState, useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import styled from 'styled-components';
-import {color, typography, TypographyProps, layout, HeightProps, SpaceProps, WidthProps} from 'styled-system';
-import {Box, Button} from '../components';
-import {ModalPortal} from '../ModalPortal';
+import {Box, Button, ModalPortal} from '.';
 
-const AcceptButton = styled(Button)<{popupType: '입부' | '퇴부', Yes: boolean}>`
-  background-color: ${({popupType}) => popupType === '입부' ? '#6D48E5' : '#FF6845'};
-  border: 2px solid ${({popupType}) => popupType === '입부' ? '#6D48E5' : '#FF6845'};
+type PopupType = 'primary' | 'danger';
 
-  :hover{
-    filter: brightness(150%);
-  }
-  :focus {
-    filter: brightness((100%));
-  }
-`;
-
-const RejectButton = styled(Button)<{popupType: '입부' | '퇴부', No: boolean}>`
-  background-color: ${({popupType}) => popupType === '입부' ? '#EFEBFC' : '#FFEEEA'};
-  border: 2px solid ${({popupType}) => popupType === '입부' ? '#6D48E5' : '#FF6845'};
-  color: ${({popupType}) => popupType === '입부' ? '#6D48E5' : '#FF6845'};
-
-  :hover {
-    filter: brightness(90%);
-  }
-  :focus {
-    filter: brightness((100%));
-  }
-`;
-
-const Text = styled.span<TypographyProps & HeightProps & SpaceProps & WidthProps>`
-  ${color}
-  ${typography}
-  ${layout}
-  font-weight: 400;
-  font-size: 20px;
-  line-height: 25px;
-
-`;
-
-const BackgroundWrapper = styled.div<{Yes: boolean, No: boolean}>`
-  background: rgba(0, 0, 0, 0.25);
+const BackgroundWrapper = styled(Box)`
+  height: 100vh;
+  width: 100vw;
   position: fixed;
   left: 0;
   top: 0;
-  height: 100%;
-  width: 100%;
-  display: ${({Yes, No}) => Yes||No ? 'none': 'flex'};
+  background: rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
 `;
 
-const PopupWrapper = styled.div<{popupType: '입부' | '퇴부'}>`
+const PopupWrapper = styled(Box)<{type: PopupType}>`
   width: 500px;
   height: 256px;
-  background-color: #ffffff;
-  border: 1px solid #6D48E5;
+  padding: 60px 80px;
+  background-color: #fff;
+  border: 1px solid ${({type}) => type === 'primary' ? '#6D48E5' : '#FF6845'};
   border-radius: 15px;
-  border-color: ${({popupType}) => popupType === '입부' ? '#6D48E5' : '#FF6845'};
+`;
+
+const ConfirmButton = styled(Button)<{type: PopupType}>`
+  border: 2px solid ${({type}) => type === 'primary' ? '#6D48E5' : '#FF6845'};
+  background-color: ${({type}) => type === 'primary' ? '#6D48E5' : '#FF6845'};
+`;
+
+const RejectButton = styled(Button)<{type: PopupType}>`
+  color: ${({type}) => type === 'primary' ? '#6D48E5' : '#FF6845'};
+  background-color: ${({type}) => type === 'primary' ? '#EFEBFC' : '#FFEEEA'};
+  border: 2px solid ${({type}) => type === 'primary' ? '#6D48E5' : '#FF6845'};
+  :hover, :focus {
+    color: #fff;
+    background-color: ${({type}) => type === 'primary' ? '#6D48E5' : '#FF6845'};
+  }
 `;
 
 interface PopupProps {
-  popupType: '입부' | '퇴부';
-  name: string;
-  onYes?: (YesStatus: boolean) => void;
-  onNo?: (NoStatus: boolean) => void;
+  children: JSX.Element | JSX.Element[];
+  show: boolean;
+  type: PopupType;
+  confirmLabel?: string;
+  cancelLabel?: string;
+  onConfirm?: () => void;
+  onCancel?: () => void;
 }
 
-export const PopUp = (Props: PopupProps) => {
-  const {onYes, onNo, popupType, name} = Props;
-  const [Yes, setYes] = useState(false);
-  const [No, setNo] = useState(false);
-  const handleYes = useCallback(() => {
-    setYes(!Yes);
-    if (onYes) {
-      setYes(!Yes);
+export const Popup = (props: PopupProps) => {
+  const {type, children, onConfirm, onCancel, confirmLabel, cancelLabel} = props;
+  const [show, setShow] = useState(false);
+
+  const handleConfirmClick = useCallback(() => {
+    if (onConfirm) {
+      onConfirm();
     }
-  }, [Yes, setYes, onYes]);
-  const handleNo = useCallback(() => {
-    setNo(!No);
-    if (onNo) {
-      setNo(!No);
+    setShow(false);
+  }, [setShow, onConfirm]);
+  const handleCancelClick = useCallback(() => {
+    if (onCancel) {
+      onCancel();
     }
-  }, [No, setNo, onNo]);
+    setShow(false);
+  }, [setShow, onCancel]);
+
+  useEffect(() => {
+    setShow(props.show);
+  }, [props.show, setShow]);
+
+  if (!show) {
+    return null;
+  }
+
   return (
     <ModalPortal>
-      <BackgroundWrapper Yes={Yes} No={No}>
-        <PopupWrapper popupType={popupType}>
-          <Box isFlex flexDirection='column' alignItems='center'>
-            <Box mt='71px' mb='53px'>
-              <Text>{name}님의 <b>{popupType}</b>을 승인하시겠습니까?</Text>
-            </Box>
-            <Box isFlex width='344px' justifyContent='space-between'>
-              <Box>
-                <AcceptButton Yes={Yes} onClick={handleYes} width='auto' height='48px' px='36px' popupType={popupType}>{popupType}승인</AcceptButton>
-              </Box>
-              <Box>
-                <RejectButton No={No} onClick={handleNo} width='auto' height='48px' px='36px' popupType={popupType}>{popupType}거부</RejectButton>
-              </Box>
-            </Box>
+      <BackgroundWrapper>
+        <PopupWrapper type={type}>
+          <Box isFlex alignItems='center' justifyContent='center' mb='52px'>
+            {children}
+          </Box>
+          <Box isFlex width='100%' justifyContent='center'>
+            <ConfirmButton type={type} width='140px' height='48px' onClick={handleConfirmClick}>{confirmLabel}</ConfirmButton>
+            <RejectButton type={type} width='140px' height='48px' ml='60px'
+              onClick={handleCancelClick}>
+              {cancelLabel}
+            </RejectButton>
           </Box>
         </PopupWrapper>
       </BackgroundWrapper>
