@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
-import {Box, MemberCard, Input, Button} from '../components';
+import {Box, MemberCard, Input, Button} from '../../components';
 import {color, typography, TypographyProps, layout, HeightProps, SpaceProps, WidthProps} from 'styled-system';
 
 const ReverseButton = styled(Button)`
@@ -21,7 +21,7 @@ const Text = styled.span<TypographyProps & HeightProps & SpaceProps & WidthProps
   line-height: 50px;
 `;
 
-export const MemberApplication: React.FC = () =>{
+export const MemberRequests: React.FC = () =>{
   const [Search, setSearch] = useState('');
   const handleInputChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {

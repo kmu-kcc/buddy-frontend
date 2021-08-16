@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {Input, Select, Button, Box, Text} from '../components';
+import {Input, Select, Button, Box, Text} from '../../components';
 import styled from 'styled-components';
 
 const FloatButton = styled(Button)`
@@ -12,7 +12,7 @@ const FloatButton = styled(Button)`
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
 `;
 
-export const ModifyMypage: React.FC = () => {
+export const Settings = () => {
   const [password, setPassword] = useState('');
   const [studentNumber, setStudentNumber] = useState('');
   const [major, setMajor] = useState('');

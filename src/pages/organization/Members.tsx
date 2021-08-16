@@ -1,7 +1,7 @@
 import React, {useState, useCallback} from 'react';
 import styled from 'styled-components';
 import {background, BackgroundProps} from 'styled-system';
-import {Box, SearchInput, Button, Text, Tab} from '../components';
+import {Box, SearchInput, Button, Text, Tab} from '../../components';
 
 const CardLine = styled.div`
   box-sizing: border-box;
@@ -97,7 +97,7 @@ const MemberCard = (MemberCardProps: MemberCardProps) => {
   );
 };
 
-export const GroupManageList = () => {
+export const Members = () => {
   const [InputTextValue, setInputTextValue] = useState('');
   const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setInputTextValue(event.target.value);

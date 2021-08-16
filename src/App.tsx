@@ -3,6 +3,7 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {ErrorBoundary} from 'react-error-boundary';
 import {Layout} from './components';
 import * as pages from './pages';
+import {NotFound} from './pages/NotFound';
 
 const App = () => {
   return (
@@ -10,14 +11,13 @@ const App = () => {
       <Layout>
         <ErrorBoundary FallbackComponent={pages.Fallback}>
           <Switch>
-            <Route path='/signup' component={pages.SignUp} />
-            <Route path='/memberapplication' component={pages.MemberApplication} />
             <Route path='/' exact component={pages.Landing} />
+            <Route path='/signup' component={pages.SignUp} />
+            <Route path='/signin' component={pages.SignIn} />
+            <Route path='/organization' component={pages.Organization} />
+            <Route path='/user' component={pages.User} />
             <Route path='/test' component={pages.Test} />
-            <Route path='/groupmanagelist' component={pages.GroupManageList} />
-            <Route path='/login' component={pages.Login} />
-            <Route path='/modifyMypage' component={pages.ModifyMypage} />
-            <Route path='/mypage' component={pages.Mypage} />
+            <Route component={NotFound} />
           </Switch>
         </ErrorBoundary>
       </Layout>
