@@ -1,94 +1,86 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import styled from 'styled-components';
-import {Box} from './Box';
+import {Box, Button, Text} from '../components';
 
-const CardWrapper = styled.div`
-  width: 303px;
-  height: 358px;
-  border: 1px solid #8D8C85;
-  border-radius: 20px;
+const CardLine = styled.div`
+  box-sizing: border-box;
+  width: calc(100% - 68px);
+  height: 1px;
+  background-color: #E5E5E5;
+  margin-top: 8px;
 `;
 
-const ApplicationMethod = styled.span`
-  font-family: Spoqa Han Sans Neo;
-  font-style: normal;
-  font-weight: bold;
-  font-size: 18px;
+const EllipsisText = styled(Text)`
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `;
 
-const ApplicationDate = styled.span`
-  font-family: Spoqa Han Sans Neo;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  color: #CBC8BE;
+
+const Inbutton = styled(Button)`
+  background: #EBEBEB;
+  border: 2px solid #EBEBEB;
+  color: #000;
+
+  :hover, :focus {
+    background: #6D48E5;
+    border: 2px solid #6D48E5;
+    color: #fff;
+  }
+  `;
+
+const Wrapper = styled(Box)<{checked: boolean}>`
+border-color: ${({checked}) => checked ? '#6D48E5' : '#EFEBFC'};
+
+:hover, :focus {
+  border: 2px solid #6D48E5;
+}
 `;
 
-const MemberProps = styled.span`
-  font-family: Spoqa Han Sans Neo;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  width: 60px;
-  height: 20px;
-  color: #8D8C85;
-`;
+interface MemberCardProps {
+  username?: string;
+  univnumber?: string;
+  major?: string;
+  date?: string;
+  group?: string;
+  phone?: string;
+  onCheck?: (checked: boolean) => void;
+  checked: boolean;
+}
 
-const MemberValues = styled.span`
-  font-family: Spoqa Han Sans Neo;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  width: 105px;
-  height: 20px;
-  color: #000000;
-`;
-
-export const MemberCard = () =>{
+export const MemberCard = (MemberCardProps: MemberCardProps) => {
+  const {group, username, univnumber, major, date, phone, checked, onCheck} = MemberCardProps;
+  const handleClick = useCallback(() => {
+    if (onCheck) {
+      onCheck(!checked);
+    }
+  }, [checked, onCheck]);
   return (
-    <div>
-      <CardWrapper>
-        <Box mt='45px' ml='41px' isFlex alignItems='baseline'>
-          <Box>
-            <ApplicationMethod>퇴부신청</ApplicationMethod>
-          </Box>
-          <Box ml='78px'>
-            <ApplicationDate>2021.05.21</ApplicationDate>
-          </Box>
+    <Wrapper maxWidth='300px' isFlex flexDirection='column' pt='44px' pb='34px' alignItems='center' border='2px solid #EBEBEB' borderRadius='37px' onClick={handleClick} checked={checked}>
+      <Box isFlex width='100%' alignItems='baseline' px='34px'>
+        <Text flex={1} fontWeight={700} fontSize='18px' lineHeight='22px'>{group}</Text>
+        <Text color='#CBC8BE;'>{date}</Text>
+      </Box>
+      <CardLine />
+      <Box isFlex mt='28px' px='44px' flexDirection='column'>
+        <Box isFlex>
+          <Text color='#8D8C85' fontWeight={500} fontSize='16px' lineHeight='20px'>이름</Text>
+          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{username}</EllipsisText>
         </Box>
-        <Box ml='45px' mt='36px' isFlex alignItems='baseline'>
-          <Box isFlex width='60px' height='20px'>
-            <MemberProps>이름</MemberProps>
-          </Box>
-          <Box ml='47px'>
-            <MemberValues>홍길동</MemberValues>
-          </Box>
+        <Box isFlex mt='24px'>
+          <Text color='#8D8C85' fontWeight={500} fontSize='16px' lineHeight='20px'>학번</Text>
+          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{univnumber}</EllipsisText>
         </Box>
-        <Box ml='45px' mt='24px' isFlex alignItems='baseline'>
-          <Box isFlex width='60px' height='20px'>
-            <MemberProps>학번</MemberProps>
-          </Box>
-          <Box ml='47px'>
-            <MemberValues>20180092</MemberValues>
-          </Box>
+        <Box isFlex mt='24px'>
+          <Text color='#8D8C85' fontWeight={500} fontSize='16px' lineHeight='20px'>학과</Text>
+          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{major}</EllipsisText>
         </Box>
-        <Box ml='45px' mt='24px' isFlex alignItems='baseline'>
-          <Box isFlex width='60px' height='20px'>
-            <MemberProps>학과</MemberProps>
-          </Box>
-          <Box ml='47px'>
-            <MemberValues>소프트웨어</MemberValues>
-          </Box>
+        <Box isFlex mt='24px'>
+          <Text color='#8D8C85' fontWeight={500} fontSize='16px' lineHeight='20px'>전화번호</Text>
+          <EllipsisText ml='32px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{phone}</EllipsisText>
         </Box>
-        <Box ml='45px' mt='24px' isFlex alignItems='baseline'>
-          <Box isFlex width='60px' height='20px'>
-            <MemberProps>전화번호</MemberProps>
-          </Box>
-          <Box ml='47px'>
-            <MemberValues>01073283315</MemberValues>
-          </Box>
-        </Box>
-      </CardWrapper>
-    </div>
+        <Inbutton mt='30px' py='0' width='100%' height='40px' fontSize='14px' lineHeight='18px'>자세히 보기</Inbutton>
+      </Box>
+    </Wrapper>
   );
 };

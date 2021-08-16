@@ -1,16 +1,11 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
-import {Box, MemberCard, Input, Button} from '../../components';
 import {color, typography, TypographyProps, layout, HeightProps, SpaceProps, WidthProps} from 'styled-system';
+import {Box, Input, Button, MemberCard, Tab} from '../../components';
 
 const ReverseButton = styled(Button)`
   background: #FF6845;
   border: 2px solid #FF6845;
-`;
-
-const UnderBar = styled.div`
-  border: 1px solid #E5E5E5;
-  width:  383px;
 `;
 
 const Text = styled.span<TypographyProps & HeightProps & SpaceProps & WidthProps>`
@@ -21,6 +16,50 @@ const Text = styled.span<TypographyProps & HeightProps & SpaceProps & WidthProps
   line-height: 50px;
 `;
 
+const UserProfile = [
+  {
+    id: 1,
+    username: 'seonilKim',
+    univnumber: '20171379',
+    major: 'eletric engineering',
+    date: '2021.08.04',
+    phone: '010-1234-1234',
+  },
+  {
+    id: 2,
+    username: 'hello',
+    univnumber: '20171380',
+    major: 'computer engineering',
+    date: '2021.08.11',
+    phone: '010-1234-1234',
+  },
+  {
+    id: 3,
+    username: 'hellowolrd',
+    univnumber: '20128191',
+    major: 'computer science',
+    date: '2021.08.13',
+    phone: '010-1234-1234',
+  },
+  {
+    id: 4,
+    username: 'juheong',
+    univnumber: '20128191',
+    major: 'computer science',
+    date: '2021.08.13',
+    phone: '010-1234-1234',
+  },
+  {
+    id: 5,
+    username: 'soyang',
+    univnumber: '20180092',
+    major: 'economic',
+    date: '2021.08.13',
+    phone: '010-1234-1234',
+  },
+];
+
+
 export const MemberRequests: React.FC = () =>{
   const [Search, setSearch] = useState('');
   const handleInputChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
@@ -28,32 +67,41 @@ export const MemberRequests: React.FC = () =>{
       setState(event.target.value);
     };
   }, []);
+  const handleCheck = useCallback() => {
+    useState()
+  }
+
+  const CardList = UserProfile.map((u) => {
+    return {
+      ...u,
+      checked: false,
+    };
+  }).map((info, idx) => (
+    <Box key={idx} mr='30px' mb='30px'>
+      <MemberCard group='입부 신청' username={info.username} univnumber={info.univnumber} major={info.major} date={info.date} phone={info.phone} checked={info.checked} onCheck={handleCheck} />
+    </Box>
+  ));
+
   return (
     <div>
       <Box isFlex flexDirection='column' width='100%' ml='67px'>
         <Box mt='60px' mb='58px' isFlex>
           <Text color='#454440;' fontSize={40}>조직관리</Text>
         </Box>
-        <Box isFlex flexDirection='row-reverse'>
+        <Box isFlex flexDirection='row-reverse' alignItems='end'>
           <Box mr='114px' ml='auto'>
             <Input height='59px' width='433px' value={Search} onChange={handleInputChange(setSearch)} placeholder='Search' />
           </Box>
-          <Box isFlex width='500px' height='48px'>
-            <Text width='500px' height='48px' color='#B8B6B0;' fontSize={20}>입 / 퇴부 신청내역</Text>
+          <Box isFlex flexDirection='column' >
+            <Tab tabs={['동아리원 목록', '입부 신청내역', '퇴부 신청내역']} />
           </Box>
         </Box>
-        <UnderBar />
         <Box isFlex flexDirection='row-reverse' mt='36px'>
           <ReverseButton mr='114px' ml='21px' width='149px' height='54px'>거부</ReverseButton>
           <Button width='149px' height='54px'>승인</Button>
         </Box>
-        <Box isFlex mt='33px' mb='50px' flexWrap='wrap' maxWidth='1302px'>
-          <MemberCard />
-          <MemberCard />
-          <MemberCard />
-          <MemberCard />
-          <MemberCard />
-          <MemberCard />
+        <Box isFlex mt='33px' mb='50px' flexWrap='wrap'>
+          {CardList}
         </Box>
       </Box>
     </div>
