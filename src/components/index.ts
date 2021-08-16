@@ -11,3 +11,5 @@ export {SearchInput} from './SearchInput';
 export {Text, Span} from './Text';
 export {MemberCard} from './MemberCard';
 export {Tab} from './Tab';
+export {Popup} from './Popup';
+export {ModalPortal} from './ModalPortal';
