@@ -1,6 +1,6 @@
 {
-  "short_name": "국민대 KCC",
-  "name": "국민대학교 컴퓨터 동아리 KCC 웹서비스",
+  "short_name": "KCC Buddy",
+  "name": "KCC Buddy Backoffice",
   "icons": [
     {
       "src": "favicon.ico",
