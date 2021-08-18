@@ -1,8 +1,11 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
+import {CSSTransition} from 'react-transition-group';
 import {Box, Button, ModalPortal} from '.';
 
 type PopupType = 'primary' | 'danger';
+
+const fadeTransition = 'fade';
 
 const BackgroundWrapper = styled(Box)`
   height: 100vh;
@@ -15,6 +18,14 @@ const BackgroundWrapper = styled(Box)`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  transition: all 0.3s ease-out;
+
+  .${fadeTransition}-enter {
+    opacity: 0;
+  }
+  .${fadeTransition}-appear-done {
+    opacity: 1;
+  }
 `;
 
 const PopupWrapper = styled(Box)<{type: PopupType}>`
@@ -45,6 +56,7 @@ interface PopupProps {
   children: JSX.Element | JSX.Element[];
   show: boolean;
   type: PopupType;
+  onClose: () => void;
   confirmLabel?: string;
   cancelLabel?: string;
   onConfirm?: () => void;
@@ -52,46 +64,73 @@ interface PopupProps {
 }
 
 export const Popup = (props: PopupProps) => {
-  const {type, children, onConfirm, onCancel, confirmLabel, cancelLabel} = props;
+  const {type, children, onConfirm, onCancel, onClose, confirmLabel, cancelLabel} = props;
   const [show, setShow] = useState(false);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  const close = useCallback(() => {
+    onClose();
+    setShow(false);
+  }, [onClose]);
 
   const handleConfirmClick = useCallback(() => {
     if (onConfirm) {
       onConfirm();
     }
-    setShow(false);
-  }, [setShow, onConfirm]);
+    close();
+  }, [onConfirm, close]);
   const handleCancelClick = useCallback(() => {
     if (onCancel) {
       onCancel();
     }
-    setShow(false);
-  }, [setShow, onCancel]);
+    close();
+  }, [onCancel, close]);
+  const handleTransitionEnd = useCallback((node, done) => {
+  }, []);
+  const handleEscKey = useCallback((event: KeyboardEvent) => {
+    if (event.key === 'Escape') {
+      close();
+    }
+  }, [close]);
+  const handleOutsideClick = useCallback((event: MouseEvent) => {
+    if (contentRef && !contentRef.current?.contains(event.target as Node)) {
+      close();
+    }
+  }, [contentRef, close]);
+
+  //  effect hook for keyboard event listener
+  useEffect(() => {
+    if (show) {
+      document.addEventListener('keydown', handleEscKey);
+      document.addEventListener('mousedown', handleOutsideClick);
+    } else {
+      document.removeEventListener('keydown', handleEscKey);
+      document.removeEventListener('mousedown', handleOutsideClick);
+    }
+  }, [show, handleEscKey, handleOutsideClick]);
 
   useEffect(() => {
     setShow(props.show);
-  }, [props.show, setShow]);
+  }, [props.show]);
 
-  if (!show) {
-    return null;
-  }
-
-  return (
+  return show ? (
     <ModalPortal>
-      <BackgroundWrapper>
-        <PopupWrapper type={type}>
-          <Box isFlex alignItems='center' justifyContent='center' mb='52px'>
-            {children}
-          </Box>
-          <Box isFlex width='100%' justifyContent='center'>
-            <ConfirmButton type={type} width='140px' height='48px' onClick={handleConfirmClick}>{confirmLabel}</ConfirmButton>
-            <RejectButton type={type} width='140px' height='48px' ml='60px'
-              onClick={handleCancelClick}>
-              {cancelLabel}
-            </RejectButton>
-          </Box>
-        </PopupWrapper>
-      </BackgroundWrapper>
+      <CSSTransition in={show} timeout={300} classNames={fadeTransition} addEndListener={handleTransitionEnd}>
+        <BackgroundWrapper>
+          <PopupWrapper type={type} ref={contentRef}>
+            <Box isFlex alignItems='center' justifyContent='center' mb='52px'>
+              {children}
+            </Box>
+            <Box isFlex width='100%' justifyContent='center'>
+              <ConfirmButton type={type} width='140px' height='48px' onClick={handleConfirmClick}>{confirmLabel}</ConfirmButton>
+              <RejectButton type={type} width='140px' height='48px' ml='60px'
+                onClick={handleCancelClick}>
+                {cancelLabel}
+              </RejectButton>
+            </Box>
+          </PopupWrapper>
+        </BackgroundWrapper>
+      </CSSTransition>
     </ModalPortal>
-  );
+  ) : null;
 };
