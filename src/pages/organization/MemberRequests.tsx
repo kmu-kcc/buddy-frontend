@@ -101,7 +101,9 @@ export const MemberRequests: React.FC = () =>{
     };
   }).map((info, idx) => (
     <Box key={idx} mr='30px' mb='30px'>
-      <MemberCard group='입부 신청' username={info.username} univnumber={info.univnumber} major={info.major} date={info.date} phone={info.phone} checked={check} onCheck={handleCheck} />
+      <MemberCard group='입부 신청' username={info.username} univnumber={info.univnumber} major={info.major} date={info.date} phone={info.phone} onCheck={handleCheck}>
+        {check ? info.checked : !info.checked}
+      </MemberCard>
     </Box>
   ));
 

@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useState, useCallback} from 'react';
 import styled from 'styled-components';
 import {Box, Button, Text} from '../components';
 
@@ -45,18 +45,21 @@ interface MemberCardProps {
   group?: string;
   phone?: string;
   onCheck?: (checked: boolean) => void;
-  checked: boolean;
+  children?: React.ReactNode
 }
 
 export const MemberCard = (MemberCardProps: MemberCardProps) => {
-  const {group, username, univnumber, major, date, phone, checked, onCheck} = MemberCardProps;
-  const handleClick = useCallback(() => {
+  const [checked, setChecked] = useState(false);
+  const {children, group, username, univnumber, major, date, phone, onCheck} = MemberCardProps;
+  const handleCheck = useCallback(() => {
+    setChecked(!checked);
     if (onCheck) {
       onCheck(!checked);
     }
-  }, [checked, onCheck]);
+  }, [checked, setChecked, onCheck]);
   return (
-    <Wrapper maxWidth='300px' isFlex flexDirection='column' pt='44px' pb='34px' alignItems='center' border='2px solid #EBEBEB' borderRadius='37px' onClick={handleClick} checked={checked}>
+    <Wrapper maxWidth='300px' isFlex flexDirection='column' pt='44px' pb='34px' alignItems='center' border='2px solid #EBEBEB' borderRadius='37px' checked={checked} onClick={handleCheck}>
+      {children}
       <Box isFlex width='100%' alignItems='baseline' px='34px'>
         <Text flex={1} fontWeight={700} fontSize='18px' lineHeight='22px'>{group}</Text>
         <Text color='#CBC8BE;'>{date}</Text>
