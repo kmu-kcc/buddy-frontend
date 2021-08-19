@@ -93,6 +93,12 @@ export const MemberRequests: React.FC = () =>{
   const handleSignUpCancel = useCallback(() => {
     setSignUpPopupShow(false);
   }, [setSignUpPopupShow]);
+  const handleSignUpClose = useCallback(() => {
+    setSignUpPopupShow(false);
+  }, []);
+  const handleWithdrawalClose = useCallback(() => {
+    setWithdrawalPopupShow(false);
+  }, []);
 
   const CardList = UserProfile.map((u) => {
     return {
@@ -122,13 +128,13 @@ export const MemberRequests: React.FC = () =>{
         <Box isFlex flexDirection='row-reverse' mt='36px'>
           <Box>
             <ReverseButton mr='114px' ml='21px' width='149px' height='54px' onClick={handleWithdrawalRequestPopupClick}>거부</ReverseButton>
-            <Popup type='danger' onConfirm={handleWithdrawalConfirm} onCancel={handleWithdrawalCancel} confirmLabel='거절' cancelLabel='닫기' show={withdrawalPopupShow}>
+            <Popup type='danger' onClose={handleSignUpClose} onConfirm={handleWithdrawalConfirm} onCancel={handleWithdrawalCancel} confirmLabel='거절' cancelLabel='닫기' show={withdrawalPopupShow}>
               <Text fontSize='20px' lineHeight='25px'>홍길동님의 <Span fontWeight={700}>입부</Span>를 거절하시겠습니까?</Text>
             </Popup>
           </Box>
           <Box>
             <Button width='149px' height='54px' onClick={handleWSignUpRequestPopupClick}>승인</Button>
-            <Popup type='primary' onConfirm={handleSignUpConfirm} onCancel={handleSignUpCancel} confirmLabel='승인' cancelLabel='닫기' show={signUpPopupShow}>
+            <Popup type='primary' onClose={handleWithdrawalClose} onConfirm={handleSignUpConfirm} onCancel={handleSignUpCancel} confirmLabel='승인' cancelLabel='닫기' show={signUpPopupShow}>
               <Text fontSize='20px' lineHeight='25px'>홍길동님의 <Span fontWeight={700}>입부</Span>를 승인하시겠습니까?</Text>
             </Popup>
           </Box>
