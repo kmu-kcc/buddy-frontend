@@ -1,6 +1,6 @@
 import React, {useCallback, useState, useMemo} from 'react';
 import styled from 'styled-components';
-import {Button, Box, Check, Span, Tab, Text, Textarea, ToggleSwitch, Input, Popup, Select} from '../components';
+import {Button, Box, Check, Span, Tab, Text, Textarea, ToggleSwitch, Input, Popup, Select, TransactionList} from '../components';
 import {Arrow, Check as CheckIcon, Buddy} from '../components/icons';
 
 const StateLabel = styled.span<{active: boolean;}>`
@@ -194,6 +194,10 @@ export const Test = () => {
           <Tab tabs={tabs} initialTab={1} onTabChange={handleTabChange} />
           <Text mt='12px'>current active tab is index <Span color='#f00'>{activeTab}</Span></Text>
         </Box>
+      </Box>
+      <Box>
+        <h2>TransactionList</h2>
+        <TransactionList></TransactionList>
       </Box>
     </Box>
   );
