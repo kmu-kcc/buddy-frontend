@@ -13,7 +13,7 @@ const Dummy = [
   {
     id: 1,
     date: '21.08.15',
-    value: '회비납부',
+    describtion: '회비납부',
     amount: '12000',
     total: '76000',
     type: 'input',
@@ -21,7 +21,7 @@ const Dummy = [
   {
     id: 2,
     date: '21.08.15',
-    value: '회비납부',
+    describtion: '회비납부',
     amount: '12000',
     total: '88000',
     type: 'input',
@@ -29,7 +29,7 @@ const Dummy = [
   {
     id: 3,
     date: '21.08.15',
-    value: '회비납부',
+    describtion: '회비납부',
     amount: '12000',
     total: '100000',
     type: 'input',
@@ -37,7 +37,7 @@ const Dummy = [
   {
     id: 4,
     date: '21.08.15',
-    value: '회비납부',
+    describtion: '회비납부',
     amount: '12000',
     total: '88000',
     type: 'withdraw',
@@ -52,20 +52,20 @@ const ColorText = styled(Text)<{type: string}>`
 
 interface TransActionInterface {
   date?: string;
-  value?: string;
+  describtion?: string;
   amount?: string;
   total?: string;
   type: string;
 };
 
 export const AccountList = (props: TransActionInterface) => {
-  const {date, value, amount, total, type} = props;
+  const {date, describtion, amount, total, type} = props;
   return (
     <div>
       <Box isFlex mb='16px' mt='27px'>
         <Text color='#8D8C85' fontSize='20px' lineHeight='25px' ml='32px' height='35px' width='114px'>{date}</Text>
-        <Text color='#000000' fontSize='20px' lineHeight='25px' ml='54px' height='35px' width='202px'>{value}</Text>
-        <ColorText type={type} ml='100px' height='35px' width='120px'>{amount}</ColorText>
+        <Text color='#000000' fontSize='20px' lineHeight='25px' ml='54px' height='35px' width='202px'>{describtion}</Text>
+        <ColorText type={type} ml='100px' height='35px' width='120px'> {amount}</ColorText>
         <Text color='#8D8C85' fontSize='20px' lineHeight='25px' ml='50px'>{total}</Text>
       </Box>
       <ListLine />
@@ -75,7 +75,7 @@ export const AccountList = (props: TransActionInterface) => {
 
 export const TransactionList = () => {
   const List = Dummy.map((info, idx) => (
-    <AccountList key={idx} date={info.date} value={info.value} amount={info.amount} total={info.total} type={info.type} />
+    <AccountList key={idx} date={info.date} describtion={info.describtion} amount={info.amount} total={info.total} type={info.type} />
   ));
   return (
     <div>
