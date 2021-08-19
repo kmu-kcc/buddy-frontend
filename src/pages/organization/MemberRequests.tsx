@@ -148,3 +148,92 @@ export const MemberRequests: React.FC = () =>{
     </div>
   );
 };
+
+export const WithdrawRequests: React.FC = () =>{
+  const [Search, setSearch] = useState('');
+  const handleInputChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
+      setState(event.target.value);
+    };
+  }, []);
+
+  const [check, setCheck] = useState(false);
+  const handleCheck = useCallback(() => {
+    setCheck(!check);
+  }, [check, setCheck]);
+
+  const [withdrawalPopupShow, setWithdrawalPopupShow] = useState(false);
+  const [signUpPopupShow, setSignUpPopupShow] = useState(false);
+  const handleWSignUpRequestPopupClick = useCallback(() => {
+    setSignUpPopupShow(true);
+  }, [setSignUpPopupShow]);
+  const handleWithdrawalRequestPopupClick = useCallback(() => {
+    setWithdrawalPopupShow(true);
+  }, [setWithdrawalPopupShow]);
+  const handleWithdrawalConfirm = useCallback(() => {
+    setWithdrawalPopupShow(false);
+  }, [setWithdrawalPopupShow]);
+  const handleWithdrawalCancel = useCallback(() => {
+    setWithdrawalPopupShow(false);
+  }, [setWithdrawalPopupShow]);
+  const handleSignUpConfirm = useCallback(() => {
+    setSignUpPopupShow(false);
+  }, [setSignUpPopupShow]);
+  const handleSignUpCancel = useCallback(() => {
+    setSignUpPopupShow(false);
+  }, [setSignUpPopupShow]);
+  const handleSignUpClose = useCallback(() => {
+    setSignUpPopupShow(false);
+  }, []);
+  const handleWithdrawalClose = useCallback(() => {
+    setWithdrawalPopupShow(false);
+  }, []);
+
+  const CardList = UserProfile.map((u) => {
+    return {
+      ...u,
+      checked: false,
+    };
+  }).map((info, idx) => (
+    <Box key={idx} mr='30px' mb='30px'>
+      <MemberCard group='퇴부 신청' username={info.username} univnumber={info.univnumber} major={info.major} date={info.date} phone={info.phone} onCheck={handleCheck}>
+        {check ? info.checked : !info.checked}
+      </MemberCard>
+    </Box>
+  ));
+
+  return (
+    <div>
+      <Box isFlex flexDirection='column' width='100%' ml='67px'>
+        <Box mt='60px' mb='58px' isFlex>
+          <Text color='#454440;' fontSize={40}>조직관리</Text>
+        </Box>
+        <Box isFlex flexDirection='row-reverse' alignItems='end'>
+          <Box mr='114px' ml='auto'>
+            <Input height='59px' width='433px' value={Search} onChange={handleInputChange(setSearch)} placeholder='Search' />
+          </Box>
+          <Box isFlex flexDirection='column' >
+            <Tab tabs={['동아리원 목록', '입부 신청내역', '퇴부 신청내역']} />
+          </Box>
+        </Box>
+        <Box isFlex flexDirection='row-reverse' mt='36px'>
+          <Box>
+            <ReverseButton mr='114px' ml='21px' width='149px' height='54px' onClick={handleWithdrawalRequestPopupClick}>거부</ReverseButton>
+            <Popup type='danger' onClose={handleSignUpClose} onConfirm={handleWithdrawalConfirm} onCancel={handleWithdrawalCancel} confirmLabel='거절' cancelLabel='닫기' show={withdrawalPopupShow}>
+              <Text fontSize='20px' lineHeight='25px'>홍길동님의 <Span fontWeight={700}>퇴부</Span>를 거절하시겠습니까?</Text>
+            </Popup>
+          </Box>
+          <Box>
+            <Button width='149px' height='54px' onClick={handleWSignUpRequestPopupClick}>승인</Button>
+            <Popup type='primary' onClose={handleWithdrawalClose} onConfirm={handleSignUpConfirm} onCancel={handleSignUpCancel} confirmLabel='승인' cancelLabel='닫기' show={signUpPopupShow}>
+              <Text fontSize='20px' lineHeight='25px'>홍길동님의 <Span fontWeight={700}>퇴부</Span>를 승인하시겠습니까?</Text>
+            </Popup>
+          </Box>
+        </Box>
+        <Box isFlex mt='33px' mb='50px' flexWrap='wrap'>
+          {CardList}
+        </Box>
+      </Box>
+    </div>
+  );
+};
