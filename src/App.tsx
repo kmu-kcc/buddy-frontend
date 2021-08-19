@@ -4,7 +4,6 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import {ErrorBoundary} from 'react-error-boundary';
 import {Layout} from './components';
 import * as pages from './pages';
-import {NotFound} from './pages/NotFound';
 
 const App = () => {
   return (
@@ -18,11 +17,10 @@ const App = () => {
             <Route path='/organization' component={pages.Organization} />
             <Route path='/user' component={pages.User} />
             <Route path='/test' component={pages.Test} />
-            <Route component={NotFound} />
+            <Route path='/activity' component={pages.Activity} />
           </Switch>
         </ErrorBoundary>
       </Layout>
-      <Navbar/>
     </BrowserRouter>
   );
 };
