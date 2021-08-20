@@ -1,7 +1,7 @@
 import React, {useState, useCallback} from 'react';
 import styled from 'styled-components';
 import {position, PositionProps} from 'styled-system';
-import {Text, Button, Box, Tab, SearchInput} from '../../components';
+import {Text, Button, Box, Tab, SearchInput, TransactionList} from '../../components';
 
 const TempBudget = 1000000;
 
@@ -50,7 +50,7 @@ const CarriedBudgetStyles = styled.div`
 const Filter = styled.div<{FilterClicked: boolean;}>`
   font-weight: 500;
   font-size: 20px;
-  line-height: 25px; 
+  line-height: 25px;
   color: #8D8C85;
   cursor: pointer;
   right: 0;
@@ -150,7 +150,7 @@ export const Account = () => {
           </Box>
           <Box isFlex mt='53px' justifyContent='space-between'>
             <Box isFlex justifyContent='space-between'>
-              <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='118px'>날짜</Text>
+              <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' ml='32px' mr='130px'>날짜</Text>
               <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px'>내역</Text>
             </Box>
             <Box isFlex justifyContent='space-between'>
@@ -159,6 +159,7 @@ export const Account = () => {
             </Box>
           </Box>
           <Line />
+          <TransactionList />
         </Box>
         <Box isFlex alignItems='flex-end' justifyContent='space-between' right='50px'>
           <FloatButton right='303px'>입금 내역 추가</FloatButton>

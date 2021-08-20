@@ -4,7 +4,7 @@ import {Box} from './Box';
 import {Text} from './Text';
 
 const ListLine = styled.div`
-  width: 821px;
+  width: 100%;
   height: 0px;
   border: 1px solid #CBC8BE;
 `;
@@ -65,8 +65,8 @@ export const AccountList = (props: TransActionInterface) => {
       <Box isFlex mb='16px' mt='27px'>
         <Text color='#8D8C85' fontSize='20px' lineHeight='25px' ml='32px' height='35px' width='114px'>{date}</Text>
         <Text color='#000000' fontSize='20px' lineHeight='25px' ml='54px' height='35px' width='202px'>{describtion}</Text>
-        <ColorText type={type} ml='100px' height='35px' width='120px'> {amount}</ColorText>
-        <Text color='#8D8C85' fontSize='20px' lineHeight='25px' ml='50px'>{total}</Text>
+        <ColorText type={type} ml='200px' height='35px' width='100px'> {amount}</ColorText>
+        <Text color='#8D8C85' fontSize='20px' lineHeight='25px' ml='42px'>{total}</Text>
       </Box>
       <ListLine />
     </div>
