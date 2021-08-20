@@ -1,7 +1,7 @@
 import React, {useCallback, useState, useMemo} from 'react';
 import styled from 'styled-components';
 import {Button, Box, Check, Span, Tab, Text, Textarea, ToggleSwitch, Input, Popup, Select} from '../components';
-import {Arrow, Check as CheckIcon, Buddy} from '../components/icons';
+import {Arrow, Check as CheckIcon, Buddy, Filter, Search} from '../components/icons';
 
 const StateLabel = styled.span<{active: boolean;}>`
   padding: 2px 6px;
@@ -181,6 +181,14 @@ export const Test = () => {
           <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
             <Buddy mb='8px' width='30px' height='30px' color='#000' />
             <Span>Buddy Icon (30x30)</Span>
+          </Box>
+          <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+            <Filter mb='8px' width='30px' height='30px' color='#000' />
+            <Span>Filter Icon (30x30)</Span>
+          </Box>
+          <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+            <Search mb='8px' width='30px' height='30px' color='#000' />
+            <Span>Search Icon (30x30)</Span>
           </Box>
         </Box>
       </Box>
