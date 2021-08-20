@@ -18,6 +18,7 @@ const App = () => {
             <Route path='/user' component={pages.User} />
             <Route path='/test' component={pages.Test} />
             <Route path='/activity' component={pages.Activity} />
+            <Route path='/fee' component={pages.Fee} />
           </Switch>
         </ErrorBoundary>
       </Layout>

@@ -19,8 +19,10 @@ export const Activity = () => {
   }, [setInputTextValue]);
   return (
     <Box width='100%' py='48px' px='60px'>
-      <Text color='#454440' fontSize='40px' fontWeight={700} lineHeight='50px'>활동</Text>
-      <SearchInput onChange={handleInputChange} value={InputTextValue} placeholder='search' />
+      <Box isFlex width='100%' mt='32px' alignItems='flex-end' justifyContent='space-between'>
+        <Text color='#454440' fontSize='40px' fontWeight={700} lineHeight='50px'>활동</Text>
+        <SearchInput onChange={handleInputChange} value={InputTextValue} placeholder='search' />
+      </Box>
       <FloatButton>새로운 활동 추가하기</FloatButton>
     </Box>
   );
