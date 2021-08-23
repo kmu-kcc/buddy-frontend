@@ -47,7 +47,7 @@ export const updateActivity = (data: updateRequst) => {
 
 // 5. Delete - 활동 삭제
 export const deleteActivity = (id: string) => {
-  return request.delete('activity/delete', {
+  return request.delete('/activity/delete', {
     data: {id},
   });
 };
