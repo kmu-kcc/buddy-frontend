@@ -1,3 +1,4 @@
 /build
 react-app-env.d.ts
-/src/redux/apis/*
+/src/store/apis/*
+/src/models/*
