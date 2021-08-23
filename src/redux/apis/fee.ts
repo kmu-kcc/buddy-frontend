@@ -20,7 +20,7 @@ export const payersListSearch = async (year: number, semester: number) => {
 
 // 4. Deptors - 회비 미납자 목록 조회
 export const deptorsListSearch = async (year: number, semester: number) => {
-  return request.post('fee/deptors', {year, semester});
+  return request.post('/fee/deptors', {year, semester});
 };
 
 // 5. Search - 회비 내역 검색 (해당 학기 내역 출력)
