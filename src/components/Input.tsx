@@ -8,40 +8,58 @@ import {
   typography, TypographyProps,
   width, WidthProps,
 } from 'styled-system';
+import {Box} from './Box';
 
-const Wrapper = styled.input<InputProps>`
-  box-sizing: border-box;
+const Wrapper = styled(Box)<WrapperProps>`
   ${compose(
       color,
       flex,
       space,
       height,
       width,
-      typography,
   )}
+  display: flex;
+  align-items: center;
   border: 1px solid ${({error, empty}) => error ? '#FF9A83' : empty ? '#CBC8BE' : '#8D71EB'};
   border-radius: 15px;
-
   ::placeholder {
     color: #CBC8BE;
   }
-
   :focus {
     border: 1px solid #8D71EB;
     outline: none;
   }
 `;
 
-interface InputProps extends ColorProps, FlexProps, SpaceProps, HeightProps, WidthProps, TypographyProps {
+interface WrapperProps extends ColorProps, FlexProps, SpaceProps, HeightProps, WidthProps{
+  type?: string;
+  disabled?: boolean;
+  value: string;
+  max?: number;
+  min?: number;
+  error?: boolean;
+  empty?: boolean;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  logo?: JSX.Element;
+}
+
+const InnerInput = styled.input<InputProps>`
+  ${typography}
+  border: 0;
+  outline: 0;
+  box-sizing: border-box;
+`;
+
+interface InputProps extends TypographyProps {
   type?: string;
   disabled?: boolean;
   value: string;
   max?: number;
   min?: number;
   maxlength?: number;
-  error?: boolean;
-  empty?: boolean;
   placeholder?: string;
+  empty?: boolean;
+  error?: boolean;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -55,12 +73,17 @@ const defaultProps = {
   lineHeight: '23px',
 };
 
-type Props = InputProps & typeof defaultProps;
+type Props = InputProps & WrapperProps & typeof defaultProps;
 
 export const Input = (props: Props) => {
-  const {value} = props;
+  const {value, logo} = props;
   const empty = useMemo(() => value === '', [value]);
-  return <Wrapper empty={empty} {...props} />;
+  return (
+    <Wrapper empty={empty} {...props}>
+      {logo}
+      <InnerInput empty={empty} {...props} />
+    </Wrapper>
+  );
 };
 
 Input.defaultProps = defaultProps;
