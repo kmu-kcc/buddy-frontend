@@ -84,7 +84,7 @@ const MemberCard = (MemberCardProps: MemberCardProps) => {
   );
 };
 
-export const AccountMembers = () => {
+export const Members = () => {
   const [InputTextValue, setInputTextValue] = useState('');
   const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setInputTextValue(event.target.value);

@@ -5,4 +5,4 @@ export {SignIn} from './SignIn';
 export {User} from './user';
 export {Fallback} from './Fallback';
 export {Test} from './Test';
-export {AccountMembers} from './accounting/AccountMembers';
+export {Fee} from './Fee';
