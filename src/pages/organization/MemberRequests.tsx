@@ -1,16 +1,12 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useMemo} from 'react';
 import styled from 'styled-components';
-import {Box, MemberCard, Input, Button} from '../../components';
 import {color, typography, TypographyProps, layout, HeightProps, SpaceProps, WidthProps} from 'styled-system';
+import {Box, Input, Button, MemberCard, Tab, Popup, Span} from '../../components';
+import {Search} from '../../components/icons';
 
 const ReverseButton = styled(Button)`
   background: #FF6845;
   border: 2px solid #FF6845;
-`;
-
-const UnderBar = styled.div`
-  border: 1px solid #E5E5E5;
-  width:  383px;
 `;
 
 const Text = styled.span<TypographyProps & HeightProps & SpaceProps & WidthProps>`
@@ -21,39 +17,218 @@ const Text = styled.span<TypographyProps & HeightProps & SpaceProps & WidthProps
   line-height: 50px;
 `;
 
+const UserProfile = [
+  {
+    id: 1,
+    username: 'seonilKim',
+    univnumber: '20171379',
+    major: 'eletric engineering',
+    date: '2021.08.04',
+    phone: '010-1234-1234',
+  },
+  {
+    id: 2,
+    username: 'hello',
+    univnumber: '20171380',
+    major: 'computer engineering',
+    date: '2021.08.11',
+    phone: '010-1234-1234',
+  },
+  {
+    id: 3,
+    username: 'hellowolrd',
+    univnumber: '20128191',
+    major: 'computer science',
+    date: '2021.08.13',
+    phone: '010-1234-1234',
+  },
+  {
+    id: 4,
+    username: 'juheong',
+    univnumber: '20128191',
+    major: 'computer science',
+    date: '2021.08.13',
+    phone: '010-1234-1234',
+  },
+  {
+    id: 5,
+    username: 'soyang',
+    univnumber: '20180092',
+    major: 'economic',
+    date: '2021.08.13',
+    phone: '010-1234-1234',
+  },
+];
+
+
 export const MemberRequests: React.FC = () =>{
-  const [Search, setSearch] = useState('');
-  const handleInputChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
-    return (event: React.ChangeEvent<HTMLInputElement>) => {
-      setState(event.target.value);
-    };
+  const [InputTextValue, setInputTextValue] = useState('');
+  const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputTextValue(event.target.value);
+  }, [setInputTextValue]);
+  const empty = useMemo(() => InputTextValue === '', [InputTextValue]);
+  const [check, setCheck] = useState(false);
+  const handleCheck = useCallback(() => {
+    setCheck(!check);
+  }, [check, setCheck]);
+
+  const [withdrawalPopupShow, setWithdrawalPopupShow] = useState(false);
+  const [signUpPopupShow, setSignUpPopupShow] = useState(false);
+  const handleWSignUpRequestPopupClick = useCallback(() => {
+    setSignUpPopupShow(true);
+  }, [setSignUpPopupShow]);
+  const handleWithdrawalRequestPopupClick = useCallback(() => {
+    setWithdrawalPopupShow(true);
+  }, [setWithdrawalPopupShow]);
+  const handleWithdrawalConfirm = useCallback(() => {
+    setWithdrawalPopupShow(false);
+  }, [setWithdrawalPopupShow]);
+  const handleWithdrawalCancel = useCallback(() => {
+    setWithdrawalPopupShow(false);
+  }, [setWithdrawalPopupShow]);
+  const handleSignUpConfirm = useCallback(() => {
+    setSignUpPopupShow(false);
+  }, [setSignUpPopupShow]);
+  const handleSignUpCancel = useCallback(() => {
+    setSignUpPopupShow(false);
+  }, [setSignUpPopupShow]);
+  const handleSignUpClose = useCallback(() => {
+    setSignUpPopupShow(false);
   }, []);
+  const handleWithdrawalClose = useCallback(() => {
+    setWithdrawalPopupShow(false);
+  }, []);
+
+  const CardList = UserProfile.map((u) => {
+    return {
+      ...u,
+      checked: false,
+    };
+  }).map((info, idx) => (
+    <Box key={idx} mr='30px' mb='30px'>
+      <MemberCard group='입부 신청' username={info.username} univnumber={info.univnumber} major={info.major} date={info.date} phone={info.phone} onCheck={handleCheck}>
+        {check ? info.checked : !info.checked}
+      </MemberCard>
+    </Box>
+  ));
+
   return (
     <div>
       <Box isFlex flexDirection='column' width='100%' ml='67px'>
         <Box mt='60px' mb='58px' isFlex>
           <Text color='#454440;' fontSize={40}>조직관리</Text>
         </Box>
-        <Box isFlex flexDirection='row-reverse'>
+        <Box isFlex flexDirection='row-reverse' alignItems='end'>
           <Box mr='114px' ml='auto'>
-            <Input height='59px' width='433px' value={Search} onChange={handleInputChange(setSearch)} placeholder='Search' />
+            <Input empty={empty} logo={<Search mr='27px' width='24px' height='24px' color='#000' />} height='59px' width='433px' value={InputTextValue} onChange={handleInputChange} placeholder='Search' />
           </Box>
-          <Box isFlex width='500px' height='48px'>
-            <Text width='500px' height='48px' color='#B8B6B0;' fontSize={20}>입 / 퇴부 신청내역</Text>
+          <Box isFlex flexDirection='column' >
+            <Tab tabs={['동아리원 목록', '입부 신청내역', '퇴부 신청내역']} />
           </Box>
         </Box>
-        <UnderBar />
         <Box isFlex flexDirection='row-reverse' mt='36px'>
-          <ReverseButton mr='114px' ml='21px' width='149px' height='54px'>거부</ReverseButton>
-          <Button width='149px' height='54px'>승인</Button>
+          <Box>
+            <ReverseButton mr='114px' ml='21px' width='149px' height='54px' onClick={handleWithdrawalRequestPopupClick}>거부</ReverseButton>
+            <Popup type='danger' onClose={handleSignUpClose} onConfirm={handleWithdrawalConfirm} onCancel={handleWithdrawalCancel} confirmLabel='거절' cancelLabel='닫기' show={withdrawalPopupShow}>
+              <Text fontSize='20px' lineHeight='25px'>홍길동님의 <Span fontWeight={700}>입부</Span>를 거절하시겠습니까?</Text>
+            </Popup>
+          </Box>
+          <Box>
+            <Button width='149px' height='54px' onClick={handleWSignUpRequestPopupClick}>승인</Button>
+            <Popup type='primary' onClose={handleWithdrawalClose} onConfirm={handleSignUpConfirm} onCancel={handleSignUpCancel} confirmLabel='승인' cancelLabel='닫기' show={signUpPopupShow}>
+              <Text fontSize='20px' lineHeight='25px'>홍길동님의 <Span fontWeight={700}>입부</Span>를 승인하시겠습니까?</Text>
+            </Popup>
+          </Box>
         </Box>
-        <Box isFlex mt='33px' mb='50px' flexWrap='wrap' maxWidth='1302px'>
-          <MemberCard />
-          <MemberCard />
-          <MemberCard />
-          <MemberCard />
-          <MemberCard />
-          <MemberCard />
+        <Box isFlex mt='33px' mb='50px' flexWrap='wrap'>
+          {CardList}
+        </Box>
+      </Box>
+    </div>
+  );
+};
+
+export const WithdrawRequests: React.FC = () =>{
+  const [InputTextValue, setInputTextValue] = useState('');
+  const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputTextValue(event.target.value);
+  }, [setInputTextValue]);
+  const empty = useMemo(() => InputTextValue === '', [InputTextValue]);
+  const [check, setCheck] = useState(false);
+  const handleCheck = useCallback(() => {
+    setCheck(!check);
+  }, [check, setCheck]);
+
+  const [withdrawalPopupShow, setWithdrawalPopupShow] = useState(false);
+  const [signUpPopupShow, setSignUpPopupShow] = useState(false);
+  const handleWSignUpRequestPopupClick = useCallback(() => {
+    setSignUpPopupShow(true);
+  }, [setSignUpPopupShow]);
+  const handleWithdrawalRequestPopupClick = useCallback(() => {
+    setWithdrawalPopupShow(true);
+  }, [setWithdrawalPopupShow]);
+  const handleWithdrawalConfirm = useCallback(() => {
+    setWithdrawalPopupShow(false);
+  }, [setWithdrawalPopupShow]);
+  const handleWithdrawalCancel = useCallback(() => {
+    setWithdrawalPopupShow(false);
+  }, [setWithdrawalPopupShow]);
+  const handleSignUpConfirm = useCallback(() => {
+    setSignUpPopupShow(false);
+  }, [setSignUpPopupShow]);
+  const handleSignUpCancel = useCallback(() => {
+    setSignUpPopupShow(false);
+  }, [setSignUpPopupShow]);
+  const handleSignUpClose = useCallback(() => {
+    setSignUpPopupShow(false);
+  }, []);
+  const handleWithdrawalClose = useCallback(() => {
+    setWithdrawalPopupShow(false);
+  }, []);
+
+  const CardList = UserProfile.map((u) => {
+    return {
+      ...u,
+      checked: false,
+    };
+  }).map((info, idx) => (
+    <Box key={idx} mr='30px' mb='30px'>
+      <MemberCard group='퇴부 신청' username={info.username} univnumber={info.univnumber} major={info.major} date={info.date} phone={info.phone} onCheck={handleCheck}>
+        {check ? info.checked : !info.checked}
+      </MemberCard>
+    </Box>
+  ));
+
+  return (
+    <div>
+      <Box isFlex flexDirection='column' width='100%' ml='67px'>
+        <Box mt='60px' mb='58px' isFlex>
+          <Text color='#454440;' fontSize={40}>조직관리</Text>
+        </Box>
+        <Box isFlex flexDirection='row-reverse' alignItems='end'>
+          <Box mr='114px' ml='auto'>
+            <Input empty={empty} logo={<Search mr='27px' width='24px' height='24px' color='#CBC8BE' />} height='59px' width='433px' value={InputTextValue} onChange={handleInputChange} placeholder='Search' />
+          </Box>
+          <Box isFlex flexDirection='column' >
+            <Tab tabs={['동아리원 목록', '입부 신청내역', '퇴부 신청내역']} />
+          </Box>
+        </Box>
+        <Box isFlex flexDirection='row-reverse' mt='36px'>
+          <Box>
+            <ReverseButton mr='114px' ml='21px' width='149px' height='54px' onClick={handleWithdrawalRequestPopupClick}>거부</ReverseButton>
+            <Popup type='danger' onClose={handleSignUpClose} onConfirm={handleWithdrawalConfirm} onCancel={handleWithdrawalCancel} confirmLabel='거절' cancelLabel='닫기' show={withdrawalPopupShow}>
+              <Text fontSize='20px' lineHeight='25px'>홍길동님의 <Span fontWeight={700}>퇴부</Span>를 거절하시겠습니까?</Text>
+            </Popup>
+          </Box>
+          <Box>
+            <Button width='149px' height='54px' onClick={handleWSignUpRequestPopupClick}>승인</Button>
+            <Popup type='primary' onClose={handleWithdrawalClose} onConfirm={handleSignUpConfirm} onCancel={handleSignUpCancel} confirmLabel='승인' cancelLabel='닫기' show={signUpPopupShow}>
+              <Text fontSize='20px' lineHeight='25px'>홍길동님의 <Span fontWeight={700}>퇴부</Span>를 승인하시겠습니까?</Text>
+            </Popup>
+          </Box>
+        </Box>
+        <Box isFlex mt='33px' mb='50px' flexWrap='wrap'>
+          {CardList}
         </Box>
       </Box>
     </div>
