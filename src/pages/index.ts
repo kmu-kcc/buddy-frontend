@@ -6,3 +6,4 @@ export {User} from './user';
 export {Fallback} from './Fallback';
 export {Test} from './Test';
 export {Fee} from './Fee';
+export {Activity} from './Activity';

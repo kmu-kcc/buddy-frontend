@@ -13,3 +13,4 @@ export {MemberCard} from './MemberCard';
 export {Tab} from './Tab';
 export {Popup} from './Popup';
 export {ModalPortal} from './ModalPortal';
+export {TransactionList} from './TransactionList';

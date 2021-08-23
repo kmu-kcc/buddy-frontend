@@ -1,5 +1,5 @@
 import React from 'react';
-import {Route} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import {NotFound} from '../pages/NotFound';
 
 interface Props {
@@ -8,9 +8,9 @@ interface Props {
 
 export const Router = ({children}: Props) => {
   return (
-    <>
+    <Switch>
       {children}
       <Route component={NotFound} />
-    </>
+    </Switch>
   );
 };
