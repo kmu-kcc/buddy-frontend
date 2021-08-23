@@ -100,7 +100,7 @@ const MemberCard = (MemberCardProps: MemberCardProps) => {
   return (
     <Box maxWidth='248px' isFlex flexDirection='column' pb='20px' alignItems='center'>
       <Box isFlex mt='20px' px='44px' flexDirection='column'>
-        <Box isFlex>
+        <Box isFlex alignItems='center'>
           <NameText fontWeight={500} fontSize='16px' lineHeight='20px'>{username}</NameText>
           <UnivNumText ml='40px' fontWeight={500} fontSize='16px' lineHeight='20px'>{univnumber}</UnivNumText>
         </Box>
