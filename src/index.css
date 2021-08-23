@@ -13,3 +13,8 @@ body {
 * {
   font-family: 'Spoqa Han Sans Neo', 'sans-serif';
 }
+
+::selection {
+  background-color: #6D48E5;
+  color: #fff;
+}

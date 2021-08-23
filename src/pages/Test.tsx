@@ -1,7 +1,7 @@
 import React, {useCallback, useState, useMemo} from 'react';
 import styled from 'styled-components';
 import {Button, Box, Check, Span, Tab, Text, Textarea, ToggleSwitch, Input, Popup, Select, TransactionList} from '../components';
-import {Arrow, Check as CheckIcon, Buddy} from '../components/icons';
+import {Arrow, Check as CheckIcon, Buddy, Filter, Search} from '../components/icons';
 
 const StateLabel = styled.span<{active: boolean;}>`
   padding: 2px 6px;
@@ -23,9 +23,15 @@ export const Test = () => {
   const [withdrawalPopupShow, setWithdrawalPopupShow] = useState(false);
   const [signUpPopupShow, setSignUpPopupShow] = useState(false);
 
+  //  button callbacks
   const handleClick = useCallback(() => {
     setCount(count + 1);
   }, [count, setCount]);
+  const handleErrorClick = useCallback(() => {
+    console.log('error button clicked');
+    setError(true);
+  }, [setError]);
+  //  toggle and input callbacks
   const handleToggleChange = useCallback((toggle: boolean) => {
     setToggle(toggle);
     console.log(`current toggle state: ${isToggle} change toggle state: ${toggle}`);
@@ -36,40 +42,47 @@ export const Test = () => {
   const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setInputTextValue(event.target.value);
   }, [setInputTextValue]);
+  //  check callbacks
   const handleCheck = useCallback(() => {
     setCheck(!check);
   }, [check, setCheck]);
   const handleSecondCheck = useCallback(() => {
     setSecondCheck(!secondCheck);
   }, [secondCheck, setSecondCheck]);
+  //  select callbacks
   const handleSelect = useCallback((index: number, value: string) => {
     setSelected(value);
   }, [setSelected]);
-  const handleWithdrawalConfirm = useCallback(() => {
-    setWithdrawalPopupShow(false);
-  }, [setWithdrawalPopupShow]);
-  const handleWithdrawalCancel = useCallback(() => {
-    setWithdrawalPopupShow(false);
-  }, [setWithdrawalPopupShow]);
-  const handleSignUpConfirm = useCallback(() => {
-    setSignUpPopupShow(false);
-  }, [setSignUpPopupShow]);
-  const handleSignUpCancel = useCallback(() => {
-    setSignUpPopupShow(false);
-  }, [setSignUpPopupShow]);
-  const handleTabChange = useCallback((index: number) => {
-    setActiveTab(index);
-  }, [setActiveTab]);
-  const handleErrorClick = useCallback(() => {
-    console.log('error button clicked');
-    setError(true);
-  }, [setError]);
+  //  popup trigger button callback
   const handleWSignUpRequestPopupClick = useCallback(() => {
     setSignUpPopupShow(true);
-  }, [setSignUpPopupShow]);
+  }, []);
   const handleWithdrawalRequestPopupClick = useCallback(() => {
     setWithdrawalPopupShow(true);
-  }, [setWithdrawalPopupShow]);
+  }, []);
+  //  popup callbacks
+  const handleWithdrawalConfirm = useCallback(() => {
+    // setWithdrawalPopupShow(false);
+  }, []);
+  const handleWithdrawalCancel = useCallback(() => {
+    // setWithdrawalPopupShow(false);
+  }, []);
+  const handleWithdrawalClose = useCallback(() => {
+    setWithdrawalPopupShow(false);
+  }, []);
+  const handleSignUpConfirm = useCallback(() => {
+    // setSignUpPopupShow(false);
+  }, []);
+  const handleSignUpCancel = useCallback(() => {
+    // setSignUpPopupShow(false);
+  }, []);
+  const handleSignUpClose = useCallback(() => {
+    setSignUpPopupShow(false);
+  }, []);
+  //  tab callbacks
+  const handleTabChange = useCallback((index: number) => {
+    setActiveTab(index);
+  }, []);
 
   const tabs = useMemo(() => ['Tab 1', 'Tab 2', 'Tab 3'], []);
   const env = useMemo(() => process.env.REACT_APP_ENV, []);
@@ -169,6 +182,14 @@ export const Test = () => {
             <Buddy mb='8px' width='30px' height='30px' color='#000' />
             <Span>Buddy Icon (30x30)</Span>
           </Box>
+          <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+            <Filter mb='8px' width='30px' height='30px' color='#000' />
+            <Span>Filter Icon (30x30)</Span>
+          </Box>
+          <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+            <Search mb='8px' width='30px' height='30px' color='#000' />
+            <Span>Search Icon (30x30)</Span>
+          </Box>
         </Box>
       </Box>
       <Box>
@@ -176,13 +197,19 @@ export const Test = () => {
         <Box isFlex>
           <Box>
             <Button onClick={handleWSignUpRequestPopupClick}>Click to open popup</Button>
-            <Popup type='primary' onConfirm={handleSignUpConfirm} onCancel={handleSignUpCancel} confirmLabel='승인' cancelLabel='거절' show={signUpPopupShow}>
+            <Popup type='primary' confirmLabel='승인' cancelLabel='거절' show={signUpPopupShow}
+              onConfirm={handleSignUpConfirm}
+              onCancel={handleSignUpCancel}
+              onClose={handleSignUpClose}>
               <Text fontSize='20px' lineHeight='25px'>홍길동님의 <Span fontWeight={700}>입부</Span>를 승인하시겠습니까?</Text>
             </Popup>
           </Box>
           <Box ml='20px'>
             <Button onClick={handleWithdrawalRequestPopupClick}>Click to open popup</Button>
-            <Popup type='danger' onConfirm={handleWithdrawalConfirm} onCancel={handleWithdrawalCancel} confirmLabel='승인' cancelLabel='거절' show={withdrawalPopupShow}>
+            <Popup type='danger' confirmLabel='승인' cancelLabel='거절' show={withdrawalPopupShow}
+              onConfirm={handleWithdrawalConfirm}
+              onCancel={handleWithdrawalCancel}
+              onClose={handleWithdrawalClose}>
               <Text fontSize='20px' lineHeight='25px'>홍길동님의 <Span fontWeight={700}>퇴부</Span>를 승인하시겠습니까?</Text>
             </Popup>
           </Box>
