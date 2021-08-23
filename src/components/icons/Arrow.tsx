@@ -4,15 +4,14 @@ import {Icon} from '../Icon';
 import {CursorProps} from '../../utils/cursor';
 
 interface Props extends SpaceProps, CursorProps {
+  width?: string;
+  height?: string;
   color?: string;
-  scale?: number;
   rotate?: number;
 }
 
 export const Arrow = (props: Props) => {
-  const {scale = 1, color, rotate = 0, ...styles} = props;
-  const width = useMemo(() => 16 * scale, [scale]);
-  const height = useMemo(() => 11 * scale, [scale]);
+  const {width = '16px', height = '11px', color, rotate = 0, ...styles} = props;
   const rotateStyle = useMemo(() => ({transform: `rotate(${rotate}deg)`}), [rotate]);
 
   return (

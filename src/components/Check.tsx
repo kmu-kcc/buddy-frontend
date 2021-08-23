@@ -1,14 +1,20 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import styled from 'styled-components';
-import {space, SpaceProps} from 'styled-system';
+import {
+  color, ColorProps,
+  space, SpaceProps,
+  typography, TypographyProps,
+} from 'styled-system';
 import {Check as CheckIcon} from './icons/Check';
 
-const Wrapper = styled.div<{shape: 'circle' | 'rectangle'} & SpaceProps & {checked: boolean;}>`
+type StyleProps = ColorProps & SpaceProps & TypographyProps;
+
+const Wrapper = styled.div<StyleProps & {checked: boolean; boxShape: 'circle' | 'rectangle'}>`
   ${space}
   width: fit-content;
   display: inline-flex;
   user-select: none;
-  align-items: flex-start;
+  align-items: center;
   cursor: pointer;
 
   :hover {
@@ -19,10 +25,7 @@ const Wrapper = styled.div<{shape: 'circle' | 'rectangle'} & SpaceProps & {check
   }
 
   > div {
-    border-radius: ${({shape}) => shape === 'rectangle' ? '1px' : '50%'};
-  }
-
-  > div {
+    border-radius: ${({boxShape}) => boxShape === 'rectangle' ? '1px' : '50%'};
     border: 1px solid ${({checked}) => checked ? '#6D48E5' : '#CBC8BE'};
     background-color: ${({checked}) => checked ? '#6D48E5' : '#fff'};
 
@@ -31,42 +34,61 @@ const Wrapper = styled.div<{shape: 'circle' | 'rectangle'} & SpaceProps & {check
       margin: auto;
     }
   }
+
+  > span {
+    ${color}
+    ${typography}
+
+  }
 `;
 
-const Box = styled.div`
+const Box = styled.div<{size: string;}>`
   box-sizing: border-box;
-  height: 10px;
-  width: 10px;
+  height: ${({size}) => size};
+  width: ${({size}) => size};
   display: inherit;
   align-items: center;
   justify-content: center;
-  border-radius: 1px;
   transition: all 0.15s ease-out;
 `;
 
 const Text = styled.span`
-  color: #454440;
-  font-size: 9px;
-  line-height: 11px;
   margin-left: 6px;
 `;
 
-interface Props extends SpaceProps {
+interface CheckProps extends SpaceProps, TypographyProps {
+  size?: string;
   boxShape: 'circle' | 'rectangle';
   checked: boolean;
-  label?: String;
-  children?: React.ReactNode;
-  onCheck?: () => void;
+  label?: string | JSX.Element;
+  onCheck?: (checked: boolean) => void;
 }
 
+const defaultProps = {
+  size: '10px',
+  color: '#454440',
+  fontSize: '9px',
+  lineHeight: '11px',
+};
+
+type Props = CheckProps & typeof defaultProps;
+
 export const Check = (props: Props) => {
-  const {label, onCheck, checked, boxShape, ...styles} = props;
+  const {checked, label, size, onCheck, ...styles} = props;
+  const handleClick = useCallback(() => {
+    if (onCheck) {
+      onCheck(!checked);
+    }
+  }, [checked, onCheck]);
+
   return (
-    <Wrapper checked={checked} onClick={onCheck} shape={boxShape} {...styles}>
-      <Box>
-        <CheckIcon color='#fff' />
+    <Wrapper checked={checked} onClick={handleClick} {...styles}>
+      <Box size={size}>
+        <CheckIcon width='60%' height='50%' color='#fff' />
       </Box>
       <Text>{label}</Text>
     </Wrapper>
   );
 };
+
+Check.defaultProps = defaultProps;

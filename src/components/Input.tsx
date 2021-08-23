@@ -1,41 +1,89 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import styled from 'styled-components';
-import {space, SpaceProps} from 'styled-system';
+import {
+  compose, color, ColorProps,
+  flex, FlexProps,
+  height, HeightProps,
+  space, SpaceProps,
+  typography, TypographyProps,
+  width, WidthProps,
+} from 'styled-system';
+import {Box} from './Box';
 
-
-const Wrapper = styled.input<SpaceProps & Props>`
-  box-sizing: border-box;
-  height: 48px;
-  border: 1px solid ${({error, empty}) => error ?
-  '#FF9A83' : empty ? '#CBC8BE' : '#8D71EB'};
-  padding: 12px 24px;
+const Wrapper = styled(Box)<WrapperProps>`
+  ${compose(
+      color,
+      flex,
+      space,
+      height,
+      width,
+  )}
+  display: flex;
+  align-items: center;
+  border: 1px solid ${({error, empty}) => error ? '#FF9A83' : empty ? '#CBC8BE' : '#8D71EB'};
   border-radius: 15px;
-  font-weight: 500;
-  font-size: 18px;
-  line-height: 23px;
-  color: #CBC8BE;
   ::placeholder {
     color: #CBC8BE;
   }
-  ${space}
   :focus {
     border: 1px solid #8D71EB;
     outline: none;
-    color: #454440;
   }
 `;
 
-interface Props extends SpaceProps {
+interface WrapperProps extends ColorProps, FlexProps, SpaceProps, HeightProps, WidthProps{
+  type?: string;
+  disabled?: boolean;
   value: string;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  max?: number;
+  min?: number;
   error?: boolean;
   empty?: boolean;
-  placeholder?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  logo?: JSX.Element;
 }
 
+const InnerInput = styled.input<InputProps>`
+  ${typography}
+  border: 0;
+  outline: 0;
+  box-sizing: border-box;
+`;
+
+interface InputProps extends TypographyProps {
+  type?: string;
+  disabled?: boolean;
+  value: string;
+  max?: number;
+  min?: number;
+  maxlength?: number;
+  placeholder?: string;
+  empty?: boolean;
+  error?: boolean;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const defaultProps = {
+  width: '296px',
+  height: '48px',
+  p: '12px 24px',
+  color: '#454440',
+  fontWeight: 500,
+  fontSize: '18px',
+  lineHeight: '23px',
+};
+
+type Props = InputProps & WrapperProps & typeof defaultProps;
 
 export const Input = (props: Props) => {
-  const {value} = props;
-  const empty = value === '';
-  return <Wrapper empty={empty} {...props} />;
+  const {value, logo} = props;
+  const empty = useMemo(() => value === '', [value]);
+  return (
+    <Wrapper empty={empty} {...props}>
+      {logo}
+      <InnerInput empty={empty} {...props} />
+    </Wrapper>
+  );
 };
+
+Input.defaultProps = defaultProps;

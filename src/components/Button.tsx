@@ -1,21 +1,30 @@
 import React from 'react';
 import styled from 'styled-components';
-import {background, BackgroundProps, space, SpaceProps} from 'styled-system';
+import {
+  compose, background, BackgroundProps,
+  border, BorderProps,
+  color, ColorProps,
+  flex, FlexProps,
+  height, HeightProps,
+  space, SpaceProps,
+  typography, TypographyProps,
+  width, WidthProps,
+} from 'styled-system';
 
-const Wrapper = styled.button<SpaceProps & BackgroundProps>`
-  height: 48px;
-  ${space}
-  ${background}
-  color: #fff;
-  border: 2px solid #6D48E5;
-  border-radius: 37px;
-  padding-top: 12px;
-  padding-bottom: 13px;
-  padding-left: 47px;
-  padding-right: 47px;
-  font-size: 18px;
-  font-weight: 700;
-  line-height: 23px;
+type StyleProps = BorderProps & BackgroundProps & ColorProps & FlexProps & HeightProps & SpaceProps & TypographyProps & WidthProps;
+
+const Wrapper = styled.button<StyleProps>`
+  box-sizing: border-box;
+  ${compose(
+      width,
+      height,
+      flex,
+      space,
+      background,
+      color,
+      typography,
+      border,
+  )}
   cursor: pointer;
   transition: all 0.15s ease-out;
 
@@ -24,17 +33,34 @@ const Wrapper = styled.button<SpaceProps & BackgroundProps>`
   }
 `;
 
-interface Props extends SpaceProps, BackgroundProps {
+interface ButtonProps extends StyleProps {
   children?: React.ReactNode;
   onClick?: () => void;
 }
 
+const defaultProps = {
+  background: '#6D48E5',
+  border: '2px solid #6D48E5',
+  borderRadius: '37px',
+  color: '#fff',
+  height: '48px',
+  fontSize: '18px',
+  fontWeight: 700,
+  lineHeight: '23px',
+  px: '47px',
+  py: '12px',
+};
+
+type Props = ButtonProps & typeof defaultProps;
+
 export const Button = (props: Props) => {
-  const {children, background, onClick, ...styles} = props;
+  const {children, onClick, ...styles} = props;
 
   return (
-    <Wrapper background={background ?? '#6D48E5'} onClick={onClick} {...styles}>
+    <Wrapper onClick={onClick} {...styles}>
       {children}
     </Wrapper>
   );
 };
+
+Button.defaultProps = defaultProps;
