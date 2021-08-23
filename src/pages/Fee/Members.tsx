@@ -148,21 +148,27 @@ export const Members = () => {
         <Box isFlex width='1330px' height='34px' border='1px solid #6D48E5' borderRadius='73px' position='absolute'>
         </Box>
       </Box>
-      <Box isBlock width='100%' height='30px' mt='64px' position='relative' mb='28px'>
-        <GroupName>납부자</GroupName>
-        <Box isFlex >
-          <Filter ml='800px' mb='8px' width='1000px' height='24px' color='#8D8C85' />
-          <FilterText mt='3px'>필터</FilterText>
+      <Box isFlex width='100%' mt='64px' mb='28px' flexDirection='column'>
+        <Box isFlex width='100%'>
+          <Box isFlex>
+            <GroupName>납부자</GroupName>
+          </Box>
+          <Box isFlex ml='auto' mt='30px'>
+            <Filter mb='8px' height='24px' color='#8D8C85' />
+            <FilterText>필터</FilterText>
+          </Box>
+        </Box>
+        <Box isFlex flexWrap='wrap' style={{gap: '30px'}}>
+          {PaidMembers}
         </Box>
       </Box>
-      <Box isFlex flexWrap='wrap' style={{gap: '30px'}}>
-        {PaidMembers}
-      </Box>
-      <Box isBlock width='140px' height='30px' mt='64px' position='relative' mb='28px'>
-        <GroupName>미납부자</GroupName>
-      </Box>
-      <Box isFlex flexWrap='wrap' style={{gap: '30px'}}>
-        {UnpaidMembers}
+      <Box isFlex width='100%' mt='64px' mb='28px' flexDirection='column'>
+        <Box isBlock width='140px' height='30px' mt='64px' position='relative' mb='28px'>
+          <GroupName>미납부자</GroupName>
+        </Box>
+        <Box isFlex flexWrap='wrap' style={{gap: '30px'}}>
+          {UnpaidMembers}
+        </Box>
       </Box>
     </Box>
   );
