@@ -1,6 +1,6 @@
 // import {Header} from 'antd/lib/layout/layout';
 import React from 'react';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {BrowserRouter, Route} from 'react-router-dom';
 import {ErrorBoundary} from 'react-error-boundary';
 import {Layout} from './components';
 import * as pages from './pages';
