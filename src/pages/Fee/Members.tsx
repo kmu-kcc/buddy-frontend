@@ -1,6 +1,7 @@
 import React, {useState, useCallback} from 'react';
 import styled from 'styled-components';
 import {Box, SearchInput, Text, Tab} from '../../components';
+import {Filter} from '../../components/icons';
 
 const GroupName = styled.span`
   font-size: 24px;
@@ -47,7 +48,31 @@ const UnivNumText = styled(Text)`
   color: #8D8D8D;
 `;
 
-const UserProfile = [
+const FilterText = styled(Text)`
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 25px;
+  color: #8D8C85;
+`;
+const PaidMembersProfile = [
+  {
+    id: 1,
+    username: '홍길동',
+    univnumber: '20190155',
+  },
+  {
+    id: 2,
+    username: '홍길동',
+    univnumber: '20190155',
+  },
+  {
+    id: 3,
+    username: '홍길동',
+    univnumber: '20190155',
+  },
+];
+
+const UnpaidMembersProfile = [
   {
     id: 1,
     username: '홍길동',
@@ -90,8 +115,14 @@ export const Members = () => {
     setInputTextValue(event.target.value);
   }, [setInputTextValue]);
 
-  const CardListAdmin = UserProfile.map((info, idx) => (
+  const PaidMembers = PaidMembersProfile.map((info, idx) => (
     <Box border='1px solid #6D48E5' borderRadius='15px' key={idx}>
+      <MemberCard username={info.username} univnumber={info.univnumber} />
+    </Box>
+  ));
+
+  const UnpaidMembers = UnpaidMembersProfile.map((info, idx) => (
+    <Box border='1px solid #FF6845' borderRadius='15px' key={idx}>
       <MemberCard username={info.username} univnumber={info.univnumber} />
     </Box>
   ));
@@ -117,11 +148,21 @@ export const Members = () => {
         <Box isFlex width='1330px' height='34px' border='1px solid #6D48E5' borderRadius='73px' position='absolute'>
         </Box>
       </Box>
-      <Box isBlock width='140px' height='30px' mt='64px' position='relative' mb='28px'>
-        <GroupName>동아리원 목록</GroupName>
+      <Box isBlock width='100%' height='30px' mt='64px' position='relative' mb='28px'>
+        <GroupName>납부자</GroupName>
+        <Box isFlex >
+          <Filter ml='800px' mb='8px' width='1000px' height='24px' color='#8D8C85' />
+          <FilterText mt='3px'>필터</FilterText>
+        </Box>
       </Box>
       <Box isFlex flexWrap='wrap' style={{gap: '30px'}}>
-        {CardListAdmin}
+        {PaidMembers}
+      </Box>
+      <Box isBlock width='140px' height='30px' mt='64px' position='relative' mb='28px'>
+        <GroupName>미납부자</GroupName>
+      </Box>
+      <Box isFlex flexWrap='wrap' style={{gap: '30px'}}>
+        {UnpaidMembers}
       </Box>
     </Box>
   );
