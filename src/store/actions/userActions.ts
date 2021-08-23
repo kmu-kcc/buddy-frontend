@@ -1,6 +1,6 @@
 import {createAction, createAsyncThunk} from '@reduxjs/toolkit';
 import {Attendance, User} from '../../models/User';
-import {signIn, SignInRequest, signUp, SignUpRequest, getMy, GetMyRequest} from '../apis/auth';
+import * as apis from '../apis/auth';
 
 /**
  * actions for user information change
@@ -15,9 +15,9 @@ export const changeAttendance = createAction<Attendance>('user/changeAttendance'
 /**
  * actions for async request
  */
-export const getMeRequest = createAsyncThunk<User, GetMyRequest>('user/getMe', async (data, thunkAPI) => {
+export const getMeRequest = createAsyncThunk<User, apis.GetMyRequest>('user/getMe', async (data, thunkAPI) => {
   try {
-    const response = await getMy(data);
+    const response = await apis.getMy(data);
     if (response.status === 200) {
       return response.data.data;
     } else {
@@ -29,9 +29,9 @@ export const getMeRequest = createAsyncThunk<User, GetMyRequest>('user/getMe', a
   }
 });
 
-export const signInRequest = createAsyncThunk<void, SignInRequest>('user/signIn', async (data, thunkAPI) => {
+export const signInRequest = createAsyncThunk<void, apis.SignInRequest>('user/signIn', async (data, thunkAPI) => {
   try {
-    const response = await signIn(data);
+    const response = await apis.signIn(data);
     if (response.status === 200) {
       return response.data.data;
     } else {
@@ -43,9 +43,9 @@ export const signInRequest = createAsyncThunk<void, SignInRequest>('user/signIn'
   }
 });
 
-export const signUpRequest = createAsyncThunk<void, SignUpRequest>('user/signUp', async (data, thunkAPI) => {
+export const signUpRequest = createAsyncThunk<void, apis.SignUpRequest>('user/signUp', async (data, thunkAPI) => {
   try {
-    const response = await signUp(data);
+    const response = await apis.signUp(data);
     if (response.status === 200) {
       return;
     } else {
