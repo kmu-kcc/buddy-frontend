@@ -61,10 +61,11 @@ interface PopupProps {
   cancelLabel?: string;
   onConfirm?: () => void;
   onCancel?: () => void;
+  hideCancelButton?: boolean;
 }
 
 export const Popup = (props: PopupProps) => {
-  const {type, children, onConfirm, onCancel, onClose, confirmLabel, cancelLabel} = props;
+  const {type, children, onConfirm, onCancel, onClose, confirmLabel, cancelLabel, hideCancelButton} = props;
   const [show, setShow] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -123,10 +124,12 @@ export const Popup = (props: PopupProps) => {
             </Box>
             <Box isFlex width='100%' justifyContent='center'>
               <ConfirmButton type={type} width='140px' height='48px' onClick={handleConfirmClick}>{confirmLabel}</ConfirmButton>
-              <RejectButton type={type} width='140px' height='48px' ml='60px'
-                onClick={handleCancelClick}>
-                {cancelLabel}
-              </RejectButton>
+              {!hideCancelButton && (
+                <RejectButton type={type} width='140px' height='48px' ml='60px'
+                  onClick={handleCancelClick}>
+                  {cancelLabel}
+                </RejectButton>
+              )}
             </Box>
           </PopupWrapper>
         </BackgroundWrapper>
