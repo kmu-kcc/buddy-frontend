@@ -87,7 +87,7 @@ const CarriedBudget = (CarriedProps: CarriedProps) => {
 
 const Line = styled.div`
   box-sizing: border-box;
-  width: 100%;
+  width: 821px;
   height: 1px;
   background-color: #CBC8BE;
   margin-top: 22px;
@@ -116,7 +116,7 @@ export const Account = () => {
           <SearchInput onChange={handleInputChange} value={InputTextValue} placeholder='search' />
         </Box>
       </Box>
-      <Box isFlex flexDirection='row'>
+      <Box isFlex flexDirection='row' flexWrap='wrap'>
         <Box flexBasis='34%'>
           <Box isFlex mt='49px' mb='39px'>
             <Text color='#454440' fontSize='24px' fontWeight={700} lineHeight='30.05px'>전체금액</Text>
@@ -148,12 +148,12 @@ export const Account = () => {
             </Box>
             <Filter FilterClicked={FilterClicked} onClick={handleFilterClick}>필터</Filter>
           </Box>
-          <Box isFlex mt='53px' justifyContent='space-between'>
+          <Box isFlex mt='53px' width='821px'>
             <Box isFlex justifyContent='space-between'>
               <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' ml='32px' mr='130px'>날짜</Text>
               <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px'>내역</Text>
             </Box>
-            <Box isFlex justifyContent='space-between'>
+            <Box isFlex justifyContent='space-betwen' ml='262px'>
               <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='104px'>금액</Text>
               <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='96px'>잔액</Text>
             </Box>
