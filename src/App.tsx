@@ -17,6 +17,7 @@ const App = () => {
             <Route path='/organization' component={pages.Organization} />
             <Route path='/user' component={pages.User} />
             <Route path='/test' component={pages.Test} />
+            <Route path='/accountMembers' component={pages.AccountMembers} />
             <Route component={NotFound} />
           </Switch>
         </ErrorBoundary>
