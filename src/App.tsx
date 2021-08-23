@@ -6,7 +6,7 @@ import {Provider} from 'react-redux';
 import {Layout} from './components';
 import * as pages from './pages';
 import {Router} from './utils/router';
-import {store} from './redux';
+import {store} from './store';
 
 const App = () => {
   return (
