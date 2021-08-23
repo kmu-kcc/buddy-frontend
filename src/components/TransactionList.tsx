@@ -14,7 +14,7 @@ const Dummy = [
     id: 1,
     date: '21.08.15',
     describtion: '회비납부',
-    amount: '12000',
+    amount: 12000,
     total: '76000',
     type: 'input',
   },
@@ -22,7 +22,7 @@ const Dummy = [
     id: 2,
     date: '21.08.15',
     describtion: '회비납부',
-    amount: '12000',
+    amount: 12000,
     total: '88000',
     type: 'input',
   },
@@ -30,7 +30,7 @@ const Dummy = [
     id: 3,
     date: '21.08.15',
     describtion: '회비납부',
-    amount: '12000',
+    amount: 12000,
     total: '100000',
     type: 'input',
   },
@@ -38,34 +38,33 @@ const Dummy = [
     id: 4,
     date: '21.08.15',
     describtion: '회비납부',
-    amount: '12000',
+    amount: -12000,
     total: '88000',
     type: 'withdraw',
   },
 ];
 
-const ColorText = styled(Text)<{type: string}>`
+const ColorText = styled(Text)<{amount: number}>`
   font-size : 20px;
   line-height: 25px;
-  color: ${({type}) => type === 'withdraw' ? '#FF6845' : '#6D48E5'};
+  color: ${({amount}) => amount < 0 ? '#FF6845' : '#6D48E5'};
 `;
 
 interface TransActionInterface {
   date?: string;
   describtion?: string;
-  amount?: string;
+  amount: number;
   total?: string;
-  type: string;
 };
 
 export const AccountList = (props: TransActionInterface) => {
-  const {date, describtion, amount, total, type} = props;
+  const {date, describtion, amount, total} = props;
   return (
     <div>
       <Box isFlex mb='16px' mt='27px'>
         <Text color='#8D8C85' fontSize='20px' lineHeight='25px' ml='32px' height='35px' width='114px'>{date}</Text>
         <Text color='#000000' fontSize='20px' lineHeight='25px' ml='54px' height='35px' width='202px'>{describtion}</Text>
-        <ColorText type={type} ml='200px' height='35px' width='100px'> {amount}</ColorText>
+        <ColorText amount={amount} ml='200px' height='35px' width='100px'> {amount}</ColorText>
         <Text color='#8D8C85' fontSize='20px' lineHeight='25px' ml='42px'>{total}</Text>
       </Box>
       <ListLine />
@@ -75,7 +74,7 @@ export const AccountList = (props: TransActionInterface) => {
 
 export const TransactionList = () => {
   const List = Dummy.map((info, idx) => (
-    <AccountList key={idx} date={info.date} describtion={info.describtion} amount={info.amount} total={info.total} type={info.type} />
+    <AccountList key={idx} date={info.date} describtion={info.describtion} amount={info.amount} total={info.total} />
   ));
   return (
     <div>
