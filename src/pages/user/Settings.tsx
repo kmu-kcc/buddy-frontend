@@ -27,6 +27,9 @@ export const Settings = () => {
   const handleWithdrawalCancel = useCallback(() => {
     setWithdrawalPopupShow(false);
   }, [setWithdrawalPopupShow]);
+  const handleWithdrawalClose = useCallback(() => {
+    setWithdrawalPopupShow(false);
+  }, []);
   const handleWithdrawalRequestPopupClick = useCallback(() => {
     setWithdrawalPopupShow(true);
   }, [setWithdrawalPopupShow]);
@@ -123,7 +126,7 @@ export const Settings = () => {
             border='1px solid #FF6845' onClick={handleWithdrawalRequestPopupClick}>
               퇴부신청
           </Button>
-          <Popup type='danger' onConfirm={handleWithdrawalConfirm} onCancel={handleWithdrawalCancel} confirmLabel='확인' cancelLabel='취소' show={withdrawalPopupShow}>
+          <Popup type='danger' onConfirm={handleWithdrawalConfirm} onCancel={handleWithdrawalCancel} onClose={handleWithdrawalClose} confirmLabel='확인' cancelLabel='취소' show={withdrawalPopupShow}>
             <Text fontSize='20px' lineHeight='25px'>정말 <Span fontWeight={700}>퇴부</Span>하시겠습니까?</Text>
           </Popup>
         </Box>
