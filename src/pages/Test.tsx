@@ -206,7 +206,7 @@ export const Test = () => {
           </Box>
           <Box ml='20px'>
             <Button onClick={handleWithdrawalRequestPopupClick}>Click to open popup</Button>
-            <Popup type='danger' confirmLabel='승인' cancelLabel='거절' show={withdrawalPopupShow}
+            <Popup type='danger' confirmLabel='승인' hideCancelButton cancelLabel='거절' show={withdrawalPopupShow}
               onConfirm={handleWithdrawalConfirm}
               onCancel={handleWithdrawalCancel}
               onClose={handleWithdrawalClose}>
