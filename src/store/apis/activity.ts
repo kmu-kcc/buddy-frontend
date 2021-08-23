@@ -1,7 +1,7 @@
 import {request} from '.';
 
 // 1. Create - 활동 생성
-interface activityCreate {
+export interface CreateActivityRequest {
   start: string;
   end: string;
   place: string;
@@ -11,7 +11,7 @@ interface activityCreate {
   private: boolean;
 }
 
-export const createActivity = (data: activityCreate) => {
+export const createActivity = (data: CreateActivityRequest) => {
   return request.post('/activity/create', {
     ...data,
   });
@@ -28,7 +28,7 @@ export const searchPrivate = () => {
 };
 
 // 4. Update - 활동 정보 수정
-interface updateRequst {
+export interface UpdateActivityRequest {
   id: string;
   update: {
     start: string;
@@ -39,16 +39,20 @@ interface updateRequst {
     participants: string[];
   }
 }
-export const updateActivity = (data: updateRequst) => {
+export const updateActivity = (data: UpdateActivityRequest) => {
   return request.put('/activity/update', {
     ...data,
   });
 };
 
+export interface DeleteActivityRequest {
+  id: string;
+}
+
 // 5. Delete - 활동 삭제
-export const deleteActivity = (id: string) => {
+export const deleteActivity = (data: DeleteActivityRequest) => {
   return request.delete('/activity/delete', {
-    data: {id},
+    data,
   });
 };
 
@@ -62,7 +66,14 @@ export const downloadFile = () => {
 
 };
 
+export interface DeleteActivityFileRequest {
+  id: string;
+  filename: string;
+}
+
 // 8. DeleteFile - 파일 삭제
-export const deleteFile = (id: string, filename: string) => {
-  return request.post('/activity/deletefile', {id, filename});
+export const deleteFile = (data: DeleteActivityFileRequest) => {
+  return request.post('/activity/deletefile', {
+    ...data,
+  });
 };
