@@ -1,7 +1,8 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useMemo} from 'react';
 import styled from 'styled-components';
 import {color, typography, TypographyProps, layout, HeightProps, SpaceProps, WidthProps} from 'styled-system';
 import {Box, Input, Button, MemberCard, Tab, Popup, Span} from '../../components';
+import {Search} from '../../components/icons';
 
 const ReverseButton = styled(Button)`
   background: #FF6845;
@@ -61,13 +62,11 @@ const UserProfile = [
 
 
 export const MemberRequests: React.FC = () =>{
-  const [Search, setSearch] = useState('');
-  const handleInputChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
-    return (event: React.ChangeEvent<HTMLInputElement>) => {
-      setState(event.target.value);
-    };
-  }, []);
-
+  const [InputTextValue, setInputTextValue] = useState('');
+  const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputTextValue(event.target.value);
+  }, [setInputTextValue]);
+  const empty = useMemo(() => InputTextValue === '', [InputTextValue]);
   const [check, setCheck] = useState(false);
   const handleCheck = useCallback(() => {
     setCheck(!check);
@@ -121,7 +120,7 @@ export const MemberRequests: React.FC = () =>{
         </Box>
         <Box isFlex flexDirection='row-reverse' alignItems='end'>
           <Box mr='114px' ml='auto'>
-            <Input height='59px' width='433px' value={Search} onChange={handleInputChange(setSearch)} placeholder='Search' />
+            <Input empty={empty} logo={<Search mr='27px' width='24px' height='24px' color='#000' />} height='59px' width='433px' value={InputTextValue} onChange={handleInputChange} placeholder='Search' />
           </Box>
           <Box isFlex flexDirection='column' >
             <Tab tabs={['동아리원 목록', '입부 신청내역', '퇴부 신청내역']} />
@@ -150,13 +149,11 @@ export const MemberRequests: React.FC = () =>{
 };
 
 export const WithdrawRequests: React.FC = () =>{
-  const [Search, setSearch] = useState('');
-  const handleInputChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
-    return (event: React.ChangeEvent<HTMLInputElement>) => {
-      setState(event.target.value);
-    };
-  }, []);
-
+  const [InputTextValue, setInputTextValue] = useState('');
+  const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputTextValue(event.target.value);
+  }, [setInputTextValue]);
+  const empty = useMemo(() => InputTextValue === '', [InputTextValue]);
   const [check, setCheck] = useState(false);
   const handleCheck = useCallback(() => {
     setCheck(!check);
@@ -210,7 +207,7 @@ export const WithdrawRequests: React.FC = () =>{
         </Box>
         <Box isFlex flexDirection='row-reverse' alignItems='end'>
           <Box mr='114px' ml='auto'>
-            <Input height='59px' width='433px' value={Search} onChange={handleInputChange(setSearch)} placeholder='Search' />
+            <Input empty={empty} logo={<Search mr='27px' width='24px' height='24px' color='#CBC8BE' />} height='59px' width='433px' value={InputTextValue} onChange={handleInputChange} placeholder='Search' />
           </Box>
           <Box isFlex flexDirection='column' >
             <Tab tabs={['동아리원 목록', '입부 신청내역', '퇴부 신청내역']} />

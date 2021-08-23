@@ -35,7 +35,6 @@ interface Props extends SpaceProps {
   placeholder?: string;
 }
 
-
 export const SearchInput = (props: Props) => {
   const {value} = props;
   const empty = value === '';
