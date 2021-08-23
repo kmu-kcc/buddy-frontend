@@ -25,3 +25,8 @@ export interface User {
   created_at?: boolean;
   updated_at?: boolean;
 }
+
+export interface Credentials {
+  access_token: string;
+  expired_at: string;
+}
