@@ -1,5 +1,4 @@
-# Buddy Frontend [![CircleCI](https://img.shields.io/circleci/build/github/kmu-kcc/buddy-frontend?style=flat-square&token=2b92ec0c979a18bfa9ee11dbfc414a27958aec12)](https://circleci.com/gh/kmu-kcc/buddy-frontend/tree/master)
-
+# Buddy Frontend [![CircleCI](https://img.shields.io/circleci/build/github/kmu-kcc/buddy-frontend?style=flat-square&token=2b92ec0c979a18bfa9ee11dbfc414a27958aec12) ](https://circleci.com/gh/kmu-kcc/buddy-frontend/tree/master)[![Netlify Status](https://api.netlify.com/api/v1/badges/3b269e61-aa2e-41a0-8f35-3406c40681e2/deploy-status)](https://app.netlify.com/sites/kcc-buddy/deploys)
 
 This repo is frontend project of Buddy
 
