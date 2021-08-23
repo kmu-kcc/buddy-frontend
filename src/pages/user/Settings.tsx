@@ -1,5 +1,5 @@
 import React, {useCallback, useState} from 'react';
-import {Input, Select, Button, Box, Text} from '../../components';
+import {Input, Select, Button, Box, Text, Popup, Span} from '../../components';
 import styled from 'styled-components';
 
 const FloatButton = styled(Button)`
@@ -19,6 +19,20 @@ export const Settings = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
+  const [withdrawalPopupShow, setWithdrawalPopupShow] = useState(false);
+
+  const handleWithdrawalConfirm = useCallback(() => {
+    setWithdrawalPopupShow(false);
+  }, [setWithdrawalPopupShow]);
+  const handleWithdrawalCancel = useCallback(() => {
+    setWithdrawalPopupShow(false);
+  }, [setWithdrawalPopupShow]);
+  const handleWithdrawalClose = useCallback(() => {
+    setWithdrawalPopupShow(false);
+  }, []);
+  const handleWithdrawalRequestPopupClick = useCallback(() => {
+    setWithdrawalPopupShow(true);
+  }, [setWithdrawalPopupShow]);
   const handleInputChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
       setState(event.target.value);
@@ -107,10 +121,15 @@ export const Settings = () => {
             <option>기타</option>
           </Select>
         </Box>
-        <Button mt='47px' px='0' width='160px' height='50px' background='#FFEEEA' color='#FF6845'
-          border='1px solid #FF6845'>
-            퇴부신청
-        </Button>
+        <Box>
+          <Button mt='47px' px='0' width='160px' height='50px' background='#FFEEEA' color='#FF6845'
+            border='1px solid #FF6845' onClick={handleWithdrawalRequestPopupClick}>
+              퇴부신청
+          </Button>
+          <Popup type='danger' onConfirm={handleWithdrawalConfirm} onCancel={handleWithdrawalCancel} onClose={handleWithdrawalClose} confirmLabel='확인' cancelLabel='취소' show={withdrawalPopupShow}>
+            <Text fontSize='20px' lineHeight='25px'>정말 <Span fontWeight={700}>퇴부</Span>하시겠습니까?</Text>
+          </Popup>
+        </Box>
       </Box>
       <FloatButton width='220px' height='72px'>저장하기</FloatButton>
     </Box>
