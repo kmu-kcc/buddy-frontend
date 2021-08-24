@@ -23,4 +23,5 @@ export const SettingsMessage = {
 export const MemberRequestsMessage = {
   loadingSuccess: '데이터를 불러왔습니다.',
   loadingFail: '데이터를 불러오는 중 문제가 발생했습니다.',
+  deleteSuccess: '선택한 회원을 삭제했습니다.',
 };

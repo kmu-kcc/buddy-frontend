@@ -10,8 +10,8 @@ interface State {
   loading: boolean,
   loadingSignUpRequests: boolean,
   loadingWithdrawalRequests: boolean,
-  loadingApproveRequests: boolean;
-  loadingRejectRequests: boolean;
+  loadingSignUpApproveRequests: boolean;
+  loadingDeleteMemberRequests: boolean;
 };
 
 const initialState: State = {
@@ -22,8 +22,8 @@ const initialState: State = {
   loading: false,
   loadingSignUpRequests: false,
   loadingWithdrawalRequests: false,
-  loadingApproveRequests: false,
-  loadingRejectRequests: false,
+  loadingSignUpApproveRequests: false,
+  loadingDeleteMemberRequests: false,
 };
 
 export const memberReducer = createReducer(initialState, (builder) => {
@@ -89,22 +89,22 @@ export const memberReducer = createReducer(initialState, (builder) => {
         state.withdrawalRequests = [];
       })
       .addCase(actions.approveSignUp.pending, (state, action) => {
-        state.loadingApproveRequests = true;
+        state.loadingSignUpApproveRequests = true;
       })
       .addCase(actions.approveSignUp.fulfilled, (state, {payload}) => {
-        state.loadingApproveRequests = false;
+        state.loadingSignUpApproveRequests = false;
       })
       .addCase(actions.approveSignUp.rejected, (state, action) => {
-        state.loadingApproveRequests = false;
+        state.loadingSignUpApproveRequests = false;
       })
-      .addCase(actions.rejectSignUp.pending, (state, action) => {
-        state.loadingRejectRequests = true;
+      .addCase(actions.deleteMember.pending, (state, action) => {
+        state.loadingDeleteMemberRequests = true;
       })
-      .addCase(actions.rejectSignUp.fulfilled, (state, {payload}) => {
-        state.loadingRejectRequests = false;
+      .addCase(actions.deleteMember.fulfilled, (state, {payload}) => {
+        state.loadingDeleteMemberRequests = false;
       })
-      .addCase(actions.rejectSignUp.rejected, (state, action) => {
-        state.loadingRejectRequests = false;
+      .addCase(actions.deleteMember.rejected, (state, action) => {
+        state.loadingDeleteMemberRequests = false;
       })
       .addCase(actions.searchMember.pending, (state, action) => {
         state.loading = true;

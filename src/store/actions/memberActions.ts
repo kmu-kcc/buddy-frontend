@@ -59,9 +59,9 @@ export const approveSignUp = createAsyncThunk<void, apis.ApproveSignUpRequest, A
   }
 });
 
-export const rejectSignUp = createAsyncThunk<void, apis.RejectSignUpRequest, APIRejectResponse>('member/rejectSignUp', async (data, thunkAPI) => {
+export const deleteMember = createAsyncThunk<void, apis.DeleteMemberRequest, APIRejectResponse>('member/rejectSignUp', async (data, thunkAPI) => {
   try {
-    const response = await apis.rejectSignUp(data);
+    const response = await apis.deleteMember(data);
     if (response.status === 200) {
       return;
     } else {
@@ -72,6 +72,20 @@ export const rejectSignUp = createAsyncThunk<void, apis.RejectSignUpRequest, API
     return thunkAPI.rejectWithValue(err?.response?.data?.error);
   }
 });
+
+// export const rejectWithdraw = createAsyncThunk<void, apis.RejectWithdrawRequest, APIRejectResponse>('member/rejectWithdraw', async (data, thunkAPI) => {
+//   try {
+//     const response = await apis.rejectWIthdraw(data);
+//     if (response.status === 200) {
+//       return;
+//     } else {
+//       return thunkAPI.rejectWithValue(response.data.error);
+//     }
+//   } catch (err) {
+//     console.log(err);
+//     return thunkAPI.rejectWithValue(err?.response?.data?.error);
+//   }
+// });
 
 export const searchMember = createAsyncThunk<User[], apis.SearchMemberRequest, APIRejectResponse>('member/searchMember', async (data, thunkAPI) => {
   try {
