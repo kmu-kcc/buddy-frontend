@@ -1,5 +1,6 @@
 import React, {useCallback, useState, useMemo} from 'react';
 import styled from 'styled-components';
+import {toast} from 'react-toastify';
 import {Button, Box, Check, Span, Tab, Text, Textarea, ToggleSwitch, Input, Popup, Select, TransactionList} from '../components';
 import {Arrow, Check as CheckIcon, Buddy, Filter, Search, Activity, Organization, Fee, Profile, Exit} from '../components/icons';
 
@@ -116,7 +117,7 @@ export const Test = () => {
       </Box>
       <Box>
         <h2>Button</h2>
-        <Button mr='8px'>Button 1</Button>
+        <Button mr='8px' onClick={() => toast('Sample Toast')}>Button 1</Button>
         <Button mr='8px' onClick={handleClick}>{count} time clicked</Button>
         <Button onClick={handleErrorClick}>Click to occur error</Button>
       </Box>

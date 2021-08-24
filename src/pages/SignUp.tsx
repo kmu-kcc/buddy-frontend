@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
-import {ToastContainer, toast} from 'react-toastify';
+import {toast} from 'react-toastify';
 // import {useHistory} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../store';
@@ -162,7 +162,6 @@ export const SignUp = () => {
         </Box>
         <Button mt='30px' width='388px' height='70px' onClick={handleSignUpClick}>회원가입</Button>
       </Box>
-      <ToastContainer position='top-center' />
     </Box>
   );
 };
