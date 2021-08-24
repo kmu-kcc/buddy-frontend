@@ -2,6 +2,7 @@ import {createAction, createAsyncThunk} from '@reduxjs/toolkit';
 import {APIRejectResponse} from '.';
 import {Attendance, Credentials, User} from '../../models/User';
 import * as apis from '../apis/auth';
+import {SignInMessage, SignUpMessage, SettingsMessage} from '../../common/wordings';
 
 /**
  * actions for user information change
@@ -26,7 +27,7 @@ export const getMeRequest = createAsyncThunk<User, apis.GetMyRequest, APIRejectR
     }
   } catch (err) {
     console.log(err);
-    return thunkAPI.rejectWithValue(err);
+    return thunkAPI.rejectWithValue(err?.response?.data?.error ?? SettingsMessage.loadingFail);
   }
 });
 
@@ -39,7 +40,7 @@ export const signInRequest = createAsyncThunk<Credentials, apis.SignInRequest, A
       return thunkAPI.rejectWithValue(response.data.error);
     }
   } catch (err) {
-    return thunkAPI.rejectWithValue(err.response.data.error || '로그인에 실패했습니다.');
+    return thunkAPI.rejectWithValue(err?.response?.data?.error ?? SignInMessage.fail);
   }
 });
 
@@ -53,7 +54,7 @@ export const signUpRequest = createAsyncThunk<void, apis.SignUpRequest, APIRejec
     }
   } catch (err) {
     console.log(err);
-    return thunkAPI.rejectWithValue(err);
+    return thunkAPI.rejectWithValue(err?.response?.data?.error ?? SignUpMessage.fail);
   }
 });
 
@@ -67,7 +68,7 @@ export const updateMeRequest = createAsyncThunk<void, apis.UpdateMeRequest, APIR
     }
   } catch (err) {
     console.log(err);
-    return thunkAPI.rejectWithValue(err);
+    return thunkAPI.rejectWithValue(err?.response?.data?.error ?? SettingsMessage.updateFail);
   }
 });
 
@@ -81,6 +82,6 @@ export const withdraw = createAsyncThunk<void, apis.WithdrawRequest, APIRejectRe
     }
   } catch (err) {
     console.log(err);
-    return thunkAPI.rejectWithValue(err);
+    return thunkAPI.rejectWithValue(err?.response?.data?.error ?? '');
   }
 });

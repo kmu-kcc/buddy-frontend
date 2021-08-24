@@ -2,6 +2,7 @@ import {createAction, createAsyncThunk} from '@reduxjs/toolkit';
 import {APIRejectResponse} from '.';
 import {User, Attendance} from '../../models/User';
 import * as apis from '../apis/member';
+import {MemberRequestsMessage} from '../../common/wordings';
 
 /**
  * actions for current member information change
@@ -26,7 +27,7 @@ export const getSignUpRequests = createAsyncThunk<User[], void, APIRejectRespons
     }
   } catch (err) {
     console.log(err);
-    return thunkAPI.rejectWithValue(err);
+    return thunkAPI.rejectWithValue(err?.response?.data?.error ?? MemberRequestsMessage.loadingFail);
   }
 });
 
@@ -40,7 +41,7 @@ export const getWithdrawalRequests = createAsyncThunk<User[], void, APIRejectRes
     }
   } catch (err) {
     console.log(err);
-    return thunkAPI.rejectWithValue(err);
+    return thunkAPI.rejectWithValue(err?.response?.data?.error ?? MemberRequestsMessage.loadingFail);
   }
 });
 
@@ -54,7 +55,7 @@ export const approveSignUp = createAsyncThunk<void, apis.ApproveSignUpRequest, A
     }
   } catch (err) {
     console.log(err);
-    return thunkAPI.rejectWithValue(err);
+    return thunkAPI.rejectWithValue(err?.response?.data?.error);
   }
 });
 
@@ -68,7 +69,7 @@ export const rejectSignUp = createAsyncThunk<void, apis.RejectSignUpRequest, API
     }
   } catch (err) {
     console.log(err);
-    return thunkAPI.rejectWithValue(err);
+    return thunkAPI.rejectWithValue(err?.response?.data?.error);
   }
 });
 
@@ -82,6 +83,6 @@ export const searchMember = createAsyncThunk<User[], apis.SearchMemberRequest, A
     }
   } catch (err) {
     console.log(err);
-    return thunkAPI.rejectWithValue(err);
+    return thunkAPI.rejectWithValue(err?.response?.data?.error);
   }
 });
