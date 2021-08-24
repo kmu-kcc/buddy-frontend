@@ -79,7 +79,6 @@ export const WithdrawRequests = () => {
           toast.error(response.payload);
         }
       } catch (err) {
-        console.log(err);
         toast.error(CommonMessage.error);
       }
     })();
