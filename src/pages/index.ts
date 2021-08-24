@@ -5,5 +5,5 @@ export {Fee} from './fee';
 export {SignUp} from './SignUp';
 export {SignIn} from './SignIn';
 export {Fallback} from './Fallback';
-export {Activity} from './Activity';
+export {Activity} from './activity';
 export {Test} from './Test';

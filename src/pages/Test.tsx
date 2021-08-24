@@ -1,7 +1,7 @@
 import React, {useCallback, useState, useMemo} from 'react';
 import styled from 'styled-components';
 import {Button, Box, Check, Span, Tab, Text, Textarea, ToggleSwitch, Input, Popup, Select, TransactionList} from '../components';
-import {Arrow, Check as CheckIcon, Buddy, Filter, Search} from '../components/icons';
+import {Arrow, Check as CheckIcon, Buddy, Filter, Search, Activity, Organization, Fee, Profile, Exit} from '../components/icons';
 
 const StateLabel = styled.span<{active: boolean;}>`
   padding: 2px 6px;
@@ -189,6 +189,26 @@ export const Test = () => {
           <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
             <Search mb='8px' width='30px' height='30px' color='#000' />
             <Span>Search Icon (30x30)</Span>
+          </Box>
+          <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+            <Activity mb='8px' width='30px' height='30px' color='#000' />
+            <Span>Activity Icon (30x30)</Span>
+          </Box>
+          <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+            <Fee mb='8px' width='30px' height='30px' color='#000' />
+            <Span>Fee Icon (30x30)</Span>
+          </Box>
+          <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+            <Organization mb='8px' width='30px' height='30px' color='#000' />
+            <Span>Organization Icon (30x30)</Span>
+          </Box>
+          <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+            <Profile mb='8px' width='30px' height='30px' color='#000' />
+            <Span>Profile Icon (30x30)</Span>
+          </Box>
+          <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+            <Exit mb='8px' width='30px' height='30px' color='#000' />
+            <Span>Exit Icon (30x30)</Span>
           </Box>
         </Box>
       </Box>
