@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
-import {ToastContainer, toast} from 'react-toastify';
+import {toast} from 'react-toastify';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
 import {updateMeRequest} from '../../store/actions/userActions';
@@ -199,7 +199,6 @@ export const Settings = () => {
         </Box>
       </Box>
       <FloatButton width='220px' height='72px' onClick={handleSubmit}>저장하기</FloatButton>
-      <ToastContainer position='top-center' />
     </Box>
   );
 };
