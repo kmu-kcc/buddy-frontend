@@ -21,7 +21,7 @@ const UnderBar = styled.div`
   border: 1px solid #939393
 `;
 
-export const Status = () => {
+export const Detail = () => {
   const [descriptionValue, setDescriptionValue] = useState('');
   const handleDescriptionareaChange = useCallback((event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDescriptionValue(event.target.value);

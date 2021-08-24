@@ -2,13 +2,13 @@ import React from 'react';
 import {Route} from 'react-router-dom';
 import {Router} from '../../utils/router';
 import {List} from './List';
-import {Add} from './Add';
-import {Status} from './Status';
+import {Create} from './Create';
+import {Detail} from './Detail';
 
 export const Activity = () => (
   <Router>
-    <Route path='/activity/add' exact component={Add} />
-    <Route path='/activity/status' exact component={Status} />
-    <Route path='/activity/list' exact component={List} />
+    <Route path='/activity/create' exact component={Create} />
+    <Route path='/activity/detail' exact component={Detail} />
+    <Route path='/activity' exact component={List} />
   </Router>
 );

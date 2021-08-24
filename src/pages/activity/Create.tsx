@@ -12,7 +12,7 @@ const FloatButton = styled(Button)`
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
 `;
 
-export const Add = () => {
+export const Create = () => {
   const [InputTextValue, setInputTextValue] = useState('');
   const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setInputTextValue(event.target.value);
