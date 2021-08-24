@@ -35,7 +35,7 @@ const IconWrapper = styled(Box)`
 const Logo = () => {
   const history = useHistory();
   const handleClick = useCallback(() => {
-    history.push('/signin');
+    history.push('/');
   }, [history]);
   return (
     <Box width='120px' height='120px' mb='40px' cursor='pointer' onClick={handleClick}>
@@ -47,7 +47,7 @@ const Logo = () => {
 const ActivityTab = () => {
   const history = useHistory();
   const handleClick = useCallback(() => {
-    history.push('/activity/list');
+    history.push('/activity');
   }, [history]);
   return (
     <IconWrapper isFlex alignItems='flexStart' onClick={handleClick}>

@@ -83,7 +83,7 @@ export const List = () => {
   }, [setInputTextValue]);
   const history = useHistory();
   const handleClick = useCallback(() => {
-    history.push('/activity/add');
+    history.push('/activity/create');
   }, [history]);
 
   const FoundAnniversary = Dummy.map((info, idx) => (
