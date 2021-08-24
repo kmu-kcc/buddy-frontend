@@ -15,7 +15,7 @@ const Dummy = [
     date: '21.08.15',
     describtion: '회비납부',
     amount: 12000,
-    total: '76000',
+    total: 76000,
     type: 'input',
   },
   {
@@ -23,7 +23,7 @@ const Dummy = [
     date: '21.08.15',
     describtion: '회비납부',
     amount: 12000,
-    total: '88000',
+    total: 88000,
     type: 'input',
   },
   {
@@ -31,7 +31,7 @@ const Dummy = [
     date: '21.08.15',
     describtion: '회비납부',
     amount: 12000,
-    total: '100000',
+    total: 100000,
     type: 'input',
   },
   {
@@ -39,7 +39,7 @@ const Dummy = [
     date: '21.08.15',
     describtion: '회비납부',
     amount: -12000,
-    total: '88000',
+    total: 88000,
     type: 'withdraw',
   },
 ];
@@ -50,11 +50,16 @@ const ColorText = styled(Text)<{amount: number}>`
   color: ${({amount}) => amount < 0 ? '#FF6845' : '#6D48E5'};
 `;
 
+const comma = (num: number) =>{
+  const res = num.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+  return (num >= 0 ? '+'+res : res);
+};
+
 interface TransActionInterface {
   date?: string;
   describtion?: string;
   amount: number;
-  total?: string;
+  total: number;
 };
 
 export const AccountList = (props: TransActionInterface) => {
@@ -64,8 +69,8 @@ export const AccountList = (props: TransActionInterface) => {
       <Box isFlex mb='16px' mt='27px'>
         <Text color='#8D8C85' fontSize='20px' lineHeight='25px' ml='32px' height='35px' width='114px'>{date}</Text>
         <Text color='#000000' fontSize='20px' lineHeight='25px' ml='54px' height='35px' width='198px'>{describtion}</Text>
-        <ColorText amount={amount} ml='100px' height='35px' width='100px'> {amount}</ColorText>
-        <Text color='#8D8C85' fontSize='20px' lineHeight='25px' ml='42px'>{total}</Text>
+        <ColorText amount={amount} ml='97px' height='35px' width='100px'> {comma(amount)}</ColorText>
+        <Text color='#8D8C85' fontSize='20px' lineHeight='25px' ml='42px'>{comma(total)}</Text>
       </Box>
       <ListLine />
     </div>
@@ -74,7 +79,7 @@ export const AccountList = (props: TransActionInterface) => {
 
 export const TransactionList = () => {
   const List = Dummy.map((info, idx) => (
-    <AccountList key={idx} date={info.date} describtion={info.describtion} amount={info.amount} total={info.total} />
+    <AccountList key={idx} date={info.date} describtion={info.describtion} amount={info.amount} total={(info.total)} />
   ));
   return (
     <div>
