@@ -40,6 +40,7 @@ export interface Deptors {
     on_delete?: boolean;
     created_at?: boolean;
     updated_at?: boolean;
+    dept?: number;
   }
 
 export interface SearchFee {
