@@ -1,6 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
 import {color, ColorProps, space, SpaceProps} from 'styled-system';
+import {ToastContainer, toast} from 'react-toastify';
 import {Link, useHistory} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../store';
@@ -31,7 +32,13 @@ export const SignIn = () => {
   const {loadingSignIn} = useSelector((state: RootState) => state.user);
 
   const handleSignInClick = useCallback(async () => {
-    if (loadingSignIn || !id || !password) {
+    if (loadingSignIn) {
+      toast.info('처리중입니다. 잠시만 기다려주세요.');
+      return;
+    }
+
+    if (!id || !password) {
+      toast.warn('아이디 / 비밀번호를 입력해주세요.');
       return;
     }
 
@@ -44,10 +51,11 @@ export const SignIn = () => {
         history.replace('/activity');
       } else {
         //  signin error
-        console.log('signin failed');
+        toast.error(response.payload);
       }
     } catch (err) {
       console.log(err);
+      toast.error('에러가 발생했습니다. 잠시 후에 다시 시도해주세요.');
     }
   }, [history, dispatch, loadingSignIn, id, password]);
   const handleInputChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
@@ -93,6 +101,7 @@ export const SignIn = () => {
           </Popup>
         </Box>
       </Box>
+      <ToastContainer position='top-center' />
     </Box>
   );
 };
