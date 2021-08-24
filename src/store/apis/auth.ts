@@ -1,4 +1,5 @@
 import {getRequest} from '.';
+import {Attendance} from '../../models/User';
 
 // buddy/back-end/docs/member에 명세 되어있는 내용 중 기능에 따라 members.ts와 해당 페이지(auth.ts)에 나눠져있습니다.
 // 주석으로 백엔드/독스/멤버 중 어디에 명세되어있는지와 몇번째 api인지 명세되어있습니다
@@ -65,7 +66,7 @@ export interface UpdateMeRequest {
       phone: string;
       email: string;
       grade: number;
-      attendence: 0 | 1 | 2;
+      attendance: Attendance;
   }
 }
 

@@ -1,6 +1,13 @@
 import React, {useCallback, useState} from 'react';
-import {Input, Select, Button, Box, Text, Popup, Span} from '../../components';
+import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
+import {ToastContainer, toast} from 'react-toastify';
+import {useSelector} from 'react-redux';
+import {RootState, useDispatch} from '../../store';
+import {updateMeRequest} from '../../store/actions/userActions';
+import {Input, Select, Button, Box, Text, Popup, Span} from '../../components';
+import {Attendance} from '../../models/User';
+import {CommonMessage, SettingsMessage} from '../../common/wordings';
 
 const FloatButton = styled(Button)`
   width: 220px;
@@ -13,12 +20,18 @@ const FloatButton = styled(Button)`
 `;
 
 export const Settings = () => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const {user, loading} = useSelector((state: RootState) => state.user);
   const [password, setPassword] = useState('');
-  const [studentNumber, setStudentNumber] = useState('');
-  const [major, setMajor] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
+  const [studentNumber, setStudentNumber] = useState(user?.id ?? '');
+  const [college, setCollege] = useState(user?.department.split(' ')[0] ?? '');
+  const [major, setMajor] = useState(user?.department.split(' ').slice(1).join(' ') ?? '');
+  const [phoneNumber, setPhoneNumber] = useState(user?.phone ?? '');
+  const [email, setEmail] = useState(user?.email ?? '');
+  const [grade, setGrade] = useState(user?.grade ?? 0);
+  const [name, setName] = useState(user?.name ?? '');
+  const [attendance, setAttendance] = useState(user?.attendance ?? -1);
   const [withdrawalPopupShow, setWithdrawalPopupShow] = useState(false);
 
   const handleWithdrawalConfirm = useCallback(() => {
@@ -38,6 +51,60 @@ export const Settings = () => {
       setState(event.target.value);
     };
   }, []);
+  const handleCollegeSelect = useCallback((index: number, value: string) => {
+    setCollege(value);
+  }, []);
+  const handleGradeSelect = useCallback((index: number) => {
+    setGrade(index + 1);
+  }, []);
+  const handleAttendanceSelect = useCallback((index: number, value: string) => {
+    let attendance: Attendance;
+    if (value === '재학') {
+      attendance = Attendance.ATTENDING;
+    } else if (value === '휴학') {
+      attendance = Attendance.LEAVE_OF_ABSENCE;
+    } else if (value === '졸업') {
+      attendance = Attendance.GRADUATED;
+    } else {
+      attendance = -1;
+    }
+    setAttendance(attendance);
+  }, []);
+  const handleSubmit = useCallback(async () => {
+    if (loading) {
+      toast.info(CommonMessage.loading);
+      return;
+    }
+
+    if (attendance < 0 || !studentNumber || !college || !major || !email || !phoneNumber || !grade || !password) {
+      toast.warn(SettingsMessage.empty);
+      return;
+    }
+
+    try {
+      const response = await dispatch(updateMeRequest({
+        id: studentNumber,
+        update: {
+          attendance,
+          department: `${college} ${major}`,
+          email,
+          grade,
+          password,
+          phone: phoneNumber,
+        },
+      }));
+      if (response.type === updateMeRequest.fulfilled.type) {
+        toast.success(SettingsMessage.updateSuccess);
+        history.replace('/user');
+      } else {
+        toast.error(response.payload as unknown as string);
+      }
+      //  go back to user profile page
+    } catch (err) {
+      console.log(err);
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch, history, loading, studentNumber, attendance, college, major, email, grade, password, phoneNumber]);
 
   return (
     <Box width='100%' pl='60px' pt='48px' pb='48px' position='relative'>
@@ -71,20 +138,20 @@ export const Settings = () => {
         {/* 대학 */}
         <Box isFlex width='525px' mt='25px' alignItems='center'>
           <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>대학</Text>
-          <Select placeholder='소속대학' width='390px' height='63px'>
-            <option value='글로벌인문지역대학'>글로벌인문지역대학</option>
-            <option value='사회과학대학'>사회과학대학</option>
-            <option value='법과대학'>법과대학</option>
-            <option value='경상대학'>경상대학</option>
-            <option value='경영대학'>경영대학</option>
-            <option value='창의공과대학'>창의공과대학</option>
-            <option value='과학기술대학'>과학기술대학</option>
-            <option value='예술대학'>예술대학</option>
-            <option value='체육대학'>체육대학</option>
-            <option value='조형대학'>조형대학</option>
-            <option value='소프트웨어융합대학'>소프트웨어융합대학</option>
-            <option value='건축대학'>건축대학</option>
-            <option value='자동차융합대학'>자동차융합대학</option>
+          <Select placeholder='소속대학' width='390px' height='63px' onSelect={handleCollegeSelect}>
+            <option>글로벌인문지역대학</option>
+            <option>사회과학대학</option>
+            <option>법과대학</option>
+            <option>경상대학</option>
+            <option>경영대학</option>
+            <option>창의공과대학</option>
+            <option>과학기술대학</option>
+            <option>예술대학</option>
+            <option>체육대학</option>
+            <option>조형대학</option>
+            <option>소프트웨어융합대학</option>
+            <option>건축대학</option>
+            <option>자동차융합대학</option>
           </Select>
         </Box>
         {/* 학과 */}
@@ -102,7 +169,7 @@ export const Settings = () => {
         {/* 학년 */}
         <Box isFlex width='525px' mt='25px' alignItems='center'>
           <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>학년</Text>
-          <Select placeholder='학년' width='390px' height='63px'>
+          <Select placeholder='학년' width='390px' height='63px' onSelect={handleGradeSelect}>
             <option>1</option>
             <option>2</option>
             <option>3</option>
@@ -114,7 +181,7 @@ export const Settings = () => {
         {/* 재학여부 */}
         <Box isFlex width='525px' mt='25px' alignItems='center'>
           <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>재학여부</Text>
-          <Select placeholder='재학여부' width='390px' height='63px'>
+          <Select placeholder='재학여부' width='390px' height='63px' onSelect={handleAttendanceSelect}>
             <option>재학</option>
             <option>휴학</option>
             <option>졸업</option>
@@ -131,7 +198,8 @@ export const Settings = () => {
           </Popup>
         </Box>
       </Box>
-      <FloatButton width='220px' height='72px'>저장하기</FloatButton>
+      <FloatButton width='220px' height='72px' onClick={handleSubmit}>저장하기</FloatButton>
+      <ToastContainer position='top-center' />
     </Box>
   );
 };
