@@ -26,12 +26,12 @@ export const approveSignUp = (data: ApproveSignUpRequest) => {
   });
 };
 
-export interface RejectSignUpRequest {
+export interface DeleteMemberRequest {
   ids: string[];
 }
 
 // 7. Delete(member spec 7번 api) - 회원 가입 거부 및 탈퇴 처리
-export const rejectSignUp = (data: RejectSignUpRequest) => {
+export const deleteMember = (data: DeleteMemberRequest) => {
   return getRequest().delete('/member/delete', {
     data,
   });
