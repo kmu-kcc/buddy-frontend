@@ -1,7 +1,8 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useMemo} from 'react';
 import styled from 'styled-components';
 import {position, PositionProps} from 'styled-system';
-import {Text, Button, Box, Tab, SearchInput, TransactionList} from '../../components';
+import {Text, Button, Box, Tab, Input, TransactionList} from '../../components';
+import {Filter, Search} from '../../components/icons';
 
 const TempBudget = 1000000;
 
@@ -47,7 +48,7 @@ const CarriedBudgetStyles = styled.div`
   margin-top: 14px;
 `;
 
-const Filter = styled.div<{FilterClicked: boolean;}>`
+const FilterButton = styled.div<{FilterClicked: boolean;}>`
   font-weight: 500;
   font-size: 20px;
   line-height: 25px;
@@ -80,7 +81,7 @@ const CarriedBudget = (CarriedProps: CarriedProps) => {
     <CarriedBudgetStyles>
       <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='29px'>{date}</Text>
       <Text color='#000000' fontSize='20px' fontWeight={500} lineHeight='25px' mr='63px'>{semester}</Text>
-      <Text color='#6D48E5' fontSize='20px' fontWeight='bold' lineHeight='25px'>{fee>=0? '+'+comma(fee):'-'+comma(fee)}</Text>
+      <Text color='#6D48E5' fontSize='20px' fontWeight='bold' lineHeight='25px'>{comma(fee)}</Text>
     </CarriedBudgetStyles>
   );
 };
@@ -97,6 +98,7 @@ export const Account = () => {
   const [InputTextValue, setInputTextValue] = useState('');
   const [FilterClicked, setFilterClick] = useState(false);
   const [ExportClicked, setExportClick] = useState(false);
+  const empty = useMemo(() => InputTextValue === '', [InputTextValue]);
   const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setInputTextValue(event.target.value);
   }, [setInputTextValue]);
@@ -113,7 +115,7 @@ export const Account = () => {
         <Text color='#454440' fontSize='40px' fontWeight={700} lineHeight='50px'>회계관리</Text>
         <Box isFlex width='100%' mt='32px' alignItems='flex-end' justifyContent='space-between'>
           <Tab tabs={['입출금내역 목록', '동아리원 목록']} />
-          <SearchInput onChange={handleInputChange} value={InputTextValue} placeholder='search' />
+          <Input empty={empty} logo={<Search mr='27px' width='24px' height='24px' color='#CBC8BE' />} onChange={handleInputChange} value={InputTextValue} placeholder='search' />
         </Box>
       </Box>
       <Box isFlex flexDirection='row' flexWrap='wrap'>
@@ -133,7 +135,7 @@ export const Account = () => {
             <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='122px'>내역</Text>
             <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='49px'>금액</Text>
           </Box>
-          <Box>
+          <Box mb='100px'>
             <CarriedBudget date={CarriedData.date} semester={CarriedData.semester} fee={CarriedData.fee} />
           </Box>
         </Box>
@@ -146,7 +148,10 @@ export const Account = () => {
                 color='#000000' border='none' px='18.5px' py='6px' onClick={handleExportClick}>내보내기
               </Button>
             </Box>
-            <Filter FilterClicked={FilterClicked} onClick={handleFilterClick}>필터</Filter>
+            <Box isFlex alignItems='center'>
+              <Filter mr='7px' width='24px' height='24px' />
+              <FilterButton FilterClicked={FilterClicked} onClick={handleFilterClick}>필터</FilterButton>
+            </Box>
           </Box>
           <Box isFlex mt='53px' width='821px'>
             <Box isFlex justifyContent='space-between'>

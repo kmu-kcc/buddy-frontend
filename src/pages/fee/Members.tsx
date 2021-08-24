@@ -1,7 +1,7 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useMemo} from 'react';
 import styled from 'styled-components';
-import {Box, SearchInput, Text, Tab} from '../../components';
-import {Filter} from '../../components/icons';
+import {Box, Input, Text, Tab} from '../../components';
+import {Filter, Search} from '../../components/icons';
 
 const GroupName = styled.span`
   font-size: 24px;
@@ -114,6 +114,7 @@ export const Members = () => {
   const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setInputTextValue(event.target.value);
   }, [setInputTextValue]);
+  const empty = useMemo(() => InputTextValue === '', [InputTextValue]);
 
   const PaidMembers = PaidMembersProfile.map((info, idx) => (
     <Box border='1px solid #6D48E5' borderRadius='15px' key={idx}>
@@ -132,7 +133,7 @@ export const Members = () => {
       <Text color='#454440' fontSize='40px' fontWeight={700} lineHeight='50px'>회계관리</Text>
       <Box isFlex width='100%' mt='32px' alignItems='flex-end' justifyContent='space-between'>
         <Tab tabs={['입출금내역 목록', '동아리원 목록']} />
-        <SearchInput onChange={handleInputChange} value={InputTextValue} placeholder='search' />
+        <Input empty={empty} logo={<Search mr='27px' width='24px' height='24px' color='#CBC8BE' />} onChange={handleInputChange} value={InputTextValue} placeholder='search' />
       </Box>
       <Box isFlex width='100%' height='30px' mt='64px' position='relative' mb='28px' alignItems='flex-end'>
         <Box isFlex width='180px' height='34px' >
