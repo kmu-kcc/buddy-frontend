@@ -20,7 +20,7 @@ export const signIn = (data: SignInRequest) => {
 export interface SignUpRequest {
   id: string;
   name: string;
-  epartment: string;
+  department: string;
   phone: string;
   email: string;
   grade: number;
