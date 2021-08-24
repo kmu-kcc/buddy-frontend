@@ -3,3 +3,7 @@ export {Buddy} from './Buddy';
 export {Check} from './Check';
 export {Filter} from './Filter';
 export {Search} from './Search';
+export {Activity} from './Activity';
+export {Fee} from './Fee';
+export {Organization} from './Organization';
+export {Profile} from './Profile';

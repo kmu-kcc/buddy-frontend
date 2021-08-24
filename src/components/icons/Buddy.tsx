@@ -10,7 +10,7 @@ interface Props extends SpaceProps, CursorProps {
 }
 
 export const Buddy = (props: Props) => {
-  const {width = '80', height = '116', color = '#6D48E5', ...styles} = props;
+  const {width = '80px', height = '116px', color = '#6D48E5', ...styles} = props;
 
   return (
     <Icon width={width} height={height} viewBox='0 0 80 116' {...styles}>
