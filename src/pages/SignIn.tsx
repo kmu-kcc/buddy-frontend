@@ -63,6 +63,9 @@ export const SignIn = () => {
       setState(event.target.value);
     };
   }, []);
+  const handleInputEnterPress = useCallback(() => {
+    handleSignInClick();
+  }, [handleSignInClick]);
   const [idSaved, setIdSaved] = useState(false);
   const handleCheck = useCallback(() => {
     setIdSaved(!idSaved);
@@ -81,8 +84,12 @@ export const SignIn = () => {
         <Box isBlock mb='64px' >
           <Buddy width='70px' height='106px' color='#6D48E5' />
         </Box>
-        <Input width='100%' height='63px' value={id} onChange={handleInputChange(setId)} placeholder='아이디' />
-        <Input mt='20px' type='password' width='100%' height='63px' value={password} onChange={handleInputChange(setPassword)} placeholder='비밀번호' />
+        <Input width='100%' height='63px' value={id} placeholder='아이디'
+          onChange={handleInputChange(setId)}
+          onEnterPress={handleInputEnterPress} />
+        <Input mt='20px' type='password' width='100%' height='63px' value={password} placeholder='비밀번호'
+          onChange={handleInputChange(setPassword)}
+          onEnterPress={handleInputEnterPress} />
         <Button mt='65px' width='100%' height='70px' onClick={handleSignInClick}>로그인</Button>
         <Check mt='24px' mr='auto' boxShape='circle' size='20px' fontSize='16px' lineHeight='19px' onCheck={handleCheck} label='아이디 저장' checked={idSaved} />
         <Box isFlex mt='40px' width='100%'>
