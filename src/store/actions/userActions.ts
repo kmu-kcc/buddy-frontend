@@ -1,4 +1,5 @@
 import {createAction, createAsyncThunk} from '@reduxjs/toolkit';
+import {APIRejectResponse} from '.';
 import {Attendance, Credentials, User} from '../../models/User';
 import * as apis from '../apis/auth';
 
@@ -15,7 +16,7 @@ export const changeAttendance = createAction<Attendance>('user/changeAttendance'
 /**
  * actions for async request
  */
-export const getMeRequest = createAsyncThunk<User, apis.GetMyRequest>('user/getMe', async (data, thunkAPI) => {
+export const getMeRequest = createAsyncThunk<User, apis.GetMyRequest, APIRejectResponse>('user/getMe', async (data, thunkAPI) => {
   try {
     const response = await apis.getMy(data);
     if (response.status === 200) {
@@ -29,7 +30,7 @@ export const getMeRequest = createAsyncThunk<User, apis.GetMyRequest>('user/getM
   }
 });
 
-export const signInRequest = createAsyncThunk<Credentials, apis.SignInRequest>('user/signIn', async (data, thunkAPI) => {
+export const signInRequest = createAsyncThunk<Credentials, apis.SignInRequest, APIRejectResponse>('user/signIn', async (data, thunkAPI) => {
   try {
     const response = await apis.signIn(data);
     if (response.status === 200) {
@@ -38,12 +39,11 @@ export const signInRequest = createAsyncThunk<Credentials, apis.SignInRequest>('
       return thunkAPI.rejectWithValue(response.data.error);
     }
   } catch (err) {
-    console.log(err);
-    return thunkAPI.rejectWithValue(err);
+    return thunkAPI.rejectWithValue(err.response.data.error || '로그인에 실패했습니다.');
   }
 });
 
-export const signUpRequest = createAsyncThunk<void, apis.SignUpRequest>('user/signUp', async (data, thunkAPI) => {
+export const signUpRequest = createAsyncThunk<void, apis.SignUpRequest, APIRejectResponse>('user/signUp', async (data, thunkAPI) => {
   try {
     const response = await apis.signUp(data);
     if (response.status === 200) {
@@ -57,7 +57,7 @@ export const signUpRequest = createAsyncThunk<void, apis.SignUpRequest>('user/si
   }
 });
 
-export const updateMeRequest = createAsyncThunk<void, apis.UpdateMeRequest>('user/updateMe', async (data, thunkAPI) => {
+export const updateMeRequest = createAsyncThunk<void, apis.UpdateMeRequest, APIRejectResponse>('user/updateMe', async (data, thunkAPI) => {
   try {
     const response = await apis.updateMe(data);
     if (response.status === 200) {
@@ -71,7 +71,7 @@ export const updateMeRequest = createAsyncThunk<void, apis.UpdateMeRequest>('use
   }
 });
 
-export const withdraw = createAsyncThunk<void, apis.WithdrawRequest>('user/withdraw', async (data, thunkAPI) => {
+export const withdraw = createAsyncThunk<void, apis.WithdrawRequest, APIRejectResponse>('user/withdraw', async (data, thunkAPI) => {
   try {
     const response = await apis.withdrawRequest(data);
     if (response.status === 200) {
