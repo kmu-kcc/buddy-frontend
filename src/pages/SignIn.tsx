@@ -8,6 +8,7 @@ import {RootState, useDispatch} from '../store';
 import {signInRequest} from '../store/actions/userActions';
 import {Input, Button, Box, Check, Popup, Text} from '../components';
 import {Buddy} from '../components/icons';
+import {CommonMessage, SignInMessage} from '../common/wordings';
 
 const LinkText = styled(Link)<SpaceProps & ColorProps>`
   text-decoration: none;
@@ -33,12 +34,12 @@ export const SignIn = () => {
 
   const handleSignInClick = useCallback(async () => {
     if (loadingSignIn) {
-      toast.info('처리중입니다. 잠시만 기다려주세요.');
+      toast.info(CommonMessage.loading);
       return;
     }
 
     if (!id || !password) {
-      toast.warn('아이디 / 비밀번호를 입력해주세요.');
+      toast.warn(SignInMessage.empty);
       return;
     }
 
@@ -55,7 +56,7 @@ export const SignIn = () => {
       }
     } catch (err) {
       console.log(err);
-      toast.error('에러가 발생했습니다. 잠시 후에 다시 시도해주세요.');
+      toast.error(CommonMessage.error);
     }
   }, [history, dispatch, loadingSignIn, id, password]);
   const handleInputChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {

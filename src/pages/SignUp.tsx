@@ -1,5 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
+import {ToastContainer, toast} from 'react-toastify';
 // import {useHistory} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../store';
@@ -7,6 +8,7 @@ import {signUpRequest} from '../store/actions/userActions';
 import {Input, Select, Button, Box} from '../components';
 import {Buddy} from '../components/icons';
 import {Attendance} from '../models/User';
+import {CommonMessage, SignUpMessage} from '../common/wordings';
 
 const Text = styled.p`
   margin-left: 19px;
@@ -30,7 +32,7 @@ export const SignUp = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [studentNumber, setStudentNumber] = useState('');
-  const [attendance, setAttendance] = useState<Attendance | null>(null);
+  const [attendance, setAttendance] = useState<Attendance>(-1);
 
   const handleInputChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +51,7 @@ export const SignUp = () => {
     } else if (value === '졸업') {
       attendance = Attendance.GRADUATED;
     } else {
-      attendance = null;
+      attendance = -1;
     }
     setAttendance(attendance);
   }, []);
@@ -58,11 +60,12 @@ export const SignUp = () => {
   }, []);
   const handleSignUpClick = useCallback(async () => {
     if (loadingSignUp) {
+      toast.info(CommonMessage.loading);
       return;
     }
 
-    if (!name || !college || !major || !phoneNumber || !email || !studentNumber || !grade || !attendance) {
-      console.log('invalid form value');
+    if (!name || !college || !major || !phoneNumber || !email || !studentNumber || !grade || (attendance < 0)) {
+      toast.warn(SignUpMessage.empty);
       return;
     }
 
@@ -77,9 +80,14 @@ export const SignUp = () => {
         attendance,
       }));
       console.log('signup request finish', response.type);
-      //  TODO show finish page
+      if (response.type === signUpRequest.fulfilled.type) {
+        //  TODO show finish page
+      } else {
+        toast.error(response.payload as unknown as string);
+      }
     } catch (err) {
       console.log(err);
+      toast.error(CommonMessage.error);
     }
   }, [dispatch, loadingSignUp, name, college, major, grade, phoneNumber, email, studentNumber, attendance]);
 
@@ -165,6 +173,7 @@ export const SignUp = () => {
         </Box>
         <Button mt='30px' width='388px' height='70px' onClick={handleSignUpClick}>회원가입</Button>
       </Box>
+      <ToastContainer position='top-center' />
     </Box>
   );
 };
