@@ -1,11 +1,16 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {Route, useHistory, useLocation} from 'react-router-dom';
+import {toast} from 'react-toastify';
+import {useSelector} from 'react-redux';
+import {RootState, useDispatch} from '../../store';
+import {searchMember} from '../../store/actions/memberActions';
 import {Box, Text, Input, Tab} from '../../components';
 import {Search} from '../../components/icons';
 import {Members} from './Members';
 import {Router} from '../../utils/router';
 import {SignUpRequests} from './SignUpReqeusts';
 import {WithdrawRequests} from './WIthdrawRequests';
+import {CommonMessage} from '../../common/wordings';
 
 const paths = ['/organization/members', '/organization/members/request/signup', '/organization/members/request/withdraw'];
 
@@ -14,13 +19,34 @@ interface Props {
 }
 
 const Container = ({children}: Props) => {
+  const dispatch = useDispatch();
+  const {loading} = useSelector((state: RootState) => state.member);
+
   const history = useHistory();
   const location = useLocation();
   const [search, setSearch] = useState('');
   const searchInputShow = useMemo(() => location.pathname === '/organization/members', [location]);
-  const handleSearchChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchChange = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
-  }, []);
+
+    if (loading) {
+      return;
+    }
+
+    try {
+      const response = await dispatch(searchMember({
+        keyword: event.target.value,
+      }));
+      if (response.type === searchMember.fulfilled.type) {
+        return;
+      } else {
+        toast.error(response.payload);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch, loading]);
   const handleTabChange = useCallback((index: number) => {
     if (location.pathname !== paths[index]) {
       history.push(paths[index]);
