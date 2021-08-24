@@ -9,6 +9,7 @@ import {signInRequest} from '../store/actions/userActions';
 import {Input, Button, Box, Check, Popup, Text} from '../components';
 import {Buddy} from '../components/icons';
 import {CommonMessage, SignInMessage} from '../common/wordings';
+import {setCredentialInfo} from '../common/credentials';
 
 const LinkText = styled(Link)<SpaceProps & ColorProps>`
   text-decoration: none;
@@ -49,7 +50,8 @@ export const SignIn = () => {
       }));
       if (response.type === signInRequest.fulfilled.type) {
         //  signin success
-        history.replace('/activity');
+        setCredentialInfo(id, password);
+        history.replace('/user');
       } else {
         //  signin error
         toast.error(response.payload);
