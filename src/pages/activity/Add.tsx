@@ -71,7 +71,7 @@ export const Add = () => {
         <Text fontSize='20px' color='#454440' lineHeight='24px'>본문</Text>
         <Textarea onChange={handleDescriptionareaChange} value={descriptionValue} backgroundColor='#F8F8F8' width='1168px' height='838px' mt='20px'></Textarea>
       </Box>
-      <FloatButton>저장하기</FloatButton>
+      <FloatButton>저장</FloatButton>
     </Box>
   );
 };

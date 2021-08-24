@@ -1,4 +1,5 @@
 import React, {useState, useCallback} from 'react';
+import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 import {Text, Button, Box, SearchInput} from '../../components';
 import {Buddy} from '../../components/icons';
@@ -55,8 +56,12 @@ interface CardProps {
 
 const ActivityCard = (props: CardProps) => {
   const {title, start} = props;
+  const history = useHistory();
+  const handleClick = useCallback(() => {
+    history.push('/activity/status');
+  }, [history]);
   return (
-    <Box isFlex flexDirection='column'>
+    <Box isFlex flexDirection='column' mr='30px' onClick={handleClick} cursor='pointer'>
       <Buddy width='226px' height='147px' />
       <Text fontSize='18px' lineHeight='22px' color='#454440' pt='20px'>{title}</Text>
       <Text fontSize='14px' lineHeight='18px' color='#9E9E9E' pt='5px'>{start}</Text>
@@ -69,6 +74,10 @@ export const List = () => {
   const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setInputTextValue(event.target.value);
   }, [setInputTextValue]);
+  const history = useHistory();
+  const handleClick = useCallback(() => {
+    history.push('/activity/add');
+  }, [history]);
 
   const FoundAnniversary = Dummy.map((info, idx) => (
     <Box key={idx}>
@@ -104,7 +113,7 @@ export const List = () => {
       <Box isFlex>
         {EtCetera}
       </Box>
-      <FloatButton>새로운 활동 추가하기</FloatButton>
+      <FloatButton onClick={handleClick}>새로운 활동 추가</FloatButton>
     </Box>
   );
 };
