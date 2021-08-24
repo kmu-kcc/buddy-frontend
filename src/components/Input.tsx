@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useCallback, useMemo} from 'react';
 import styled from 'styled-components';
 import {
   compose, color, ColorProps,
@@ -61,6 +61,7 @@ interface InputProps extends TypographyProps {
   empty?: boolean;
   error?: boolean;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onEnterPress?: () => void;
 }
 
 const defaultProps = {
@@ -76,12 +77,18 @@ const defaultProps = {
 type Props = InputProps & WrapperProps & typeof defaultProps;
 
 export const Input = (props: Props) => {
-  const {value, logo} = props;
+  const {value, logo, onEnterPress} = props;
   const empty = useMemo(() => value === '', [value]);
+  const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
+    if (onEnterPress && event.key === 'Enter') {
+      onEnterPress();
+    }
+  }, [onEnterPress]);
+
   return (
     <Wrapper empty={empty} {...props}>
       {logo}
-      <InnerInput empty={empty} {...props} />
+      <InnerInput empty={empty} onKeyDown={handleKeyDown} {...props} />
     </Wrapper>
   );
 };
