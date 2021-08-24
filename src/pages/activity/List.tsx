@@ -88,7 +88,7 @@ export const List = () => {
 
   return (
     <Box width='100%' py='48px' px='60px'>
-      <Box isFlex width='100%' mt='32px' alignItems='flex-end' justifyContent='space-between'>
+      <Box isFlex width='100%' justifyContent='space-between'>
         <Text color='#454440' fontSize='40px' fontWeight={700} lineHeight='50px'>활동관리</Text>
         <SearchInput onChange={handleInputChange} value={InputTextValue} placeholder='search' />
       </Box>
