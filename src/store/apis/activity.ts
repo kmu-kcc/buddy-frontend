@@ -1,4 +1,4 @@
-import {request} from '.';
+import {getRequest} from '.';
 
 // 1. Create - 활동 생성
 export interface CreateActivityRequest {
@@ -12,7 +12,7 @@ export interface CreateActivityRequest {
 }
 
 export const createActivity = (data: CreateActivityRequest) => {
-  return request.post('/activity/create', {
+  return getRequest().post('/activity/create', {
     ...data,
   });
 };
@@ -40,7 +40,7 @@ export interface UpdateActivityRequest {
   }
 }
 export const updateActivity = (data: UpdateActivityRequest) => {
-  return request.put('/activity/update', {
+  return getRequest().put('/activity/update', {
     ...data,
   });
 };
@@ -51,7 +51,7 @@ export interface DeleteActivityRequest {
 
 // 5. Delete - 활동 삭제
 export const deleteActivity = (data: DeleteActivityRequest) => {
-  return request.delete('/activity/delete', {
+  return getRequest().delete('/activity/delete', {
     data,
   });
 };
@@ -73,7 +73,7 @@ export interface DeleteActivityFileRequest {
 
 // 8. DeleteFile - 파일 삭제
 export const deleteFile = (data: DeleteActivityFileRequest) => {
-  return request.post('/activity/deletefile', {
+  return getRequest().post('/activity/deletefile', {
     ...data,
   });
 };

@@ -1,4 +1,4 @@
-import {request} from '.';
+import {getRequest} from '.';
 
 // buddy/back-end/docs/member에 명세 되어있는 내용 중 기능에 따라 members.ts와 해당 페이지(auth.ts)에 나눠져있습니다.
 // 주석으로 백엔드/독스/멤버 중 어디에 명세되어있는지와 몇번째 api인지 명세되어있습니다
@@ -11,7 +11,7 @@ export interface SignInRequest {
 
 // 1. SignIn(member spec 1번 api) - 회원 로그인
 export const signIn = (data: SignInRequest) => {
-  return request.post('/member/signin', {
+  return getRequest().post('/member/signin', {
     ...data,
   });
 };
@@ -28,7 +28,7 @@ export interface SignUpRequest {
 }
 
 export const signUp = (data: SignUpRequest) => {
-  return request.post('/member/signup', {
+  return getRequest().post('/member/signup', {
     ...data,
   });
 };
@@ -39,7 +39,7 @@ export interface WithdrawRequest {
 
 // 5. Exit(member spec 5번 api) - 회원 탈퇴 신청
 export const withdrawRequest = (data: WithdrawRequest) => {
-  return request.put('/member/exit', {
+  return getRequest().put('/member/exit', {
     ...data,
   });
 };
@@ -51,7 +51,7 @@ export interface GetMyRequest {
 
 // 8. My(member spec 8번 api) - 내 정보 불러오기
 export const getMy = (data: GetMyRequest) => {
-  return request.post('/member/my', {
+  return getRequest().post('/member/my', {
     ...data,
   });
 };
@@ -70,7 +70,7 @@ export interface UpdateMeRequest {
 }
 
 export const updateMe = (data: UpdateMeRequest) => {
-  return request.put('/member/update', {
+  return getRequest().put('/member/update', {
     ...data,
   });
 };
