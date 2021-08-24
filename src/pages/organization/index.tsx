@@ -4,7 +4,8 @@ import {Box, Text, Input, Tab} from '../../components';
 import {Search} from '../../components/icons';
 import {Members} from './Members';
 import {Router} from '../../utils/router';
-import {SignUpRequests, WithdrawRequests} from './MemberRequests';
+import {SignUpRequests} from './SignUpReqeusts';
+import {WithdrawRequests} from './WIthdrawRequests';
 
 const paths = ['/organization/members', '/organization/members/request/signup', '/organization/members/request/withdraw'];
 
@@ -46,8 +47,8 @@ export const Organization = () => (
   <Container>
     <Router>
       <Route path='/organization/members' exact component={Members} />
-      <Route path='/organization/members/request' exact component={SignUpRequests} />
-      <Route path='/organization/members/withdraw' exact component={WithdrawRequests} />
+      <Route path='/organization/members/request/signup' exact component={SignUpRequests} />
+      <Route path='/organization/members/request/withdraw' exact component={WithdrawRequests} />
     </Router>
   </Container>
 );
