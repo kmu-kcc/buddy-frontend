@@ -45,7 +45,7 @@ export const Status = () => {
       </Box>
       <UnderBar />
       <Textarea onChange={handleDescriptionareaChange} value={descriptionValue} backgroundColor='#F8F8F8' width='1147px' height='838px'></Textarea>
-      <FloatButton>새로운 활동 추가하기</FloatButton>
+      <FloatButton>새로운 활동 추가</FloatButton>
     </Box>
   );
 };
