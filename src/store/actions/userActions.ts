@@ -20,7 +20,7 @@ export const getMeRequest = createAsyncThunk<User, apis.GetMyRequest, APIRejectR
   try {
     const response = await apis.getMy(data);
     if (response.status === 200) {
-      return response.data.data;
+      return response.data.data.data;
     } else {
       return thunkAPI.rejectWithValue(response.data.error);
     }
