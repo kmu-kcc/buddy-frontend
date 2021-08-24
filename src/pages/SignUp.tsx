@@ -24,8 +24,6 @@ export const SignUp = () => {
   const dispatch = useDispatch();
   const {loadingSignUp} = useSelector((state: RootState) => state.user);
   const [name, setName] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordCheck, setPasswordCheck] = useState('');
   const [college, setCollege] = useState('');
   const [major, setMajor] = useState('');
   const [grade, setGrade] = useState(0);
@@ -104,15 +102,6 @@ export const SignUp = () => {
           </Box>
           <Box ml='174px'>
             <Input width='390px' height='63px' value={email} onChange={handleInputChange(setEmail)} type='email' placeholder='이메일' />
-          </Box>
-        </Box>
-        <Box isFlex>
-          <Box width='390px'>
-            <Input width='390px' height='63px' value={password} onChange={handleInputChange(setPassword)} type='password' placeholder='비밀번호' />
-            <Text>영어 대문자, 숫자, 특수문자 각 1개 이상 혼용, 전체 8글자 이상</Text>
-          </Box>
-          <Box ml='174px'>
-            <Input width='390px' height='63px' value={passwordCheck} onChange={handleInputChange(setPasswordCheck)} type='password' placeholder='비밀번호 확인' />
           </Box>
         </Box>
         <Box isFlex>
