@@ -20,6 +20,10 @@ export const SettingsMessage = {
   loadingFail: '정보를 불러오는 중 문제가 발생했습니다.',
 };
 
+export const MemberMessage = {
+  success: '데이터를 불러왔습니다.',
+};
+
 export const MemberRequestsMessage = {
   loadingSuccess: '데이터를 불러왔습니다.',
   loadingFail: '데이터를 불러오는 중 문제가 발생했습니다.',
