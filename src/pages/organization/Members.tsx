@@ -1,8 +1,7 @@
-import React, {useState, useCallback, useMemo} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {background, BackgroundProps} from 'styled-system';
-import {Box, Input, Button, Text, Tab} from '../../components';
-import {Search} from '../../components/icons';
+import {Box, Button, Text} from '../../components';
 
 const CardLine = styled.div`
   box-sizing: border-box;
@@ -99,16 +98,6 @@ const MemberCard = (MemberCardProps: MemberCardProps) => {
 };
 
 export const Members = () => {
-  const [InputTextValue, setInputTextValue] = useState('');
-  const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputTextValue(event.target.value);
-  }, [setInputTextValue]);
-  const empty = useMemo(() => InputTextValue === '', [InputTextValue]);
-  const [activeTab, setActiveTab] = useState(1);
-  const handleTabChange = useCallback((index: number) => {
-    setActiveTab(index);
-  }, []);
-  const tabs = useMemo(() => ['동아리원 목록', '입부 신청내역', '퇴부 신청내역'], []);
   const CardListAdmin = UserProfile.map((info, idx) => (
     <Box border='2px solid #6D48E5' borderRadius='37px' key={idx}>
       <MemberCard group='운영자' username={info.username} univnumber={info.univnumber} major={info.major} date={info.date} />
@@ -121,12 +110,7 @@ export const Members = () => {
   ));
 
   return (
-    <Box width='100%' py='48px' px='60px'>
-      <Text color='#454440' fontSize='40px' fontWeight={700} lineHeight='50px'>조직관리</Text>
-      <Box isFlex width='100%' mt='32px' alignItems='flex-end' justifyContent='space-between'>
-        <Tab tabs={tabs} initialTab={activeTab} onTabChange={handleTabChange} />
-        <Input empty={empty} logo={<Search mr='27px' width='24px' height='24px' color='#CBC8BE' />} onChange={handleInputChange} value={InputTextValue} placeholder='Search' />
-      </Box>
+    <Box>
       <Box isBlock width='80px' height='30px' mt='64px' position='relative' mb='28px'>
         <GroupName>운영자</GroupName>
         <GroupNameShadow background='#EFEBFC' />

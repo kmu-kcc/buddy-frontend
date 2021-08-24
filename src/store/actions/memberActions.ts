@@ -1,4 +1,5 @@
 import {createAction, createAsyncThunk} from '@reduxjs/toolkit';
+import {APIRejectResponse} from '.';
 import {User, Attendance} from '../../models/User';
 import * as apis from '../apis/member';
 
@@ -15,7 +16,7 @@ export const changeAttendance = createAction<Attendance>('member/changeAttendanc
 /**
  * actions for async request
  */
-export const getSignUpRequests = createAsyncThunk<User[], void>('member/getSignUpRequests', async (data, thunkAPI) => {
+export const getSignUpRequests = createAsyncThunk<User[], void, APIRejectResponse>('member/getSignUpRequests', async (data, thunkAPI) => {
   try {
     const response = await apis.getSignUpRequests();
     if (response.status === 200) {
@@ -29,7 +30,7 @@ export const getSignUpRequests = createAsyncThunk<User[], void>('member/getSignU
   }
 });
 
-export const getWithdrawalRequests = createAsyncThunk('member/getWithdrawalRequests', async (data, thunkAPI) => {
+export const getWithdrawalRequests = createAsyncThunk<User[], void, APIRejectResponse>('member/getWithdrawalRequests', async (data, thunkAPI) => {
   try {
     const response = await apis.getWithdrawalRequests();
     if (response.status === 200) {
@@ -43,7 +44,7 @@ export const getWithdrawalRequests = createAsyncThunk('member/getWithdrawalReque
   }
 });
 
-export const approveSignUp = createAsyncThunk<void, apis.ApproveSignUpRequest>('member/approveSignUp', async (data, thunkAPI) => {
+export const approveSignUp = createAsyncThunk<void, apis.ApproveSignUpRequest, APIRejectResponse>('member/approveSignUp', async (data, thunkAPI) => {
   try {
     const response = await apis.approveSignUp(data);
     if (response.status === 200) {
@@ -57,7 +58,7 @@ export const approveSignUp = createAsyncThunk<void, apis.ApproveSignUpRequest>('
   }
 });
 
-export const rejectSignUp = createAsyncThunk<void, apis.RejectSignUpRequest>('member/rejectSignUp', async (data, thunkAPI) => {
+export const rejectSignUp = createAsyncThunk<void, apis.RejectSignUpRequest, APIRejectResponse>('member/rejectSignUp', async (data, thunkAPI) => {
   try {
     const response = await apis.rejectSignUp(data);
     if (response.status === 200) {
@@ -71,7 +72,7 @@ export const rejectSignUp = createAsyncThunk<void, apis.RejectSignUpRequest>('me
   }
 });
 
-export const searchMember = createAsyncThunk<User[], apis.SearchMemberRequest>('member/searchMember', async (data, thunkAPI) => {
+export const searchMember = createAsyncThunk<User[], apis.SearchMemberRequest, APIRejectResponse>('member/searchMember', async (data, thunkAPI) => {
   try {
     const response = await apis.searchMember(data);
     if (response.status === 200) {
