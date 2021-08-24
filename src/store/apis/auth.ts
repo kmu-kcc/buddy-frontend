@@ -9,14 +9,14 @@ export interface SignInRequest {
   password: string;
 }
 
-// 1. SignIn(member 독스 1번 api) - 회원 로그인
+// 1. SignIn(member spec 1번 api) - 회원 로그인
 export const signIn = (data: SignInRequest) => {
   return request.post('/member/signin', {
     ...data,
   });
 };
 
-// 2. SignUp(member 독스 2번 api) - 회원 가입 신청
+// 2. SignUp(member spec 2번 api) - 회원 가입 신청
 export interface SignUpRequest {
   id: string;
   name: string;
@@ -33,9 +33,15 @@ export const signUp = (data: SignUpRequest) => {
   });
 };
 
-// 5. Exit(member 독스 5번 api) - 회원 탈퇴 신청
-export const withdrawRequest = (id: string) => {
-  return request.put('/member/exit', {id});
+export interface WithdrawRequest {
+  id: string;
+}
+
+// 5. Exit(member spec 5번 api) - 회원 탈퇴 신청
+export const withdrawRequest = (data: WithdrawRequest) => {
+  return request.put('/member/exit', {
+    ...data,
+  });
 };
 
 export interface GetMyRequest {
@@ -51,7 +57,7 @@ export const getMy = (data: GetMyRequest) => {
 };
 
 // 10. Update(member spec 10번 api) - 회원 정보 갱신
-interface UpdateMemberStatusRequest {
+export interface UpdateMeRequest {
   id: string;
   update: {
       password: string;
@@ -63,6 +69,8 @@ interface UpdateMemberStatusRequest {
   }
 }
 
-export const updateMemberStatus = (data: UpdateMemberStatusRequest) => {
-  return request.put('/member/update', {data});
+export const updateMe = (data: UpdateMeRequest) => {
+  return request.put('/member/update', {
+    ...data,
+  });
 };

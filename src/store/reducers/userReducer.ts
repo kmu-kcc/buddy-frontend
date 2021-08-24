@@ -1,12 +1,14 @@
 import {createReducer} from '@reduxjs/toolkit';
 import {User} from '../../models/User';
 import * as actions from '../actions/userActions';
+import {setCredentials} from '../../common/credentials';
 
 interface State {
   user: User | null;
   loading: boolean;
   loadingSignIn: boolean;
   loadingSignUp: boolean;
+  loadingWithdraw: boolean;
 };
 
 const initialState: State = {
@@ -14,6 +16,7 @@ const initialState: State = {
   loading: false,
   loadingSignIn: false,
   loadingSignUp: false,
+  loadingWithdraw: false,
 };
 
 export const userReducer = createReducer(initialState, (builder) => {
@@ -59,9 +62,10 @@ export const userReducer = createReducer(initialState, (builder) => {
       .addCase(actions.signInRequest.pending, (state, action) => {
         state.loadingSignIn = true;
       })
-      .addCase(actions.signInRequest.fulfilled, (state, action) => {
+      .addCase(actions.signInRequest.fulfilled, (state, {payload}) => {
         state.loadingSignIn = false;
-        // credentials store logic required
+        console.log('store credentials into localStorage');
+        setCredentials(payload);
       })
       .addCase(actions.signInRequest.rejected, (state, action) => {
         state.loadingSignIn = false;
@@ -79,9 +83,28 @@ export const userReducer = createReducer(initialState, (builder) => {
         state.loading = true;
       })
       .addCase(actions.getMeRequest.fulfilled, (state, {payload}) => {
+        state.loading = false;
         state.user = payload;
       })
       .addCase(actions.getMeRequest.rejected, (state, action) => {
         state.loading = false;
+      })
+      .addCase(actions.updateMeRequest.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(actions.updateMeRequest.fulfilled, (state, {payload}) => {
+        state.loading = false;
+      })
+      .addCase(actions.updateMeRequest.rejected, (state, action) => {
+        state.loading = false;
+      })
+      .addCase(actions.withdraw.pending, (state, action) => {
+        state.loadingWithdraw = true;
+      })
+      .addCase(actions.withdraw.fulfilled, (state, {payload}) => {
+        state.loadingWithdraw = false;
+      })
+      .addCase(actions.withdraw.rejected, (state, action) => {
+        state.loadingWithdraw = false;
       });
 });
