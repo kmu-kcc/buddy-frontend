@@ -14,6 +14,11 @@ const FloatButton = styled(Button)`
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
 `;
 
+const ActivityCardWrapper = styled(Box)`
+  background-color: #F8F8F8;
+  border-radius: 15px;
+`;
+
 const Dummy = [
   {
     id: '610d458b79e122ea1d150cd6',
@@ -62,7 +67,9 @@ const ActivityCard = (props: CardProps) => {
   }, [history]);
   return (
     <Box isFlex flexDirection='column' mr='30px' onClick={handleClick} cursor='pointer'>
-      <Buddy width='226px' height='147px' />
+      <ActivityCardWrapper isFlex justifyContent='center' width='226px' height='147px'>
+        <Buddy width='38px' height='56px' mt='46px' />
+      </ActivityCardWrapper>
       <Text fontSize='18px' lineHeight='22px' color='#454440' pt='20px'>{title}</Text>
       <Text fontSize='14px' lineHeight='18px' color='#9E9E9E' pt='5px'>{start}</Text>
     </Box>
