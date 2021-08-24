@@ -39,6 +39,11 @@ export const setCredentials = (credentials: Credentials) => {
   localStorage.setItem(EXPIRED_AT, credentials.expired_at);
 };
 
+export const setCredentialInfo = (id: string, pw: string) => {
+  localStorage.setItem(USER_ID, id);
+  localStorage.setItem(USER_PW, pw);
+};
+
 export const getCredentialInfo = () => {
   const id = localStorage.getItem(USER_ID);
   const pw = localStorage.getItem(USER_PW);
