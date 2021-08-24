@@ -1,5 +1,5 @@
 import {createAction, createAsyncThunk} from '@reduxjs/toolkit';
-import {Attendance, User} from '../../models/User';
+import {Attendance, Credentials, User} from '../../models/User';
 import * as apis from '../apis/auth';
 
 /**
@@ -29,7 +29,7 @@ export const getMeRequest = createAsyncThunk<User, apis.GetMyRequest>('user/getM
   }
 });
 
-export const signInRequest = createAsyncThunk<void, apis.SignInRequest>('user/signIn', async (data, thunkAPI) => {
+export const signInRequest = createAsyncThunk<Credentials, apis.SignInRequest>('user/signIn', async (data, thunkAPI) => {
   try {
     const response = await apis.signIn(data);
     if (response.status === 200) {
@@ -46,6 +46,34 @@ export const signInRequest = createAsyncThunk<void, apis.SignInRequest>('user/si
 export const signUpRequest = createAsyncThunk<void, apis.SignUpRequest>('user/signUp', async (data, thunkAPI) => {
   try {
     const response = await apis.signUp(data);
+    if (response.status === 200) {
+      return;
+    } else {
+      return thunkAPI.rejectWithValue(response.data.error);
+    }
+  } catch (err) {
+    console.log(err);
+    return thunkAPI.rejectWithValue(err);
+  }
+});
+
+export const updateMeRequest = createAsyncThunk<void, apis.UpdateMeRequest>('user/updateMe', async (data, thunkAPI) => {
+  try {
+    const response = await apis.updateMe(data);
+    if (response.status === 200) {
+      return;
+    } else {
+      return thunkAPI.rejectWithValue(response.data.error);
+    }
+  } catch (err) {
+    console.log(err);
+    return thunkAPI.rejectWithValue(err);
+  }
+});
+
+export const withdraw = createAsyncThunk<void, apis.WithdrawRequest>('user/withdraw', async (data, thunkAPI) => {
+  try {
+    const response = await apis.withdrawRequest(data);
     if (response.status === 200) {
       return;
     } else {
