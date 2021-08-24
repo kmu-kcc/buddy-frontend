@@ -7,3 +7,4 @@ export {Activity} from './Activity';
 export {Fee} from './Fee';
 export {Organization} from './Organization';
 export {Profile} from './Profile';
+export {Exit} from './Exit';
