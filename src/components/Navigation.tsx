@@ -7,7 +7,6 @@ import {Activity, Organization, Fee, Profile} from '../components/icons';
 const Wrapper = styled(Box)`
   width: 240px;
   height: 100vh;
-  display: flex;
   flex-direction: column;
   align-items: center;
   position: sticky;
@@ -110,7 +109,7 @@ export const Navigation = () => {
   }, [location.pathname]);
 
   return (
-    <Wrapper display={hidden ? 'none' : 'block'}>
+    <Wrapper display={hidden ? 'none' : 'flex'}>
       <Logo />
       <ActivityTab />
       <OrganizationTab />
