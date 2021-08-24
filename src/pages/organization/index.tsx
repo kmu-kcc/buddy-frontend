@@ -26,14 +26,14 @@ const Container = ({children}: Props) => {
   }, [history]);
 
   return (
-    <Box isFlex flexDirection='column' width='100%' pl='67px'>
+    <Box isFlex flexDirection='column' width='100%' px='60px'>
       <Box mt='60px' mb='58px' isFlex>
         <Text color='#454440;' fontSize='40px' fontWeight={700}>조직관리</Text>
       </Box>
       <Box isFlex flexDirection='row-reverse' alignItems='end'>
-        <Box mr='114px' ml='auto'>
-          <Input logo={<Search mr='27px' width='24px' height='24px' color='#CBC8BE' />} height='59px' width='433px' value={search} onChange={handleSearchChange} placeholder='Search' />
-        </Box>
+        <Input ml='auto' height='59px' width='433px' value={search}
+          logo={<Search mr='27px' width='24px' height='24px' color='#CBC8BE' />}
+          onChange={handleSearchChange} placeholder='Search' />
         <Box isFlex flexDirection='column' >
           <Tab tabs={['동아리원 목록', '입부 신청내역', '퇴부 신청내역']} onTabChange={handleTabChange} />
         </Box>
