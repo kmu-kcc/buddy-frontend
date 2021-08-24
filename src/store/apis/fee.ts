@@ -1,8 +1,6 @@
 import {request} from '.';
-
 // 주석은 API 명세에 쓰여있는 내용입니다
 // 코드는 명세에 쓰여있는 함수이름을 사용하기 편하게 수정하였습니다.
-
 export interface CreateFeeRequest {
   year: number;
   semester: number;
