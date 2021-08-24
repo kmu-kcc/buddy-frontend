@@ -1,7 +1,12 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 import styled from 'styled-components';
 import {useHistory} from 'react-router-dom';
+import {useSelector} from 'react-redux';
+import {RootState, useDispatch} from '../../store';
 import {Button, Box, Text} from '../../components';
+import {Attendance} from '../../models/User';
+import {getMeRequest} from '../../store/actions/userActions';
+import {getCredentialInfo} from '../../common/credentials';
 
 const Key = styled.span`
   float: left;
@@ -25,10 +30,29 @@ const FloatButton = styled(Button)`
 `;
 
 export const Profile = () => {
+  const dispatch = useDispatch();
   const history = useHistory();
+  const {user} = useSelector((state: RootState) => state.user);
+  const college = useMemo(() => user?.department.split(' ')[0], [user?.department]);
+  const major = useMemo(() => user?.department.split(' ').slice(1).join(' '), [user?.department]);
+  const attendance = useMemo(() => {
+    const attendance = user?.attendance;
+    if (attendance === Attendance.ATTENDING) {
+      return '재학';
+    } else if (attendance === Attendance.LEAVE_OF_ABSENCE) {
+      return '휴학';
+    } else if (attendance === Attendance.GRADUATED) {
+      return '졸업';
+    }
+  }, [user?.attendance]);
+
   const handleClick = useCallback(() => {
     history.push('/user/settings');
   }, [history]);
+
+  useEffect(() => {
+    dispatch(getMeRequest(getCredentialInfo()));
+  }, [dispatch]);
 
   return (
     <Box width='100%' pl='60px' pt='48px' pb='48px' position='relative'>
@@ -41,18 +65,7 @@ export const Profile = () => {
         </Box>
         <Box isFlex width='262px' height='68px' alignItems='center' justifyContent='center'
           border='1px solid #6D48E5' borderTopRightRadius='16px'>
-          <Value>홍길동</Value>
-        </Box>
-      </Box>
-      {/* 비밀번호 */}
-      <Box isFlex>
-        <Box isFlex width='152px' height='68px' alignItems='center' justifyContent='center'
-          bg='#6D48E5' borderTop='1px solid #fff'>
-          <Key>비밀번호</Key>
-        </Box>
-        <Box isFlex width='262px' height='68px' alignItems='center' justifyContent='center'
-          border='1px solid #6D48E5'>
-          <Value>abcd1234</Value>
+          <Value>{user?.name}</Value>
         </Box>
       </Box>
       {/* 전화번호 */}
@@ -63,7 +76,7 @@ export const Profile = () => {
         </Box>
         <Box isFlex width='262px' height='68px' alignItems='center' justifyContent='center'
           border='1px solid #6D48E5'>
-          <Value>01012345678</Value>
+          <Value>{user?.phone}</Value>
         </Box>
       </Box>
       {/* 이메일 */}
@@ -74,7 +87,7 @@ export const Profile = () => {
         </Box>
         <Box isFlex width='262px' height='68px' alignItems='center' justifyContent='center'
           border='1px solid #6D48E5'>
-          <Value>abc123@naver.com</Value>
+          <Value>{user?.email}</Value>
         </Box>
       </Box>
       {/* 대학 */}
@@ -85,7 +98,7 @@ export const Profile = () => {
         </Box>
         <Box isFlex width='262px' height='68px' alignItems='center' justifyContent='center'
           border='1px solid #6D48E5'>
-          <Value>소프트웨어융합대학</Value>
+          <Value>{college}</Value>
         </Box>
       </Box>
       {/* 학과 */}
@@ -96,7 +109,7 @@ export const Profile = () => {
         </Box>
         <Box isFlex width='262px' height='68px' alignItems='center' justifyContent='center'
           border='1px solid #6D48E5'>
-          <Value>경영학과</Value>
+          <Value>{major}</Value>
         </Box>
       </Box>
       {/* 학번 */}
@@ -107,7 +120,7 @@ export const Profile = () => {
         </Box>
         <Box isFlex width='262px' height='68px' alignItems='center' justifyContent='center'
           border='1px solid #6D48E5'>
-          <Value>20191954</Value>
+          <Value>{user?.id}</Value>
         </Box>
       </Box>
       {/* 학년 */}
@@ -118,7 +131,7 @@ export const Profile = () => {
         </Box>
         <Box isFlex width='262px' height='68px' alignItems='center' justifyContent='center'
           border='1px solid #6D48E5'>
-          <Value>1학년</Value>
+          <Value>{user?.grade}학년</Value>
         </Box>
       </Box>
       {/* 재학여부 */}
@@ -129,7 +142,7 @@ export const Profile = () => {
         </Box>
         <Box isFlex width='262px' height='68px' alignItems='center' justifyContent='center'
           border='1px solid #6D48E5' borderBottomRightRadius='16px'>
-          <Value>재학</Value>
+          <Value>{attendance}</Value>
         </Box>
       </Box>
       <FloatButton onClick={handleClick}>수정하기</FloatButton>
