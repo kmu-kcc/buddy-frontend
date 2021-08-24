@@ -58,8 +58,8 @@ const ActivityCard = (props: CardProps) => {
   return (
     <Box isFlex flexDirection='column'>
       <Buddy width='226px' height='147px' />
-      <Text fontSize='18px' lineHeight='22px' color='#454440'>{title}</Text>
-      <Text fontSize='14px' lineHeight='18px' color='#9E9E9E'>{start}</Text>
+      <Text fontSize='18px' lineHeight='22px' color='#454440' pt='20px'>{title}</Text>
+      <Text fontSize='14px' lineHeight='18px' color='#9E9E9E' pt='5px'>{start}</Text>
     </Box>
   );
 };
@@ -96,11 +96,11 @@ export const List = () => {
       <Box isFlex>
         {FoundAnniversary}
       </Box>
-      <Text fontSize='24px' lineHeight='29px' color='#454440' pt='30px' >창립제</Text>
+      <Text fontSize='24px' lineHeight='29px' color='#454440' pt='30px' pb='20px'>창립제</Text>
       <Box isFlex>
         {Study}
       </Box>
-      <Text fontSize='24px' lineHeight='29px' color='#454440' pt='30px' >기타</Text>
+      <Text fontSize='24px' lineHeight='29px' color='#454440' pt='30px' pb='20px'>기타</Text>
       <Box isFlex>
         {EtCetera}
       </Box>
