@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
 import {color, ColorProps, space, SpaceProps} from 'styled-system';
-import {ToastContainer, toast} from 'react-toastify';
+import {toast} from 'react-toastify';
 import {Link, useHistory} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../store';
@@ -111,7 +111,6 @@ export const SignIn = () => {
           </Popup>
         </Box>
       </Box>
-      <ToastContainer position='top-center' />
     </Box>
   );
 };

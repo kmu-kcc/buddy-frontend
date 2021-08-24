@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import {ToastContainer} from 'react-toastify';
 import {Box} from './Box';
 import {Navigation} from './Navigation';
 
@@ -28,6 +29,7 @@ export const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
       <Content>
         {children}
       </Content>
+      <ToastContainer position='top-center' />
     </Wrapper>
   );
 };
