@@ -14,8 +14,6 @@ const Text = styled.p`
 
 export const SignUp: React.FC = () => {
   const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordCheck, setPasswordCheck] = useState('');
   const [major, setMajor] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
@@ -39,15 +37,6 @@ export const SignUp: React.FC = () => {
           </Box>
           <Box ml='174px'>
             <Input width='390px' height='63px' value={email} onChange={handleInputChange(setEmail)} type='email' placeholder='이메일' />
-          </Box>
-        </Box>
-        <Box isFlex>
-          <Box width='390px'>
-            <Input width='390px' height='63px' value={password} onChange={handleInputChange(setPassword)} type='password' placeholder='비밀번호' />
-            <Text>영어 대문자, 숫자, 특수문자 각 1개 이상 혼용, 전체 8글자 이상</Text>
-          </Box>
-          <Box ml='174px'>
-            <Input width='390px' height='63px' value={passwordCheck} onChange={handleInputChange(setPasswordCheck)} type='password' placeholder='비밀번호 확인' />
           </Box>
         </Box>
         <Box isFlex>
