@@ -40,11 +40,11 @@ export const Status = () => {
         <Text color='#454440' fontSize='16px' lineHeight='20px' pl='44px'>봉사활동</Text>
       </Box>
       <Box isFlex pt='7px'>
-        <Text color='#AAAAAA' fontSize='16px' lineHeight='20px'>참여자</Text>
+        <Text color='#AAAAAA' fontSize='16px' lineHeight='20px' >참여자</Text>
         <Text color='#454440' fontSize='16px' lineHeight='20px' pl='29px'>김수환중위,,,, 보고싶다 수환이형,,,</Text>
       </Box>
       <UnderBar />
-      <Textarea onChange={handleDescriptionareaChange} value={descriptionValue} width='1147px' height='838px'></Textarea>
+      <Textarea onChange={handleDescriptionareaChange} value={descriptionValue} backgroundColor='#F8F8F8' width='1147px' height='838px'></Textarea>
       <FloatButton>새로운 활동 추가하기</FloatButton>
     </Box>
   );
