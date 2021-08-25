@@ -5,8 +5,8 @@ import {position, PositionProps} from 'styled-system';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
 import {searchAccount} from '../../store/actions/feeActions';
-import {Text, Button, Box, Tab, Input, Transaction, TransactionHeader, Popup} from '../../components';
-import {Filter, Search} from '../../components/icons';
+import {Text, Button, Box, Tab, Input, Transaction, TransactionHeader, Popup, Select} from '../../components';
+import {Filter} from '../../components/icons';
 import {CommonMessage, FeeMessage} from '../../common/wordings';
 import {getCurrentSemester} from '../../utils/semester';
 import {formatCurrency} from '../../utils/currency';
@@ -173,7 +173,14 @@ export const Account = () => {
         <Text color='#454440' fontSize='40px' fontWeight={700} lineHeight='50px'>회계관리</Text>
         <Box isFlex width='100%' mt='32px' alignItems='flex-end' justifyContent='space-between'>
           <Tab tabs={['입출금내역 목록', '동아리원 목록']} />
-          <Input empty={empty} logo={<Search mr='27px' width='24px' height='24px' color='#CBC8BE' />} onChange={handleInputChange} value={InputTextValue} placeholder='search' />
+          <Box isFlex>
+            <Input empty={empty} width='150px' onChange={handleInputChange} value={InputTextValue} placeholder='연도' />
+            <Select width='150px' ml='20px' placeholder='학기'>
+              <option>1학기</option>
+              <option>2학기</option>
+            </Select>
+            <Button ml='20px'>조회</Button>
+          </Box>
         </Box>
       </Box>
       <Box isFlex flexDirection='row' flexWrap='wrap'>
