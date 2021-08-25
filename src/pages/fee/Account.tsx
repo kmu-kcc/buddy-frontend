@@ -212,26 +212,26 @@ export const Account = () => {
         </Box>
         <Box isFlex alignItems='flex-end' justifyContent='space-between' right='50px'>
           <FloatButton right='303px' onClick={handleDepositRequestPopupClick}>입금 내역 추가</FloatButton>
-          <Popup type='primary' confirmLabel='추가' cancelLabel='닫기' show={depositPopupShow}
+          <Popup width='500px' height='390px' type='primary' confirmLabel='추가' cancelLabel='닫기' show={depositPopupShow}
             onConfirm={handleDepositConfirm}
             onCancel={handleDepositCancel}
             onClose={handleDepositClose}>
             <Box isFlex flexDirection='column' justifyItems='center'>
-              <Text fontSize='20px' lineHeight='25px'>입금 내역 입력</Text>
+              <Text fontSize='20px' lineHeight='25px' mb='6px'>입금 내역 입력</Text>
               <Input onChange={handleDepositDescriptionChange} value={inputDepositDescriptionValue}></Input>
-              <Text fontSize='20px' lineHeight='25px'>입금 금액 입력</Text>
+              <Text fontSize='20px' lineHeight='25px' mt='25px' mb='6px'>입금 금액 입력</Text>
               <Input onChange={handleDepositChange} value={inputDepositValue}></Input>
             </Box>
           </Popup>
           <FloatButton right='50px' onClick={handleWithdrawRequestPopupClick} background='#FF6845' border='none'>출금 내역 추가</FloatButton>
-          <Popup type='danger' confirmLabel='추가' cancelLabel='닫기' show={WithdrawPopupShow}
+          <Popup width='500px' height='390px' type='danger' confirmLabel='추가' cancelLabel='닫기' show={WithdrawPopupShow}
             onConfirm={handleWithdrawConfirm}
             onCancel={handleWithdrawCancel}
             onClose={handleWithdrawClose}>
             <Box isFlex flexDirection='column'>
-              <Text fontSize='20px' lineHeight='15px'>출금 내역 입력</Text>
+              <Text fontSize='20px' lineHeight='25px' mb='6px'>출금 내역 입력</Text>
               <Input onChange={handleWithdrawDescriptionChange} value={inputWithdrawDescriptionValue}></Input>
-              <Text fontSize='20px' lineHeight='15px'>출금 금액 입력</Text>
+              <Text fontSize='20px' lineHeight='25px' mt='25px' mb='6px'>출금 금액 입력</Text>
               <Input onChange={handleWithdrawChange} value={inputWithdrawValue}></Input>
             </Box>
           </Popup>
