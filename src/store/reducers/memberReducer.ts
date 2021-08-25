@@ -5,8 +5,8 @@ import * as actions from '../actions/memberActions';
 interface State {
   members: User[];
   currentMember: User | null;
-  signUpRequests: User[];
-  withdrawalRequests: User[];
+  signUpRequests: User[] | null;
+  withdrawalRequests: User[] | null;
   loading: boolean,
   loadingSignUpRequests: boolean,
   loadingWithdrawalRequests: boolean,
@@ -83,7 +83,7 @@ export const memberReducer = createReducer(initialState, (builder) => {
       })
       .addCase(actions.getSignUpRequests.fulfilled, (state, {payload}) => {
         state.loadingSignUpRequests = false;
-        state.signUpRequests = payload.map((req) => ({
+        state.signUpRequests = payload?.map((req) => ({
           ...req,
           checked: false,
         }));
@@ -97,7 +97,7 @@ export const memberReducer = createReducer(initialState, (builder) => {
       })
       .addCase(actions.getWithdrawalRequests.fulfilled, (state, {payload}) => {
         state.loadingWithdrawalRequests = false;
-        state.withdrawalRequests = payload.map((req) => ({
+        state.withdrawalRequests = payload?.map((req) => ({
           ...req,
           checked: false,
         }));

@@ -5,6 +5,7 @@ import {RootState, useDispatch} from '../../store';
 import {getWithdrawalRequests, deleteMember, changeCheckedInWithdrawalRequests} from '../../store/actions/memberActions';
 import {Box, Button, MemberCard, Popup, Text, Span} from '../../components';
 import {CommonMessage, MemberRequestsMessage} from '../../common/wordings';
+import {User} from '../../models/User';
 
 // const ReverseButton = styled(Button)`
 //   background: #FF6845;
@@ -18,7 +19,7 @@ export const WithdrawRequests = () => {
   const handleCheck = useCallback((index: number) => () => {
     dispatch(changeCheckedInWithdrawalRequests({
       index,
-      checked: !withdrawalRequests[index].checked,
+      checked: !((withdrawalRequests as User[])[index].checked),
     }));
   }, [dispatch, withdrawalRequests]);
 
@@ -34,7 +35,7 @@ export const WithdrawRequests = () => {
 
     try {
       const response = await dispatch(deleteMember({
-        ids: withdrawalRequests.filter((req) => req.checked).map((req) => req.id),
+        ids: withdrawalRequests?.filter((req) => req.checked).map((req) => req.id) ?? [],
       }));
       if (response.type === deleteMember.fulfilled.type) {
         toast.success(MemberRequestsMessage.deleteSuccess);
@@ -89,7 +90,7 @@ export const WithdrawRequests = () => {
         </Box>
       </Box>
       <Box isFlex mt='33px' mb='50px' flexWrap='wrap'>
-        {withdrawalRequests.length > 0 ? withdrawalRequests.map((info, idx) => (
+        {(withdrawalRequests?.length ?? 0) > 0 ? withdrawalRequests?.map((info, idx) => (
           <Box key={idx} mr='30px' mb='30px'>
             <MemberCard group='퇴부 신청'
               username={info.name}
