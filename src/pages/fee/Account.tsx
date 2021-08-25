@@ -5,12 +5,11 @@ import {position, PositionProps} from 'styled-system';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
 import {searchAccount} from '../../store/actions/feeActions';
-import {Text, Button, Box, Tab, Input, TransactionList, Popup} from '../../components';
+import {Text, Button, Box, Tab, Input, Transaction, TransactionHeader, Popup} from '../../components';
 import {Filter, Search} from '../../components/icons';
 import {CommonMessage, FeeMessage} from '../../common/wordings';
 import {getCurrentSemester} from '../../utils/semester';
-
-const TempBudget = 1000000;
+import {formatCurrency} from '../../utils/currency';
 
 const CarriedData = {
   fee: 200000,
@@ -18,22 +17,15 @@ const CarriedData = {
   date: '21.08.04',
 };
 
-const comma = (num: number) =>{
-  const res = num.toLocaleString();
-  return (num >= 0 ? '+'+res : res);
-};
-
-const FullBudget = styled.div<{Budget: number;}>`
-  width: 382px;
+const TotalBalanceContainer = styled(Box)`
+  width: 442px;
   height: 90px;
-  background: #6D48E5;
-  border-radius: 15px;
-  padding-right: 30px;
-  padding-left: 30px;
   display: flex;
   justify-content: space-between;
+  background: #6D48E5;
+  border-radius: 15px;
+  padding: 0 30px;
   align-items: center;
-  margin-bottom: 58px;
 `;
 
 interface CarriedProps {
@@ -42,7 +34,7 @@ interface CarriedProps {
   date?: string;
 };
 
-const CarriedBudgetStyles = styled.div`
+const CarriedBudgetWrapper = styled.div`
   width: 436px;
   height: 73px;
   box-sizing: border-box;
@@ -55,6 +47,17 @@ const CarriedBudgetStyles = styled.div`
   margin-top: 14px;
 `;
 
+const CarriedBudget = (CarriedProps: CarriedProps) => {
+  const {fee, semester, date} = CarriedProps;
+  return (
+    <CarriedBudgetWrapper>
+      <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='29px'>{date}</Text>
+      <Text color='#000000' fontSize='20px' fontWeight={500} lineHeight='25px' mr='63px'>{semester}</Text>
+      <Text color='#6D48E5' fontSize='20px' fontWeight='bold' lineHeight='25px'>{formatCurrency(fee)}</Text>
+    </CarriedBudgetWrapper>
+  );
+};
+
 const FilterButton = styled.div<{FilterClicked: boolean;}>`
   font-weight: 500;
   font-size: 20px;
@@ -62,7 +65,7 @@ const FilterButton = styled.div<{FilterClicked: boolean;}>`
   color: #8D8C85;
   cursor: pointer;
   right: 0;
-  &::after{
+  &::after {
     display: ${({FilterClicked}) => FilterClicked ? 'none': 'block'};
     border: 1px solid #6D48E5;
     width: 100px;
@@ -80,25 +83,6 @@ const FloatButton = styled(Button)<PositionProps>`
   bottom: 35px;
   font-size: 20px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-`;
-
-const CarriedBudget = (CarriedProps: CarriedProps) => {
-  const {fee, semester, date} = CarriedProps;
-  return (
-    <CarriedBudgetStyles>
-      <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='29px'>{date}</Text>
-      <Text color='#000000' fontSize='20px' fontWeight={500} lineHeight='25px' mr='63px'>{semester}</Text>
-      <Text color='#6D48E5' fontSize='20px' fontWeight='bold' lineHeight='25px'>{comma(fee)}</Text>
-    </CarriedBudgetStyles>
-  );
-};
-
-const Line = styled.div`
-  box-sizing: border-box;
-  width: 821px;
-  height: 1px;
-  background-color: #CBC8BE;
-  margin-top: 22px;
 `;
 
 export const Account = () => {
@@ -194,16 +178,12 @@ export const Account = () => {
       </Box>
       <Box isFlex flexDirection='row' flexWrap='wrap'>
         <Box flexBasis='34%'>
-          <Box isFlex mt='49px' mb='39px'>
-            <Text color='#454440' fontSize='24px' fontWeight={700} lineHeight='30.05px'>전체금액</Text>
-          </Box>
-          <FullBudget Budget={TempBudget}>
-            <Box isFlex>
-              <Text color='#ffffff' fontSize='18px' lineHeight='22px'>잔여 총액</Text>
-            </Box>
-            <Text color='#ffffff' fontSize='28px' fontWeight='bold' lineHeight='34px' textAlign='right'>{account?.total ? `${comma(account?.total)}` : '-'}원</Text>
-          </FullBudget>
-          <Text color='#454440' fontSize='24px' fontWeight='bold' lineHeight='30px'>이월 목록</Text>
+          <Text mt='48px' ml='12px' color='#454440' fontSize='24px' fontWeight={700} lineHeight='30.05px'>전체금액</Text>
+          <TotalBalanceContainer mt='40px'>
+            <Text color='#fff' fontSize='18px' lineHeight='22px'>잔여 총액</Text>
+            <Text color='#fff' fontSize='28px' fontWeight='bold' lineHeight='34px' textAlign='right'>{account?.total ? `${formatCurrency(account?.total)}` : '-'}원</Text>
+          </TotalBalanceContainer>
+          <Text mt='58px' color='#454440' fontSize='24px' fontWeight='bold' lineHeight='30px'>이월 내역</Text>
           <Box isFlex mt='42px' padding='0 38px'>
             <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='75px'>날짜</Text>
             <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='122px'>내역</Text>
@@ -216,7 +196,7 @@ export const Account = () => {
         <Box flexBasis='66%' py='48px' px='60px'>
           <Box isFlex alignItems='center' justifyContent='space-between'>
             <Box isFlex alignItems='center' justifyContent='space-between'>
-              <Text color='#454440' fontSize='24px' fontWeight='bold' lineHeight='30px' mr='51px'>입출금내역 목록</Text>
+              <Text color='#454440' fontSize='24px' fontWeight='bold' lineHeight='30px' mr='51px'>입출금 내역</Text>
               <Button background='#FFD646' width='82px' height='27px'
                 fontSize='12px' fontWeight={500} lineHeight='15px' borderColor='#FFD646'
                 color='#000000' border='none' px='18.5px' py='6px' onClick={handleExportClick}>내보내기
@@ -227,18 +207,14 @@ export const Account = () => {
               <FilterButton FilterClicked={FilterClicked} onClick={handleFilterClick}>필터</FilterButton>
             </Box>
           </Box>
-          <Box isFlex mt='53px' width='821px'>
-            <Box isFlex justifyContent='space-between'>
-              <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' ml='32px' mr='130px'>날짜</Text>
-              <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px'>내역</Text>
-            </Box>
-            <Box isFlex justifyContent='space-betwen' ml='262px'>
-              <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='104px'>금액</Text>
-              <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='96px'>잔액</Text>
-            </Box>
-          </Box>
-          <Line />
-          <TransactionList />
+          <TransactionHeader />
+          {(account?.logs.length ?? 0) > 0 ? account?.logs.map((log) => (
+            <Transaction key={log.created_at}
+              date={log.created_at}
+              description={log.description}
+              amount={log.amount}
+              total={100000} />
+          )) : <Text mt='48px' width='100%' textAlign='center' fontSize='20px'>입출금 내역이 없습니다.</Text>}
         </Box>
         <Box isFlex alignItems='flex-end' justifyContent='space-between' right='50px'>
           <FloatButton right='303px' onClick={handleDepositRequestPopupClick}>입금 내역 추가</FloatButton>
