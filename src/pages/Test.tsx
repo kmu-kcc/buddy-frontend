@@ -218,7 +218,7 @@ export const Test = () => {
         <Box isFlex>
           <Box>
             <Button onClick={handleWSignUpRequestPopupClick}>Click to open popup</Button>
-            <Popup type='primary' confirmLabel='승인' cancelLabel='거절' show={signUpPopupShow}
+            <Popup width='700px' height='1000px' type='primary' confirmLabel='승인' cancelLabel='거절' show={signUpPopupShow}
               onConfirm={handleSignUpConfirm}
               onCancel={handleSignUpCancel}
               onClose={handleSignUpClose}>

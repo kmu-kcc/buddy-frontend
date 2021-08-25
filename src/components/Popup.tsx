@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
+import {WidthProps, HeightProps, MaxWidthProps, MaxHeightProps, MinWidthProps, MinHeightProps} from 'styled-system';
 import {CSSTransition} from 'react-transition-group';
 import {Box, Button, ModalPortal} from '.';
 
@@ -29,8 +30,6 @@ const BackgroundWrapper = styled(Box)`
 `;
 
 const PopupWrapper = styled(Box)<{type: PopupType}>`
-  width: 500px;
-  height: 256px;
   padding: 60px 80px;
   background-color: #fff;
   border: 1px solid ${({type}) => type === 'primary' ? '#6D48E5' : '#FF6845'};
@@ -52,7 +51,7 @@ const RejectButton = styled(Button)<{type: PopupType}>`
   }
 `;
 
-interface PopupProps {
+interface PopupProps extends WidthProps, MinWidthProps, MaxWidthProps, HeightProps, MinHeightProps, MaxHeightProps {
   children: JSX.Element | JSX.Element[];
   show: boolean;
   type: PopupType;
@@ -64,8 +63,15 @@ interface PopupProps {
   hideCancelButton?: boolean;
 }
 
-export const Popup = (props: PopupProps) => {
-  const {type, children, onConfirm, onCancel, onClose, confirmLabel, cancelLabel, hideCancelButton} = props;
+const defaultProps = {
+  width: '500px',
+  height: '256px',
+};
+
+type Props = PopupProps & typeof defaultProps;
+
+export const Popup = (props: Props) => {
+  const {type, children, onConfirm, onCancel, onClose, confirmLabel, cancelLabel, hideCancelButton, width, minWidth, maxWidth, height, minHeight, maxHeight} = props;
   const [show, setShow] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -118,7 +124,7 @@ export const Popup = (props: PopupProps) => {
     <ModalPortal>
       <CSSTransition in={show} timeout={300} classNames={fadeTransition} addEndListener={handleTransitionEnd}>
         <BackgroundWrapper>
-          <PopupWrapper type={type} ref={contentRef}>
+          <PopupWrapper width={width} minWidth={minWidth} maxWidth={maxWidth} height={height} minHeight={minHeight} maxHeight={maxHeight} type={type} ref={contentRef}>
             <Box isFlex alignItems='center' justifyContent='center' mb='52px'>
               {children}
             </Box>
@@ -137,3 +143,5 @@ export const Popup = (props: PopupProps) => {
     </ModalPortal>
   ) : null;
 };
+
+Popup.defaultProps = defaultProps;
