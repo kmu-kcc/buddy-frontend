@@ -5,74 +5,20 @@ import {position, PositionProps} from 'styled-system';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
 import {searchAccount} from '../../store/actions/feeActions';
-import {Text, Button, Box, Input, Transaction, TransactionHeader, Popup} from '../../components';
+import {Text, Button, Box, Input, Transaction, TransactionHeader, Popup, Span} from '../../components';
 import {Filter} from '../../components/icons';
 import {CommonMessage, FeeMessage} from '../../common/wordings';
 import {getCurrentSemester} from '../../utils/semester';
 import {formatCurrency} from '../../utils/currency';
 
-const CarriedData = {
-  fee: 200000,
-  semester: '21년 1학기',
-  date: '21.08.04',
-};
-
 const TotalBalanceContainer = styled(Box)`
-  width: 442px;
-  height: 90px;
+  width: 380px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   background: #6D48E5;
   border-radius: 15px;
-  padding: 0 30px;
+  padding: 32px 30px 24px 30px;
   align-items: center;
-`;
-
-interface CarriedProps {
-  fee: number;
-  semester?: string;
-  date?: string;
-};
-
-const CarriedBudgetWrapper = styled.div`
-  width: 436px;
-  height: 73px;
-  box-sizing: border-box;
-  border: 1px solid #6D48E5;
-  border-radius: 15px;
-  padding-right: 38px;
-  padding-left: 38px;
-  display: flex;
-  align-items: center;
-  margin-top: 14px;
-`;
-
-const CarriedBudget = (CarriedProps: CarriedProps) => {
-  const {fee, semester, date} = CarriedProps;
-  return (
-    <CarriedBudgetWrapper>
-      <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='29px'>{date}</Text>
-      <Text color='#000000' fontSize='20px' fontWeight={500} lineHeight='25px' mr='63px'>{semester}</Text>
-      <Text color='#6D48E5' fontSize='20px' fontWeight='bold' lineHeight='25px'>{formatCurrency(fee)}</Text>
-    </CarriedBudgetWrapper>
-  );
-};
-
-const FilterButton = styled.div<{FilterClicked: boolean;}>`
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 25px;
-  color: #8D8C85;
-  cursor: pointer;
-  right: 0;
-  &::after {
-    display: ${({FilterClicked}) => FilterClicked ? 'none': 'block'};
-    border: 1px solid #6D48E5;
-    width: 100px;
-    height: 100px;
-    background: #000000;
-    z-index: 10;
-  }
 `;
 
 const FloatButton = styled(Button)<PositionProps>`
@@ -164,25 +110,22 @@ export const Account = () => {
   }, []);
 
   return (
-    <Box isFlex flexDirection='row'>
-      <Box flexBasis='34%'>
+    <Box isFlex width='100%' flexDirection='row' flexWrap='wrap'>
+      <Box mr='64px'>
         <Text mt='48px' ml='12px' color='#454440' fontSize='24px' fontWeight={700} lineHeight='30.05px'>전체금액</Text>
         <TotalBalanceContainer mt='40px'>
-          <Text color='#fff' fontSize='18px' lineHeight='22px'>잔여 총액</Text>
-          <Text color='#fff' fontSize='28px' fontWeight='bold' lineHeight='34px' textAlign='right'>{account?.total ? `${formatCurrency(account?.total)}` : '-'}원</Text>
+          <Box isFlex width='100%' flexDirection='column' alignItems='center'>
+            <Text color='#fff' fontSize='18px' lineHeight='22px'>잔여 총액</Text>
+            <Text mt='6px' color='#fff' fontSize='28px' fontWeight='bold' lineHeight='34px' textAlign='right'>{account?.total ? `${formatCurrency(account?.total)}` : '-'}원</Text>
+          </Box>
+          <Box mt='24px' isFlex width='100%' alignItems='center' justifyContent='flex-end'>
+            <Text color='#fff' fontSize='14px' lineHeight='22px'>이월 금액<Span ml='18px' fontWeight={700}>{account?.carry_over ? `${formatCurrency(account?.carry_over)}` : '-'}원</Span></Text>
+            {/* <Text color='#fff' fontSize='24px' fontWeight='bold' lineHeight='34px' textAlign='right'></Text> */}
+          </Box>
         </TotalBalanceContainer>
-        <Text mt='58px' color='#454440' fontSize='24px' fontWeight='bold' lineHeight='30px'>이월 내역</Text>
-        <Box isFlex mt='42px' padding='0 38px'>
-          <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='75px'>날짜</Text>
-          <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='122px'>내역</Text>
-          <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='49px'>금액</Text>
-        </Box>
-        <Box mb='100px'>
-          <CarriedBudget date={CarriedData.date} semester={CarriedData.semester} fee={CarriedData.fee} />
-        </Box>
       </Box>
-      <Box flexBasis='66%' py='48px' px='60px'>
-        <Box isFlex alignItems='center' justifyContent='space-between'>
+      <Box flex={1} py='48px'>
+        <Box isFlex minWidth='600px' alignItems='center' justifyContent='space-between'>
           <Box isFlex alignItems='center' justifyContent='space-between'>
             <Text color='#454440' fontSize='24px' fontWeight='bold' lineHeight='30px' mr='51px'>입출금 내역</Text>
             <Button background='#FFD646' width='82px' height='27px'
@@ -190,9 +133,9 @@ export const Account = () => {
               color='#000000' border='none' px='18.5px' py='6px' onClick={handleExportClick}>내보내기
             </Button>
           </Box>
-          <Box isFlex alignItems='center'>
-            <Filter mr='7px' width='24px' height='24px' />
-            <FilterButton FilterClicked={FilterClicked} onClick={handleFilterClick}>필터</FilterButton>
+          <Box isFlex alignItems='center' cursor='pointer' onClick={handleFilterClick}>
+            <Filter width='24px' height='24px' />
+            <Span ml='7px' color='#8D8C85' fontSize='20px' lineHeight='25px' fontWeight={500}>필터</Span>
           </Box>
         </Box>
         <TransactionHeader />
