@@ -5,13 +5,13 @@ import * as actions from '../actions/feeActions';
 interface State {
   payers: Payers[];
   deptors: Deptors[];
-  searchfee: SearchFee[];
+  account: SearchFee | null;
   amounts: number;
   loadingCreatefee: boolean;
   loadingAmount: boolean;
   loadingPayers: boolean;
   loadingDeptors: boolean;
-  loadingSearch: boolean;
+  loadingTransaction: boolean;
   loadingPay: boolean;
   loadingDeposit: boolean;
   loadingExempt: boolean;
@@ -20,13 +20,13 @@ interface State {
 const initialState: State = {
   payers: [],
   deptors: [],
-  searchfee: [],
+  account: null,
   amounts: 0,
   loadingCreatefee: false,
   loadingAmount: false,
   loadingPayers: false,
   loadingDeptors: false,
-  loadingSearch: false,
+  loadingTransaction: false,
   loadingPay: false,
   loadingDeposit: false,
   loadingExempt: false,
@@ -43,25 +43,25 @@ export const feeReducer = createReducer(initialState, (builder) => {
       .addCase(actions.createFee.rejected, (state, action) => {
         state.loadingCreatefee = false;
       })
-      .addCase(actions.searchAmountList.pending, (state, action) => {
+      .addCase(actions.searchAmount.pending, (state, action) => {
         state.loadingAmount = true;
       })
-      .addCase(actions.searchAmountList.fulfilled, (state, {payload}) => {
+      .addCase(actions.searchAmount.fulfilled, (state, {payload}) => {
         state.loadingAmount = false;
         state.amounts = payload;
       })
-      .addCase(actions.searchAmountList.rejected, (state, action) => {
+      .addCase(actions.searchAmount.rejected, (state, action) => {
         state.loadingAmount = false;
         state.amounts = 0;
       })
-      .addCase(actions.searchPayersList.pending, (state, action) => {
+      .addCase(actions.searchPayers.pending, (state, action) => {
         state.loadingPayers = true;
       })
-      .addCase(actions.searchPayersList.fulfilled, (state, {payload}) => {
+      .addCase(actions.searchPayers.fulfilled, (state, {payload}) => {
         state.loadingPayers = false;
         state.payers = payload;
       })
-      .addCase(actions.searchPayersList.rejected, (state, action) => {
+      .addCase(actions.searchPayers.rejected, (state, action) => {
         state.loadingPayers = false;
         state.payers = [];
       })
@@ -75,16 +75,16 @@ export const feeReducer = createReducer(initialState, (builder) => {
       .addCase(actions.searchDeptorsList.rejected, (state, action) => {
         state.loadingDeptors = false;
       })
-      .addCase(actions.searchTransaction.pending, (state, action) => {
-        state.loadingSearch = true;
+      .addCase(actions.searchAccount.pending, (state, action) => {
+        state.loadingTransaction = true;
       })
-      .addCase(actions.searchTransaction.fulfilled, (state, {payload}) => {
-        state.loadingSearch = false;
-        state.searchfee = payload;
+      .addCase(actions.searchAccount.fulfilled, (state, {payload}) => {
+        state.loadingTransaction = false;
+        state.account = payload;
       })
-      .addCase(actions.searchTransaction.rejected, (state, action) => {
-        state.loadingSearch = false;
-        state.searchfee = [];
+      .addCase(actions.searchAccount.rejected, (state, action) => {
+        state.loadingTransaction = false;
+        state.account = null;
       })
       .addCase(actions.pay.pending, (state, action) => {
         state.loadingPay = true;
