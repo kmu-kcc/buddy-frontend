@@ -85,7 +85,7 @@ export const Members = () => {
   }), [members]);
   const normalUsers = useMemo(() => members.filter((member) => {
     const role = member.role;
-    return role?.activity_management && role.fee_management && role.member_management;
+    return !(role?.activity_management || role?.fee_management || role?.member_management);
   }), [members]);
 
   const CardListAdmin = adminUsers.map((info, idx) => (
