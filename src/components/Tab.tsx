@@ -37,6 +37,7 @@ const TabWrapper = styled(Box)<{tabIndex: number;}>`
   align-items: center;
   border-bottom: 2px solid #E5E5E5;
   transition: all 0.15s ease-out;
+  outline: none;
 
   > div:nth-child(${({tabIndex}) => tabIndex + 1}) {
     border-bottom-color: #6D48E5;
