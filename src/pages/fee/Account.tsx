@@ -4,7 +4,7 @@ import {toast} from 'react-toastify';
 import {position, PositionProps} from 'styled-system';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
-import {searchAccount} from '../../store/actions/feeActions';
+import {searchAccount, deposit} from '../../store/actions/feeActions';
 import {Text, Button, Box, Input, Transaction, TransactionHeader, Popup, Span} from '../../components';
 import {Filter} from '../../components/icons';
 import {CommonMessage, FeeMessage} from '../../common/wordings';
@@ -33,15 +33,16 @@ const FloatButton = styled(Button)<PositionProps>`
 
 export const Account = () => {
   const dispatch = useDispatch();
-  const {loadingTransaction, account} = useSelector((state: RootState) => state.fee);
+  const {loadingDeposit, loadingTransaction, account, currentSemester} = useSelector((state: RootState) => state.fee);
+
   const [FilterClicked, setFilterClick] = useState(false);
   const [ExportClicked, setExportClick] = useState(false);
   const [depositPopupShow, setDepositPopupShow] = useState(false);
-  const [inputDepositValue, setInputDepositValue] = useState('');
-  const [inputDepositDescriptionValue, setInputDepositDescriptionValue] = useState('');
+  const [depositAmount, setDepositAmount] = useState('');
+  const [depositDescription, setDepositDescription] = useState('');
   const [WithdrawPopupShow, setWithdrawPopupShow] = useState(false);
-  const [inputWithdrawValue, setInputWithdrawValue] = useState('');
-  const [inputWithdrawDescriptionValue, setInputWithdrawDescriptionValue] = useState('');
+  const [withdrawAmount, setWithdrawAmount] = useState('');
+  const [withdrawDescription, setWithdrawDescription] = useState('');
 
   const fetchAccount = useCallback(async () => {
     if (loadingTransaction) {
@@ -67,42 +68,61 @@ export const Account = () => {
 
   const handleFilterClick = useCallback(() => {
     setFilterClick(!FilterClicked);
-  }, [FilterClicked, setFilterClick]);
+  }, [FilterClicked]);
   const handleExportClick = useCallback(() => {
     setExportClick(!ExportClicked);
-  }, [ExportClicked, setExportClick]);
+  }, [ExportClicked]);
+  const handleTextChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
+      setState(event.target.value);
+    };
+  }, []);
 
   const handleDepositRequestPopupClick = useCallback(() => {
     setDepositPopupShow(true);
   }, []);
-  const handleDepositConfirm = useCallback(() => {
-    setDepositPopupShow(false);
-  }, [setDepositPopupShow]);
+  const handleDepositConfirm = useCallback(async () => {
+    if (loadingDeposit) {
+      toast.info(CommonMessage.loading);
+      return;
+    }
+
+    if (Number(depositAmount) === NaN || !depositDescription) {
+      toast.error(FeeMessage.invalidDepositInfo);
+      return;
+    }
+
+    try {
+      const response = await dispatch(deposit({
+        amount: Number(depositAmount),
+        description: depositDescription,
+        ...currentSemester,
+      }));
+
+      if (response.type === deposit.fulfilled.type) {
+        toast.success(FeeMessage.successDeposit);
+        setDepositAmount('');
+        setDepositDescription('');
+        fetchAccount();
+      } else {
+        toast.error(response.payload as unknown as string);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch, loadingDeposit, depositAmount, depositDescription, currentSemester, fetchAccount]);
   const handleDepositClose = useCallback(() => {
     setDepositPopupShow(false);
   }, []);
-  const handleDepositChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputDepositValue(event.target.value);
-  }, [setInputDepositValue]);
-  const handleDepositDescriptionChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputDepositDescriptionValue(event.target.value);
-  }, [setInputDepositDescriptionValue]);
-
   const handleWithdrawRequestPopupClick = useCallback(() => {
     setWithdrawPopupShow(true);
   }, []);
-  const handleWithdrawConfirm = useCallback(() => {
-    setWithdrawPopupShow(false);
-  }, [setWithdrawPopupShow]);
+  const handleWithdrawConfirm = useCallback(async () => {
+  }, []);
   const handleWithdrawClose = useCallback(() => {
     setWithdrawPopupShow(false);
   }, []);
-  const handleWithdrawChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputWithdrawValue(event.target.value);
-  }, [setInputWithdrawValue]);
-  const handleWithdrawDescriptionChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputWithdrawDescriptionValue(event.target.value);
-  }, [setInputWithdrawDescriptionValue]);
 
   useEffect(() => {
     fetchAccount();
@@ -147,30 +167,28 @@ export const Account = () => {
             total={100000} />
         )) : <Text mt='48px' width='100%' textAlign='center' fontSize='20px'>입출금 내역이 없습니다.</Text>}
       </Box>
-      <Box isFlex alignItems='flex-end' justifyContent='space-between' right='50px'>
-        <FloatButton right='303px' onClick={handleDepositRequestPopupClick}>입금 내역 추가</FloatButton>
-        <Popup width='500px' height='390px' type='primary' confirmLabel='추가' cancelLabel='닫기' show={depositPopupShow}
-          onConfirm={handleDepositConfirm}
-          onClose={handleDepositClose}>
-          <Box isFlex flexDirection='column' justifyItems='center'>
-            <Text fontSize='20px' lineHeight='25px' mb='6px'>입금 내역 입력</Text>
-            <Input onChange={handleDepositDescriptionChange} value={inputDepositDescriptionValue}></Input>
-            <Text fontSize='20px' lineHeight='25px' mt='25px' mb='6px'>입금 금액 입력</Text>
-            <Input onChange={handleDepositChange} value={inputDepositValue}></Input>
-          </Box>
-        </Popup>
-        <FloatButton right='50px' onClick={handleWithdrawRequestPopupClick} background='#FF6845' border='none'>출금 내역 추가</FloatButton>
-        <Popup width='500px' height='390px' type='danger' confirmLabel='추가' cancelLabel='닫기' show={WithdrawPopupShow}
-          onConfirm={handleWithdrawConfirm}
-          onClose={handleWithdrawClose}>
-          <Box isFlex flexDirection='column'>
-            <Text fontSize='20px' lineHeight='25px' mb='6px'>출금 내역 입력</Text>
-            <Input onChange={handleWithdrawDescriptionChange} value={inputWithdrawDescriptionValue}></Input>
-            <Text fontSize='20px' lineHeight='25px' mt='25px' mb='6px'>출금 금액 입력</Text>
-            <Input onChange={handleWithdrawChange} value={inputWithdrawValue}></Input>
-          </Box>
-        </Popup>
-      </Box>
+      <FloatButton right='303px' onClick={handleDepositRequestPopupClick}>입금 내역 추가</FloatButton>
+      <FloatButton right='50px' onClick={handleWithdrawRequestPopupClick} background='#FF6845' border='none'>출금 내역 추가</FloatButton>
+      <Popup width='500px' height='390px' type='primary' confirmLabel='추가' cancelLabel='닫기' show={depositPopupShow}
+        onConfirm={handleDepositConfirm}
+        onClose={handleDepositClose}>
+        <Box isFlex flexDirection='column' justifyItems='center'>
+          <Text fontSize='20px' lineHeight='25px' mb='6px'>입금 내역 입력</Text>
+          <Input onChange={handleTextChange(setDepositDescription)} value={depositDescription} />
+          <Text fontSize='20px' lineHeight='25px' mt='25px' mb='6px'>입금 금액 입력</Text>
+          <Input type='number' onChange={handleTextChange(setDepositAmount)} value={depositAmount} />
+        </Box>
+      </Popup>
+      <Popup width='500px' height='390px' type='danger' confirmLabel='추가' cancelLabel='닫기' show={WithdrawPopupShow}
+        onConfirm={handleWithdrawConfirm}
+        onClose={handleWithdrawClose}>
+        <Box isFlex flexDirection='column'>
+          <Text fontSize='20px' lineHeight='25px' mb='6px'>출금 내역 입력</Text>
+          <Input onChange={handleTextChange(setWithdrawDescription)} value={withdrawDescription} />
+          <Text fontSize='20px' lineHeight='25px' mt='25px' mb='6px'>출금 금액 입력</Text>
+          <Input type='number' onChange={handleTextChange(setWithdrawAmount)} value={withdrawAmount} />
+        </Box>
+      </Popup>
     </Box>
   );
 };

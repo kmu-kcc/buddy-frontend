@@ -1,13 +1,15 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {Deptors, Account} from '../../models/Fee';
+import {Deptors, Account, Semester} from '../../models/Fee';
 import {User} from '../../models/User';
 import * as actions from '../actions/feeActions';
+import {getCurrentSemester} from '../../utils/semester';
 
 interface State {
   payers: User[];
   deptors: Deptors[];
   account: Account | null;
   amounts: number;
+  currentSemester: Semester;
   loadingCreatefee: boolean;
   loadingAmount: boolean;
   loadingPayers: boolean;
@@ -23,6 +25,7 @@ const initialState: State = {
   deptors: [],
   account: null,
   amounts: 0,
+  currentSemester: getCurrentSemester(),
   loadingCreatefee: false,
   loadingAmount: false,
   loadingPayers: false,
