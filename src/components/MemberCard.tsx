@@ -41,7 +41,6 @@ interface MemberCardProps {
   username?: string;
   univnumber?: string;
   major?: string;
-  date?: string;
   group?: string;
   phone?: string;
   onCheck?: (checked: boolean) => void;
@@ -50,7 +49,7 @@ interface MemberCardProps {
 
 export const MemberCard = (MemberCardProps: MemberCardProps) => {
   const [checked, setChecked] = useState(false);
-  const {children, group, username, univnumber, major, date, phone, onCheck} = MemberCardProps;
+  const {children, group, username, univnumber, major, phone, onCheck} = MemberCardProps;
   const handleCheck = useCallback(() => {
     setChecked(!checked);
     if (onCheck) {
@@ -62,7 +61,6 @@ export const MemberCard = (MemberCardProps: MemberCardProps) => {
       {children}
       <Box isFlex width='100%' alignItems='baseline' px='34px'>
         <Text flex={1} fontWeight={700} fontSize='18px' lineHeight='22px'>{group}</Text>
-        <Text color='#CBC8BE;'>{date}</Text>
       </Box>
       <CardLine />
       <Box isFlex mt='28px' px='44px' flexDirection='column'>

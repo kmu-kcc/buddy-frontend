@@ -87,7 +87,12 @@ export const SignUpRequests = () => {
     };
   }).map((info, idx) => (
     <Box key={idx} mr='30px' mb='30px'>
-      <MemberCard group='입부 신청' username={info.name} univnumber={info.id} major={info.department.slice(1)} date={'info.date'} phone={info.phone} onCheck={handleCheck}>
+      <MemberCard group='입부 신청'
+        username={info.name}
+        univnumber={info.id}
+        major={info.department.split(' ').slice(1).join(' ')}
+        phone={info.phone}
+        onCheck={handleCheck}>
         {check ? info.checked : !info.checked}
       </MemberCard>
     </Box>
