@@ -38,6 +38,7 @@ interface TextareaProps extends ColorProps, FlexProps, SpaceProps, HeightProps, 
   value: string;
   error?: boolean;
   empty?: boolean;
+  disabled?: boolean;
   placeholder?: string;
   onChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
