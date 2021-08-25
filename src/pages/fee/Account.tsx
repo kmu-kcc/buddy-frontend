@@ -160,6 +160,7 @@ export const Account = () => {
 
   useEffect(() => {
     fetchAccount();
+  //  eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
