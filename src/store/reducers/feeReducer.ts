@@ -1,11 +1,12 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {Payers, Deptors, SearchFee} from '../../models/Fee';
+import {Deptors, Account} from '../../models/Fee';
+import {User} from '../../models/User';
 import * as actions from '../actions/feeActions';
 
 interface State {
-  payers: Payers[];
+  payers: User[];
   deptors: Deptors[];
-  account: SearchFee | null;
+  account: Account | null;
   amounts: number;
   loadingCreatefee: boolean;
   loadingAmount: boolean;

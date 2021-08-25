@@ -1,6 +1,7 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
 import {APIRejectResponse} from '.';
-import {Payers, Deptors, SearchFee} from '../../models/Fee';
+import {Deptors, Account} from '../../models/Fee';
+import {User} from '../../models/User';
 import * as apis from '../apis/fee';
 /**
  * actions for async request
@@ -33,7 +34,7 @@ export const searchAmount = createAsyncThunk<number, apis.SearchAmountRequest, A
   }
 });
 
-export const searchPayers = createAsyncThunk<Payers[], apis.SearchPayersRequest, APIRejectResponse>('/fee/payers', async (data, thunkAPI) => {
+export const searchPayers = createAsyncThunk<User[], apis.SearchPayersRequest, APIRejectResponse>('/fee/payers', async (data, thunkAPI) => {
   try {
     const response = await apis.searchPayers(data);
     if (response.status === 200) {
@@ -61,7 +62,7 @@ export const searchDeptorsList = createAsyncThunk<Deptors[], apis.SearchDeptorsR
   }
 });
 
-export const searchAccount = createAsyncThunk<SearchFee, apis.SearchAccountRequest, APIRejectResponse>('/fee/search', async (data, thunkAPI) => {
+export const searchAccount = createAsyncThunk<Account, apis.SearchAccountRequest, APIRejectResponse>('/fee/search', async (data, thunkAPI) => {
   try {
     const response = await apis.searchAccount(data);
     if (response.status === 200) {
