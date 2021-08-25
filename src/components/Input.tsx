@@ -1,27 +1,27 @@
 import React, {useCallback, useMemo} from 'react';
 import styled from 'styled-components';
 import {
-  compose, color, ColorProps,
-  flex, FlexProps,
-  height, HeightProps,
-  space, SpaceProps,
+  color, ColorProps,
+  FlexProps, HeightProps, WidthProps,
+  SpaceProps,
   typography, TypographyProps,
-  width, WidthProps,
 } from 'styled-system';
 import {Box} from './Box';
 
+interface WrapperProps extends FlexProps, SpaceProps, HeightProps, WidthProps{
+  error?: boolean;
+  empty?: boolean;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  logo?: JSX.Element;
+}
+
 const Wrapper = styled(Box)<WrapperProps>`
-  ${compose(
-      color,
-      flex,
-      space,
-      height,
-      width,
-  )}
-  display: flex;
+  display: inline-flex;
   align-items: center;
   border: 1px solid ${({error, empty}) => error ? '#FF9A83' : empty ? '#CBC8BE' : '#8D71EB'};
   border-radius: 15px;
+  overflow: hidden;
+
   ::placeholder {
     color: #CBC8BE;
   }
@@ -31,26 +31,18 @@ const Wrapper = styled(Box)<WrapperProps>`
   }
 `;
 
-interface WrapperProps extends ColorProps, FlexProps, SpaceProps, HeightProps, WidthProps{
-  type?: string;
-  disabled?: boolean;
-  value: string;
-  max?: number;
-  min?: number;
-  error?: boolean;
-  empty?: boolean;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  logo?: JSX.Element;
-}
-
 const InnerInput = styled.input<InputProps>`
   ${typography}
-  border: 0;
+  ${color}
+  width: 100%;
+  height: 100%;
+  padding: 12px 24px;
+  border: none;
   outline: 0;
   box-sizing: border-box;
 `;
 
-interface InputProps extends TypographyProps {
+interface InputProps extends TypographyProps, SpaceProps, ColorProps {
   type?: string;
   disabled?: boolean;
   value: string;
@@ -58,8 +50,6 @@ interface InputProps extends TypographyProps {
   min?: number;
   maxlength?: number;
   placeholder?: string;
-  empty?: boolean;
-  error?: boolean;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onEnterPress?: () => void;
 }
@@ -67,7 +57,6 @@ interface InputProps extends TypographyProps {
 const defaultProps = {
   width: '296px',
   height: '48px',
-  p: '12px 24px',
   color: '#454440',
   fontWeight: 500,
   fontSize: '18px',
@@ -77,7 +66,7 @@ const defaultProps = {
 type Props = InputProps & WrapperProps & typeof defaultProps;
 
 export const Input = (props: Props) => {
-  const {value, logo, onEnterPress} = props;
+  const {logo, value, color, p, onEnterPress, width, height, ...styles} = props;
   const empty = useMemo(() => value === '', [value]);
   const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
     if (onEnterPress && event.key === 'Enter') {
@@ -86,9 +75,9 @@ export const Input = (props: Props) => {
   }, [onEnterPress]);
 
   return (
-    <Wrapper empty={empty} {...props}>
+    <Wrapper width={width} height={height} empty={empty} {...styles}>
       {logo}
-      <InnerInput empty={empty} onKeyDown={handleKeyDown} {...props} />
+      <InnerInput color={color} value={value} empty={empty} p={p} onKeyDown={handleKeyDown} {...styles} />
     </Wrapper>
   );
 };
