@@ -1,8 +1,12 @@
-import React, {useState, useCallback, useMemo} from 'react';
+import React, {useEffect, useMemo} from 'react';
 import styled from 'styled-components';
 import {background, BackgroundProps} from 'styled-system';
-import {Box, Input, Button, Text, Tab} from '../../components';
-import {Search} from '../../components/icons';
+import {toast} from 'react-toastify';
+import {useSelector} from 'react-redux';
+import {RootState, useDispatch} from '../../store';
+import {searchMember} from '../../store/actions/memberActions';
+import {Box, Button, Text} from '../../components';
+import {CommonMessage, MemberMessage} from '../../common/wordings';
 
 const CardLine = styled.div`
   box-sizing: border-box;
@@ -37,30 +41,6 @@ const EllipsisText = styled(Text)`
   text-overflow: ellipsis;
   overflow: hidden;
 `;
-
-const UserProfile = [
-  {
-    id: 1,
-    username: 'seonilKim',
-    univnumber: '20171379',
-    major: 'eletric engineering',
-    date: '2021.08.04',
-  },
-  {
-    id: 2,
-    username: 'hello',
-    univnumber: '20171380',
-    major: 'computer engineering',
-    date: '2021.08.11',
-  },
-  {
-    id: 3,
-    username: 'hellowolrd',
-    univnumber: '20128191',
-    major: 'computer science',
-    date: '2021.08.13',
-  },
-];
 
 interface MemberCardProps {
   username?: string;
@@ -99,47 +79,61 @@ const MemberCard = (MemberCardProps: MemberCardProps) => {
 };
 
 export const Members = () => {
-  const [InputTextValue, setInputTextValue] = useState('');
-  const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputTextValue(event.target.value);
-  }, [setInputTextValue]);
-  const empty = useMemo(() => InputTextValue === '', [InputTextValue]);
-  const [activeTab, setActiveTab] = useState(1);
-  const handleTabChange = useCallback((index: number) => {
-    setActiveTab(index);
-  }, []);
-  const tabs = useMemo(() => ['동아리원 목록', '입부 신청내역', '퇴부 신청내역'], []);
-  const CardListAdmin = UserProfile.map((info, idx) => (
+  const dispatch = useDispatch();
+  const {members} = useSelector((state: RootState) => state.member);
+  const adminUsers = useMemo(() => members.filter((member) => {
+    const role = member.role;
+    return role?.activity_management || role?.fee_management || role?.member_management;
+  }), [members]);
+  const normalUsers = useMemo(() => members.filter((member) => {
+    const role = member.role;
+    return role?.activity_management && role.fee_management && role.member_management;
+  }), [members]);
+
+  const CardListAdmin = adminUsers.map((info, idx) => (
     <Box border='2px solid #6D48E5' borderRadius='37px' key={idx}>
-      <MemberCard group='운영자' username={info.username} univnumber={info.univnumber} major={info.major} date={info.date} />
+      <MemberCard group='운영자' username={info.name} univnumber={info.id} major={info.department.slice(1)} date={'info.date'} />
     </Box>
   ));
-  const CardListMember = UserProfile.map((info, idx) => (
+  const CardListMember = normalUsers.map((info, idx) => (
     <Box border='2px solid #FFD646' borderRadius='37px' key={idx}>
-      <MemberCard group='동아리원' username={info.username} univnumber={info.univnumber} major={info.major} date={info.date} />
+      <MemberCard group='동아리원' username={info.name} univnumber={info.id} major={info.department.slice(1)} date={'info.date'} />
     </Box>
   ));
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await dispatch(searchMember({
+          keyword: '',
+        }));
+        if (response.type === searchMember.fulfilled.type) {
+          toast.success(MemberMessage.success);
+        } else {
+          toast.error(response.payload);
+        }
+      } catch (err) {
+        console.log(err);
+        toast(CommonMessage.error);
+      }
+    })();
+  }, [dispatch]);
+
   return (
-    <Box width='100%' py='48px' px='60px'>
-      <Text color='#454440' fontSize='40px' fontWeight={700} lineHeight='50px'>조직관리</Text>
-      <Box isFlex width='100%' mt='32px' alignItems='flex-end' justifyContent='space-between'>
-        <Tab tabs={tabs} initialTab={activeTab} onTabChange={handleTabChange} />
-        <Input empty={empty} logo={<Search mr='27px' width='24px' height='24px' color='#CBC8BE' />} onChange={handleInputChange} value={InputTextValue} placeholder='Search' />
-      </Box>
+    <Box>
       <Box isBlock width='80px' height='30px' mt='64px' position='relative' mb='28px'>
         <GroupName>운영자</GroupName>
         <GroupNameShadow background='#EFEBFC' />
       </Box>
       <Box isFlex flexWrap='wrap' style={{gap: '30px'}}>
-        {CardListAdmin}
+        {adminUsers.length > 0 ? CardListAdmin : <Text width='100%' textAlign='center' fontWeight={400} fontSize='20px'>회원이 없습니다.</Text>}
       </Box>
       <Box width='80px' height='30px' mt='62px' position='relative' mb='28px'>
         <GroupName>동아리원</GroupName>
         <GroupNameShadow background='#FFF5D1' />
       </Box>
       <Box isFlex flexWrap='wrap' style={{gap: '30px'}}>
-        {CardListMember}
+        {normalUsers.length > 0 ? CardListMember : <Text width='100%' textAlign='center' fontWeight={400} fontSize='20px'>회원이 없습니다.</Text>}
       </Box>
     </Box>
   );

@@ -1,4 +1,4 @@
-import {request} from '.';
+import {getRequest} from '.';
 import {UserRole} from '../../models/User';
 
 // buddy/back-end/docs/member에 명세 되어있는 내용 중 기능에 따라 auth.ts와 해당 페이지(members.ts)에 나눠져있습니다.
@@ -7,12 +7,12 @@ import {UserRole} from '../../models/User';
 
 // 3. SignUps(member spec 3번 api) - 회원 가입 신청 목록 조회
 export const getSignUpRequests = () => {
-  return request.get('/member/signups');
+  return getRequest().get('/member/signups');
 };
 
 // 6. Exits(member spec 6번 api) - 회원 탈퇴 신청 목록 조회
 export const getWithdrawalRequests = () => {
-  return request.get('/member/exits');
+  return getRequest().get('/member/exits');
 };
 
 export interface ApproveSignUpRequest {
@@ -21,18 +21,18 @@ export interface ApproveSignUpRequest {
 
 // 4. Approve(member spec 4번 api) - 회원 가입 승인
 export const approveSignUp = (data: ApproveSignUpRequest) => {
-  return request.put('/member/approve', {
+  return getRequest().put('/member/approve', {
     ...data,
   });
 };
 
-export interface RejectSignUpRequest {
+export interface DeleteMemberRequest {
   ids: string[];
 }
 
 // 7. Delete(member spec 7번 api) - 회원 가입 거부 및 탈퇴 처리
-export const rejectSignUp = (data: RejectSignUpRequest) => {
-  return request.delete('/member/delete', {
+export const deleteMember = (data: DeleteMemberRequest) => {
+  return getRequest().delete('/member/delete', {
     data,
   });
 };
@@ -43,13 +43,13 @@ export interface SearchMemberRequest {
 
 // 9. Search(member spec 9번 api) - 회원 검색
 export const searchMember = ({keyword}: SearchMemberRequest) => {
-  return request.get(`/member/search?query=${keyword}`);
+  return getRequest().get(`/member/search?query=${keyword}`);
 };
 
 // 11. Active(member spec 11번 api) - 회원 가입 신청 활성 상태 확인
 // organization에서 확인 할 순 없지만 해당 기능이 들어간다면 오가니제이션 페이지에서 활성/비활성 및 확인을 해야할 것 같아서 추가했습니다.
 export const getSignUpActivated = () => {
-  return request.get('/member/active');
+  return getRequest().get('/member/active');
 };
 
 export interface ActivateSignUpRequest {
@@ -59,7 +59,7 @@ export interface ActivateSignUpRequest {
 // 12. Activate(member spec 12번 api) - 회원 가입 신청 활성화 / 비활성화
 // 이 api 또한 디자인 혹은 프론트 구현은 안되어 있지만 들어가게 된다면 오가니제이션에 붙어야 할거같습니다.
 export const activateSignUp = (data: ActivateSignUpRequest) => {
-  return request.put('/member/activate', {
+  return getRequest().put('/member/activate', {
     ...data,
   });
 };
@@ -72,7 +72,7 @@ export interface UpdateUserRoleRequest {
 }
 
 export const updateUserRole = (data: UpdateUserRoleRequest) => {
-  return request.put('/member/updaterole', {
+  return getRequest().put('/member/updaterole', {
     ...data,
   });
 };

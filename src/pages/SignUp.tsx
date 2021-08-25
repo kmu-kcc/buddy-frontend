@@ -1,7 +1,14 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
+import {toast} from 'react-toastify';
+// import {useHistory} from 'react-router-dom';
+import {useSelector} from 'react-redux';
+import {RootState, useDispatch} from '../store';
+import {signUpRequest} from '../store/actions/userActions';
 import {Input, Select, Button, Box} from '../components';
 import {Buddy} from '../components/icons';
+import {Attendance} from '../models/User';
+import {CommonMessage, SignUpMessage} from '../common/wordings';
 
 const Text = styled.p`
   margin-left: 19px;
@@ -12,19 +19,75 @@ const Text = styled.p`
   white-space: nowrap;
 `;
 
-export const SignUp: React.FC = () => {
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordCheck, setPasswordCheck] = useState('');
+export const SignUp = () => {
+  // const history = useHistory();
+  const dispatch = useDispatch();
+  const {loadingSignUp} = useSelector((state: RootState) => state.user);
+  const [name, setName] = useState('');
+  const [college, setCollege] = useState('');
   const [major, setMajor] = useState('');
+  const [grade, setGrade] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [studentNumber, setStudentNumber] = useState('');
+  const [attendance, setAttendance] = useState<Attendance>(-1);
+
   const handleInputChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
       setState(event.target.value);
     };
   }, []);
+  const handleCollegeSelect = useCallback((index: number, value: string) => {
+    setCollege(value);
+  }, []);
+  const handleAttendanceSelect = useCallback((index: number, value: string) => {
+    let attendance: Attendance | null;
+    if (value === '재학') {
+      attendance = Attendance.ATTENDING;
+    } else if (value === '휴학') {
+      attendance = Attendance.LEAVE_OF_ABSENCE;
+    } else if (value === '졸업') {
+      attendance = Attendance.GRADUATED;
+    } else {
+      attendance = -1;
+    }
+    setAttendance(attendance);
+  }, []);
+  const handleGradeSelect = useCallback((index: number, value: string) => {
+    setGrade(index + 1);
+  }, []);
+  const handleSignUpClick = useCallback(async () => {
+    if (loadingSignUp) {
+      toast.info(CommonMessage.loading);
+      return;
+    }
+
+    if (!name || !college || !major || !phoneNumber || !email || !studentNumber || !grade || (attendance < 0)) {
+      toast.warn(SignUpMessage.empty);
+      return;
+    }
+
+    try {
+      const response = await dispatch(signUpRequest({
+        email,
+        phone: phoneNumber,
+        grade,
+        name,
+        id: studentNumber,
+        department: `${college} ${major}`,
+        attendance,
+      }));
+      console.log('signup request finish', response.type);
+      if (response.type === signUpRequest.fulfilled.type) {
+        //  TODO show finish page
+      } else {
+        toast.error(response.payload as unknown as string);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch, loadingSignUp, name, college, major, grade, phoneNumber, email, studentNumber, attendance]);
 
   return (
     <Box isFlex width='100%' pt='100px' pb='96px' justifyContent='center'>
@@ -42,17 +105,8 @@ export const SignUp: React.FC = () => {
           </Box>
         </Box>
         <Box isFlex>
-          <Box width='390px'>
-            <Input width='390px' height='63px' value={password} onChange={handleInputChange(setPassword)} type='password' placeholder='비밀번호' />
-            <Text>영어 대문자, 숫자, 특수문자 각 1개 이상 혼용, 전체 8글자 이상</Text>
-          </Box>
-          <Box ml='174px'>
-            <Input width='390px' height='63px' value={passwordCheck} onChange={handleInputChange(setPasswordCheck)} type='password' placeholder='비밀번호 확인' />
-          </Box>
-        </Box>
-        <Box isFlex>
           <Box>
-            <Input width='390px' height='63px' value={id} onChange={handleInputChange(setId)} placeholder='이름' />
+            <Input width='390px' height='63px' value={name} onChange={handleInputChange(setName)} placeholder='이름' />
             <Text>한글만, 최대 10자</Text>
           </Box>
           <Box ml='174px'>
@@ -62,20 +116,20 @@ export const SignUp: React.FC = () => {
         </Box>
         <Box isFlex>
           <Box>
-            <Select placeholder='소속대학' width='390px' height='63px'>
-              <option value='글로벌인문지역대학'>글로벌인문지역대학</option>
-              <option value='사회과학대학'>사회과학대학</option>
-              <option value='법과대학'>법과대학</option>
-              <option value='경상대학'>경상대학</option>
-              <option value='경영대학'>경영대학</option>
-              <option value='창의공과대학'>창의공과대학</option>
-              <option value='과학기술대학'>과학기술대학</option>
-              <option value='예술대학'>예술대학</option>
-              <option value='체육대학'>체육대학</option>
-              <option value='조형대학'>조형대학</option>
-              <option value='소프트웨어융합대학'>소프트웨어융합대학</option>
-              <option value='건축대학'>건축대학</option>
-              <option value='자동차융합대학'>자동차융합대학</option>
+            <Select placeholder='소속대학' width='390px' height='63px' onSelect={handleCollegeSelect}>
+              <option>글로벌인문지역대학</option>
+              <option>사회과학대학</option>
+              <option>법과대학</option>
+              <option>경상대학</option>
+              <option>경영대학</option>
+              <option>창의공과대학</option>
+              <option>과학기술대학</option>
+              <option>예술대학</option>
+              <option>체육대학</option>
+              <option>조형대학</option>
+              <option>소프트웨어융합대학</option>
+              <option>건축대학</option>
+              <option>자동차융합대학</option>
             </Select>
           </Box>
           <Box ml='174px'>
@@ -85,7 +139,7 @@ export const SignUp: React.FC = () => {
         </Box>
         <Box isFlex>
           <Box isFlex height='63px'>
-            <Select placeholder='재학여부' width='390px' height='63px'>
+            <Select placeholder='재학여부' width='390px' height='63px' onSelect={handleAttendanceSelect}>
               <option>재학</option>
               <option>휴학</option>
               <option>졸업</option>
@@ -93,7 +147,7 @@ export const SignUp: React.FC = () => {
             </Select>
           </Box>
           <Box ml='174px'>
-            <Select placeholder='학년' width='390px' height='63px'>
+            <Select placeholder='학년' width='390px' height='63px' onSelect={handleGradeSelect}>
               <option>1</option>
               <option>2</option>
               <option>3</option>
@@ -106,7 +160,7 @@ export const SignUp: React.FC = () => {
         <Box isFlex mt='71px' height='20px'>
           <Text></Text>
         </Box>
-        <Button mt='30px' width='388px' height='70px'>회원가입</Button>
+        <Button mt='30px' width='388px' height='70px' onClick={handleSignUpClick}>회원가입</Button>
       </Box>
     </Box>
   );

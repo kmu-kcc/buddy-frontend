@@ -12,10 +12,11 @@ import {
   space, SpaceProps,
   typography, TypographyProps,
 } from 'styled-system';
+import {cursor, CursorProps} from '../utils/cursor';
 
 interface Props extends BackgroundProps, BorderProps, ColorProps,
                         FlexboxProps, GridProps, LayoutProps,
-                        PositionProps,
+                        PositionProps, CursorProps,
                         SpaceProps, ShadowProps, TypographyProps {
   isFlex?: boolean;
   isBlock?: boolean;
@@ -36,6 +37,7 @@ export const Box = styled.div<Props>`
       shadow,
       space,
       typography,
+      cursor,
   )}
   ${({isFlex, isBlock, isInlineBlock, isInlineFlex}) => {
     if (isFlex || isBlock || isInlineFlex || isInlineBlock) {
