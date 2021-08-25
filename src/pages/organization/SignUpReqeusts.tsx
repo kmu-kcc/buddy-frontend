@@ -6,6 +6,7 @@ import {RootState, useDispatch} from '../../store';
 import {getSignUpRequests, approveSignUp, deleteMember, changeCheckedInSignUpRequests} from '../../store/actions/memberActions';
 import {Box, Button, MemberCard, Popup, Text, Span} from '../../components';
 import {CommonMessage, MemberRequestsMessage} from '../../common/wordings';
+import {User} from '../../models/User';
 
 const ReverseButton = styled(Button)`
   background: #FF6845;
@@ -19,7 +20,7 @@ export const SignUpRequests = () => {
   const handleCheck = useCallback((index: number) => () => {
     dispatch(changeCheckedInSignUpRequests({
       index,
-      checked: !signUpRequests[index].checked,
+      checked: !(signUpRequests as User[])[index].checked,
     }));
   }, [dispatch, signUpRequests]);
 
@@ -36,7 +37,7 @@ export const SignUpRequests = () => {
 
     try {
       const response = await dispatch(deleteMember({
-        ids: signUpRequests.filter((req) => req.checked).map((req) => req.id),
+        ids: signUpRequests?.filter((req) => req.checked).map((req) => req.id) ?? [],
       }));
       if (response.type === deleteMember.fulfilled.type) {
         toast.success(MemberRequestsMessage.deleteSuccess);
@@ -62,7 +63,7 @@ export const SignUpRequests = () => {
 
     try {
       const response = await dispatch(approveSignUp({
-        ids: signUpRequests.filter((req) => req.checked).map((req) => req.id),
+        ids: signUpRequests?.filter((req) => req.checked).map((req) => req.id) ?? [],
       }));
       if (response.type === approveSignUp.fulfilled.type) {
         toast.success(MemberRequestsMessage.approveSuccess);
@@ -116,7 +117,7 @@ export const SignUpRequests = () => {
         </Box>
       </Box>
       <Box isFlex mt='33px' mb='50px' flexWrap='wrap'>
-        {signUpRequests.length > 0 ? signUpRequests.map((info, idx) => (
+        {(signUpRequests?.length ?? 0) > 0 ? signUpRequests?.map((info, idx) => (
           <Box key={idx} mr='30px' mb='30px'>
             <MemberCard group='입부 신청'
               username={info.name}
