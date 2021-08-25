@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useCallback, useEffect, useMemo} from 'react';
 import styled from 'styled-components';
 import {toast} from 'react-toastify';
 import {useHistory} from 'react-router-dom';
@@ -8,7 +8,7 @@ import {setCurrentActivity, searchActivity} from '../../store/actions/activityAc
 import {Text, Button, Box, SearchInput} from '../../components';
 import {Buddy} from '../../components/icons';
 import {CommonMessage} from '../../common/wordings';
-import {Activity} from '../../models/Activity';
+import {Activity, ActivityType} from '../../models/Activity';
 
 const FloatButton = styled(Button)`
   width: 245px;
@@ -24,42 +24,6 @@ const ActivityCardWrapper = styled(Box)`
   background-color: #F8F8F8;
   border-radius: 15px;
 `;
-
-const Dummy: Activity[] = [
-  {
-    id: '610d458b79e122ea1d150cd6',
-    title: 'it is long night',
-    start: '1628249722',
-    end: '1628249722',
-    place: '성곡도서관 2층 스터디룸',
-    type: 1,
-    private: true,
-    description: '2021년 2차 알고리즘 스터디',
-    participants: [],
-  },
-  {
-    id: '610d458b79e122ea1d150888',
-    title: 'really long night',
-    start: '1628249722',
-    end: '1628249722',
-    place: '성곡도서관 2층 스터디룸',
-    type: 1,
-    private: true,
-    description: '2021년 2차 로아 스터디',
-    participants: [],
-  },
-  {
-    id: '610d458b79e122ea1d150777',
-    title: 'very long night',
-    start: '1628249722',
-    end: '1628249722',
-    place: '성곡도서관 2층 스터디룸',
-    type: 1,
-    private: true,
-    description: '2021년 2차 ㅠㅠ 스터디',
-    participants: [],
-  },
-];
 
 type CardProps = Activity;
 
@@ -87,7 +51,11 @@ const ActivityCard = (props: CardProps) => {
 
 export const List = () => {
   const dispatch = useDispatch();
-  const {loading} = useSelector((state: RootState) => state.activity);
+  const {loading, activities} = useSelector((state: RootState) => state.activity);
+
+  const foundingActivities = useMemo(() => activities.filter((activity) => activity.type === ActivityType.FOUNDING_FESTIVAL), [activities]);
+  const studyActivities = useMemo(() => activities.filter((activity) => activity.type === ActivityType.STUDY), [activities]);
+  const etcActivities = useMemo(() => activities.filter((activity) => activity.type === ActivityType.ETC), [activities]);
 
   const [InputTextValue, setInputTextValue] = useState('');
   const handleInputChange = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,17 +104,17 @@ export const List = () => {
     })();
   }, [dispatch]);
 
-  const FoundAnniversary = Dummy.map((info, idx) => (
+  const FoundAnniversary = studyActivities.map((info, idx) => (
     <Box key={idx}>
       <ActivityCard {...info} />
     </Box>
   ));
-  const Study = Dummy.map((info, idx) => (
+  const Study = foundingActivities.map((info, idx) => (
     <Box key={idx}>
       <ActivityCard {...info} />
     </Box>
   ));
-  const EtCetera = Dummy.map((info, idx) => (
+  const EtCetera = etcActivities.map((info, idx) => (
     <Box key={idx}>
       <ActivityCard {...info} />
     </Box>
