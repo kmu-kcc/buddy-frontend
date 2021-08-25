@@ -1,11 +1,13 @@
 import {getRequest} from '.';
+import {ActivityType} from '../../models/Activity';
 
 // 1. Create - 활동 생성
 export interface CreateActivityRequest {
   start: string;
   end: string;
   place: string;
-  type: 0 | 1 | 2;
+  type: ActivityType;
+  title: string;
   description: string;
   participants: string[];
   private: boolean;
