@@ -88,7 +88,7 @@ export const Account = () => {
     }
 
     if (Number(depositAmount) === NaN || !depositDescription) {
-      toast.error(FeeMessage.invalidDepositInfo);
+      toast.warn(FeeMessage.invalidDepositInfo);
       return;
     }
 
@@ -119,7 +119,36 @@ export const Account = () => {
     setWithdrawPopupShow(true);
   }, []);
   const handleWithdrawConfirm = useCallback(async () => {
-  }, []);
+    if (loadingDeposit) {
+      toast.info(CommonMessage.loading);
+      return;
+    }
+
+    if (Number(withdrawAmount) === NaN || !withdrawDescription) {
+      toast.warn(FeeMessage.invalidWithdrawInfo);
+      return;
+    }
+
+    try {
+      const response = await dispatch(deposit({
+        amount: Number(withdrawAmount) * -1,
+        description: withdrawDescription,
+        ...currentSemester,
+      }));
+
+      if (response.type === deposit.fulfilled.type) {
+        toast.success(FeeMessage.successWithdraw);
+        setWithdrawAmount('');
+        setWithdrawDescription('');
+        fetchAccount();
+      } else {
+        toast.error(response.payload as unknown as string);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch, loadingDeposit, withdrawAmount, withdrawDescription, currentSemester, fetchAccount]);
   const handleWithdrawClose = useCallback(() => {
     setWithdrawPopupShow(false);
   }, []);
