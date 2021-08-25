@@ -1,8 +1,14 @@
-import React, {useState, useCallback, useMemo} from 'react';
+import React, {useState, useCallback, useEffect, useMemo} from 'react';
 import styled from 'styled-components';
+import {toast} from 'react-toastify';
 import {position, PositionProps} from 'styled-system';
+import {useSelector} from 'react-redux';
+import {RootState, useDispatch} from '../../store';
+import {searchAccount} from '../../store/actions/feeActions';
 import {Text, Button, Box, Tab, Input, TransactionList, Popup} from '../../components';
 import {Filter, Search} from '../../components/icons';
+import {CommonMessage, FeeMessage} from '../../common/wordings';
+import {getCurrentSemester} from '../../utils/semester';
 
 const TempBudget = 1000000;
 
@@ -96,10 +102,41 @@ const Line = styled.div`
 `;
 
 export const Account = () => {
+  const dispatch = useDispatch();
+  const {loadingTransaction, account} = useSelector((state: RootState) => state.fee);
   const [InputTextValue, setInputTextValue] = useState('');
   const [FilterClicked, setFilterClick] = useState(false);
   const [ExportClicked, setExportClick] = useState(false);
+  const [depositPopupShow, setDepositPopupShow] = useState(false);
+  const [inputDepositValue, setInputDepositValue] = useState('');
+  const [inputDepositDescriptionValue, setInputDepositDescriptionValue] = useState('');
+  const [WithdrawPopupShow, setWithdrawPopupShow] = useState(false);
+  const [inputWithdrawValue, setInputWithdrawValue] = useState('');
+  const [inputWithdrawDescriptionValue, setInputWithdrawDescriptionValue] = useState('');
   const empty = useMemo(() => InputTextValue === '', [InputTextValue]);
+
+  const fetchAccount = useCallback(async () => {
+    if (loadingTransaction) {
+      toast.info(CommonMessage.loading);
+      return;
+    }
+
+    try {
+      const response = await dispatch(searchAccount({
+        ...getCurrentSemester(),
+      }));
+
+      if (response.type === searchAccount.fulfilled.type) {
+        toast.success(FeeMessage.successTransaction);
+      } else {
+        toast.error(response.payload);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch, loadingTransaction]);
+
   const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setInputTextValue(event.target.value);
   }, [setInputTextValue]);
@@ -110,49 +147,41 @@ export const Account = () => {
     setExportClick(!ExportClicked);
   }, [ExportClicked, setExportClick]);
 
-  const [depositPopupShow, setDepositPopupShow] = useState(false);
   const handleDepositRequestPopupClick = useCallback(() => {
     setDepositPopupShow(true);
   }, []);
   const handleDepositConfirm = useCallback(() => {
     setDepositPopupShow(false);
   }, [setDepositPopupShow]);
-  const handleDepositCancel = useCallback(() => {
-    setDepositPopupShow(false);
-  }, [setDepositPopupShow]);
   const handleDepositClose = useCallback(() => {
     setDepositPopupShow(false);
   }, []);
-  const [inputDepositValue, setInputDepositValue] = useState('');
   const handleDepositChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setInputDepositValue(event.target.value);
   }, [setInputDepositValue]);
-  const [inputDepositDescriptionValue, setInputDepositDescriptionValue] = useState('');
   const handleDepositDescriptionChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setInputDepositDescriptionValue(event.target.value);
   }, [setInputDepositDescriptionValue]);
 
-  const [WithdrawPopupShow, setWithdrawPopupShow] = useState(false);
   const handleWithdrawRequestPopupClick = useCallback(() => {
     setWithdrawPopupShow(true);
   }, []);
   const handleWithdrawConfirm = useCallback(() => {
     setWithdrawPopupShow(false);
   }, [setWithdrawPopupShow]);
-  const handleWithdrawCancel = useCallback(() => {
-    setWithdrawPopupShow(false);
-  }, [setWithdrawPopupShow]);
   const handleWithdrawClose = useCallback(() => {
     setWithdrawPopupShow(false);
   }, []);
-  const [inputWithdrawValue, setInputWithdrawValue] = useState('');
   const handleWithdrawChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setInputWithdrawValue(event.target.value);
   }, [setInputWithdrawValue]);
-  const [inputWithdrawDescriptionValue, setInputWithdrawDescriptionValue] = useState('');
   const handleWithdrawDescriptionChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     setInputWithdrawDescriptionValue(event.target.value);
   }, [setInputWithdrawDescriptionValue]);
+
+  useEffect(() => {
+    fetchAccount();
+  }, []);
 
   return (
     <Box width='100%' py='48px' px='60px'>
@@ -172,7 +201,7 @@ export const Account = () => {
             <Box isFlex>
               <Text color='#ffffff' fontSize='18px' lineHeight='22px'>잔여 총액</Text>
             </Box>
-            <Text color='#ffffff' fontSize='28px' fontWeight='bold' lineHeight='34px' textAlign='right'>{comma(TempBudget)}원</Text>
+            <Text color='#ffffff' fontSize='28px' fontWeight='bold' lineHeight='34px' textAlign='right'>{account?.total ? `${comma(account?.total)}` : '-'}원</Text>
           </FullBudget>
           <Text color='#454440' fontSize='24px' fontWeight='bold' lineHeight='30px'>이월 목록</Text>
           <Box isFlex mt='42px' padding='0 38px'>
@@ -215,7 +244,6 @@ export const Account = () => {
           <FloatButton right='303px' onClick={handleDepositRequestPopupClick}>입금 내역 추가</FloatButton>
           <Popup width='500px' height='390px' type='primary' confirmLabel='추가' cancelLabel='닫기' show={depositPopupShow}
             onConfirm={handleDepositConfirm}
-            onCancel={handleDepositCancel}
             onClose={handleDepositClose}>
             <Box isFlex flexDirection='column' justifyItems='center'>
               <Text fontSize='20px' lineHeight='25px' mb='6px'>입금 내역 입력</Text>
@@ -227,7 +255,6 @@ export const Account = () => {
           <FloatButton right='50px' onClick={handleWithdrawRequestPopupClick} background='#FF6845' border='none'>출금 내역 추가</FloatButton>
           <Popup width='500px' height='390px' type='danger' confirmLabel='추가' cancelLabel='닫기' show={WithdrawPopupShow}
             onConfirm={handleWithdrawConfirm}
-            onCancel={handleWithdrawCancel}
             onClose={handleWithdrawClose}>
             <Box isFlex flexDirection='column'>
               <Text fontSize='20px' lineHeight='25px' mb='6px'>출금 내역 입력</Text>
