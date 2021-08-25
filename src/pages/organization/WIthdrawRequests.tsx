@@ -15,6 +15,7 @@ import {User} from '../../models/User';
 export const WithdrawRequests = () => {
   const dispatch = useDispatch();
   const {withdrawalRequests, loadingDeleteMemberRequests} = useSelector((state: RootState) => state.member);
+  const [withdrawalPopupShow, setWithdrawalPopupShow] = useState(false);
 
   const handleCheck = useCallback((index: number) => () => {
     dispatch(changeCheckedInWithdrawalRequests({
@@ -23,7 +24,19 @@ export const WithdrawRequests = () => {
     }));
   }, [dispatch, withdrawalRequests]);
 
-  const [withdrawalPopupShow, setWithdrawalPopupShow] = useState(false);
+  const fetchWithdrawRequest = useCallback(async () => {
+    try {
+      const response = await dispatch(getWithdrawalRequests());
+      if (response.type === getWithdrawalRequests.fulfilled.type) {
+        toast.success(MemberRequestsMessage.loadingSuccess);
+      } else {
+        toast.error(response.payload);
+      }
+    } catch (err) {
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch]);
+
   const handleWithdrawalRequestPopupClick = useCallback(() => {
     setWithdrawalPopupShow(true);
   }, [setWithdrawalPopupShow]);
@@ -39,6 +52,7 @@ export const WithdrawRequests = () => {
       }));
       if (response.type === deleteMember.fulfilled.type) {
         toast.success(MemberRequestsMessage.deleteSuccess);
+        fetchWithdrawRequest();
       } else {
         toast.error(response.payload as unknown as string);
       }
@@ -46,25 +60,14 @@ export const WithdrawRequests = () => {
       console.log(err);
       toast.error(CommonMessage.error);
     }
-  }, [dispatch, loadingDeleteMemberRequests, withdrawalRequests]);
+  }, [dispatch, fetchWithdrawRequest, loadingDeleteMemberRequests, withdrawalRequests]);
   const handleWithdrawalClose = useCallback(() => {
     setWithdrawalPopupShow(false);
   }, []);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const response = await dispatch(getWithdrawalRequests());
-        if (response.type === getWithdrawalRequests.fulfilled.type) {
-          toast.success(MemberRequestsMessage.loadingSuccess);
-        } else {
-          toast.error(response.payload);
-        }
-      } catch (err) {
-        toast.error(CommonMessage.error);
-      }
-    })();
-  }, [dispatch]);
+    fetchWithdrawRequest();
+  }, [fetchWithdrawRequest]);
 
   return (
     <Box>
