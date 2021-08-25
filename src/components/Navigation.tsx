@@ -5,7 +5,7 @@ import {Box, Span} from '../components';
 import {Activity, Organization, Fee, Profile} from '../components/icons';
 
 const Wrapper = styled(Box)`
-  width: 240px;
+  min-width: 240px;
   height: 100vh;
   flex-direction: column;
   align-items: center;
