@@ -49,7 +49,7 @@ export const feeReducer = createReducer(initialState, (builder) => {
       })
       .addCase(actions.searchAmount.fulfilled, (state, {payload}) => {
         state.loadingAmount = false;
-        state.amounts = payload;
+        state.amounts = payload ?? 0;
       })
       .addCase(actions.searchAmount.rejected, (state, action) => {
         state.loadingAmount = false;
@@ -60,7 +60,7 @@ export const feeReducer = createReducer(initialState, (builder) => {
       })
       .addCase(actions.searchPayers.fulfilled, (state, {payload}) => {
         state.loadingPayers = false;
-        state.payers = payload;
+        state.payers = payload ?? [];
       })
       .addCase(actions.searchPayers.rejected, (state, action) => {
         state.loadingPayers = false;
@@ -71,7 +71,7 @@ export const feeReducer = createReducer(initialState, (builder) => {
       })
       .addCase(actions.searchDeptorsList.fulfilled, (state, {payload}) => {
         state.loadingDeptors = false;
-        state.deptors = payload;
+        state.deptors = payload ?? [];
       })
       .addCase(actions.searchDeptorsList.rejected, (state, action) => {
         state.loadingDeptors = false;
