@@ -1,9 +1,9 @@
-import React, {useCallback, useState, useEffect, useMemo} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {toast} from 'react-toastify';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
-import {getSignUpRequests, approveSignUp, deleteMember} from '../../store/actions/memberActions';
+import {getSignUpRequests, approveSignUp, deleteMember, changeCheckedInSignUpRequests} from '../../store/actions/memberActions';
 import {Box, Button, MemberCard, Popup, Text, Span} from '../../components';
 import {CommonMessage, MemberRequestsMessage} from '../../common/wordings';
 
@@ -15,15 +15,13 @@ const ReverseButton = styled(Button)`
 export const SignUpRequests = () => {
   const dispatch = useDispatch();
   const {signUpRequests, loadingDeleteMemberRequests, loadingSignUpApproveRequests} = useSelector((state: RootState) => state.member);
-  const requests = useMemo(() => signUpRequests.map((req) => ({
-    ...req,
-    checked: false,
-  })), [signUpRequests]);
 
-  const [check, setCheck] = useState(false);
-  const handleCheck = useCallback(() => {
-    setCheck(!check);
-  }, [check, setCheck]);
+  const handleCheck = useCallback((index: number) => () => {
+    dispatch(changeCheckedInSignUpRequests({
+      index,
+      checked: !signUpRequests[index].checked,
+    }));
+  }, [dispatch, signUpRequests]);
 
   const [signUpPopupShow, setSignUpPopupShow] = useState(false);
   const [deleteMemberPopupShow, setDeleteMemberPopupShow] = useState(false);
@@ -38,7 +36,7 @@ export const SignUpRequests = () => {
 
     try {
       const response = await dispatch(deleteMember({
-        ids: requests.filter((req) => req.checked).map((req) => req.id),
+        ids: signUpRequests.filter((req) => req.checked).map((req) => req.id),
       }));
       if (response.type === deleteMember.fulfilled.type) {
         toast.success(MemberRequestsMessage.deleteSuccess);
@@ -49,7 +47,7 @@ export const SignUpRequests = () => {
       console.log(err);
       toast.error(CommonMessage.error);
     }
-  }, [dispatch, loadingDeleteMemberRequests, requests]);
+  }, [dispatch, loadingDeleteMemberRequests, signUpRequests]);
   const handleDeleteMemberClose = useCallback(() => {
     setDeleteMemberPopupShow(false);
   }, []);
@@ -64,7 +62,7 @@ export const SignUpRequests = () => {
 
     try {
       const response = await dispatch(approveSignUp({
-        ids: requests.filter((req) => req.checked).map((req) => req.id),
+        ids: signUpRequests.filter((req) => req.checked).map((req) => req.id),
       }));
       if (response.type === approveSignUp.fulfilled.type) {
         toast.success(MemberRequestsMessage.approveSuccess);
@@ -75,28 +73,10 @@ export const SignUpRequests = () => {
       console.log(err);
       toast.error(CommonMessage.error);
     }
-  }, [dispatch, loadingSignUpApproveRequests, requests]);
+  }, [dispatch, loadingSignUpApproveRequests, signUpRequests]);
   const handleSignUpClose = useCallback(() => {
     setSignUpPopupShow(false);
   }, []);
-
-  const CardList = signUpRequests.map((u) => {
-    return {
-      ...u,
-      checked: false,
-    };
-  }).map((info, idx) => (
-    <Box key={idx} mr='30px' mb='30px'>
-      <MemberCard group='입부 신청'
-        username={info.name}
-        univnumber={info.id}
-        major={info.department.split(' ').slice(1).join(' ')}
-        phone={info.phone}
-        onCheck={handleCheck}>
-        {check ? info.checked : !info.checked}
-      </MemberCard>
-    </Box>
-  ));
 
   useEffect(() => {
     (async () => {
@@ -136,7 +116,17 @@ export const SignUpRequests = () => {
         </Box>
       </Box>
       <Box isFlex mt='33px' mb='50px' flexWrap='wrap'>
-        {requests.length > 0 ? CardList : <Text width='100%' textAlign='center' fontWeight={400} fontSize='20px'>입부 신청이 없습니다.</Text>}
+        {signUpRequests.length > 0 ? signUpRequests.map((info, idx) => (
+          <Box key={idx} mr='30px' mb='30px'>
+            <MemberCard group='입부 신청'
+              username={info.name}
+              univnumber={info.id}
+              major={info.department.split(' ').slice(1).join(' ')}
+              phone={info.phone}
+              checked={info.checked}
+              onClick={handleCheck(idx)} />
+          </Box>
+        )) : <Text width='100%' textAlign='center' fontWeight={400} fontSize='20px'>입부 신청이 없습니다.</Text>}
       </Box>
     </Box>
   );

@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react';
+import React, {useCallback} from 'react';
 import styled from 'styled-components';
 import {Box, Button, Text} from '../components';
 
@@ -43,22 +43,19 @@ interface MemberCardProps {
   major?: string;
   group?: string;
   phone?: string;
-  onCheck?: (checked: boolean) => void;
-  children?: React.ReactNode
+  checked?: boolean;
+  onClick?: () => void;
 }
 
 export const MemberCard = (MemberCardProps: MemberCardProps) => {
-  const [checked, setChecked] = useState(false);
-  const {children, group, username, univnumber, major, phone, onCheck} = MemberCardProps;
-  const handleCheck = useCallback(() => {
-    setChecked(!checked);
-    if (onCheck) {
-      onCheck(!checked);
+  const {checked, group, username, univnumber, major, phone, onClick} = MemberCardProps;
+  const handleClick = useCallback(() => {
+    if (onClick) {
+      onClick();
     }
-  }, [checked, setChecked, onCheck]);
+  }, [onClick]);
   return (
-    <Wrapper maxWidth='300px' isFlex flexDirection='column' pt='44px' pb='34px' alignItems='center' border='2px solid #EBEBEB' borderRadius='37px' checked={checked} onClick={handleCheck}>
-      {children}
+    <Wrapper maxWidth='300px' isFlex flexDirection='column' pt='44px' pb='34px' alignItems='center' border='2px solid #EBEBEB' borderRadius='37px' checked={checked || false} onClick={handleClick}>
       <Box isFlex width='100%' alignItems='baseline' px='34px'>
         <Text flex={1} fontWeight={700} fontSize='18px' lineHeight='22px'>{group}</Text>
       </Box>
