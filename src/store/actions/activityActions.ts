@@ -1,4 +1,5 @@
 import {createAction, createAsyncThunk} from '@reduxjs/toolkit';
+import {APIRejectResponse} from '.';
 import {Activity, ActivityType} from '../../models/Activity';
 import * as apis from '../apis/activity';
 
@@ -18,7 +19,7 @@ export const changeType = createAction<ActivityType>('activity/changeType');
 export const changeParticipants = createAction<string[]>('activity/changeParticipants');
 export const changePrivate = createAction<boolean>('activity/changePrivate');
 
-export const createActivity = createAsyncThunk<void, apis.CreateActivityRequest>('activity/createActivity', async (data, thunkAPI) => {
+export const createActivity = createAsyncThunk<void, apis.CreateActivityRequest, APIRejectResponse>('activity/createActivity', async (data, thunkAPI) => {
   try {
     const response = await apis.createActivity(data);
     if (response.status === 200) {
@@ -28,11 +29,11 @@ export const createActivity = createAsyncThunk<void, apis.CreateActivityRequest>
     }
   } catch (err) {
     console.log(err);
-    return thunkAPI.rejectWithValue(err);
+    return thunkAPI.rejectWithValue(err?.response?.data?.error ?? '');
   }
 });
 
-export const updateActivity = createAsyncThunk<void, apis.UpdateActivityRequest>('activity/updateActivity', async (data, thunkAPI) => {
+export const updateActivity = createAsyncThunk<void, apis.UpdateActivityRequest, APIRejectResponse>('activity/updateActivity', async (data, thunkAPI) => {
   try {
     const response = await apis.updateActivity(data);
     if (response.status === 200) {
@@ -42,11 +43,11 @@ export const updateActivity = createAsyncThunk<void, apis.UpdateActivityRequest>
     }
   } catch (err) {
     console.log(err);
-    return thunkAPI.rejectWithValue(err);
+    return thunkAPI.rejectWithValue(err?.response?.data?.error ?? '');
   }
 });
 
-export const deleteActivity = createAsyncThunk<void, apis.DeleteActivityRequest>('activity/deleteActivity', async (data, thunkAPI) => {
+export const deleteActivity = createAsyncThunk<void, apis.DeleteActivityRequest, APIRejectResponse>('activity/deleteActivity', async (data, thunkAPI) => {
   try {
     const response = await apis.deleteActivity(data);
     if (response.status === 200) {
@@ -57,5 +58,19 @@ export const deleteActivity = createAsyncThunk<void, apis.DeleteActivityRequest>
   } catch (err) {
     console.log(err);
     return thunkAPI.rejectWithValue(err);
+  }
+});
+
+export const searchActivity = createAsyncThunk<Activity[], apis.SearchActivityRequest, APIRejectResponse>('activity/searchActivity', async (data, thunkAPI) => {
+  try {
+    const response = await apis.searchActivity(data);
+    if (response.status === 200) {
+      return response.data.data.activities;
+    } else {
+      return thunkAPI.rejectWithValue(response.data.error);
+    }
+  } catch (err) {
+    console.log(err);
+    return thunkAPI.rejectWithValue(err?.response?.data?.error ?? '');
   }
 });
