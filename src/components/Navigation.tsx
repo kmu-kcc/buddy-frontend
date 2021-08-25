@@ -48,11 +48,13 @@ const Logo = () => {
 
 const ActivityTab = () => {
   const history = useHistory();
+  const location = useLocation();
+  const active = useMemo(() => location.pathname.startsWith('/activity'), [location.pathname]);
   const handleClick = useCallback(() => {
     history.push('/activity');
   }, [history]);
   return (
-    <IconWrapper isFlex alignItems='flexStart' onClick={handleClick}>
+    <IconWrapper isFlex alignItems='flexStart' bg={active ? '#5635BF' : 'none'} onClick={handleClick}>
       <Activity width='20px' height='20px' color='#F9F3FF'></Activity>
       <Span ml={['10px', '18px']} fontSize={['18px', '22px']} lineHeight={['22px', '26px']} color='#F9F3FF'>활동 관리</Span>
     </IconWrapper>
@@ -61,11 +63,13 @@ const ActivityTab = () => {
 
 const OrganizationTab = () => {
   const history = useHistory();
+  const location = useLocation();
+  const active = useMemo(() => location.pathname.startsWith('/organization'), [location.pathname]);
   const handleClick = useCallback(() => {
     history.push('/organization/members');
   }, [history]);
   return (
-    <IconWrapper isFlex alignItems='flexStart' mt={['6px', '10px']} onClick={handleClick}>
+    <IconWrapper isFlex alignItems='flexStart' mt={['6px', '10px']} bg={active ? '#5635BF' : 'none'} onClick={handleClick}>
       <Organization width='20px' height='20px' color='#F9F3FF'></Organization>
       <Span ml={['10px', '18px']} fontSize={['18px', '22px']} lineHeight={['22px', '26px']} color='#F9F3FF'>조직 관리</Span>
     </IconWrapper>
@@ -74,11 +78,13 @@ const OrganizationTab = () => {
 
 const FeeTab = () => {
   const history = useHistory();
+  const location = useLocation();
+  const active = useMemo(() => location.pathname.startsWith('/fee'), [location.pathname]);
   const handleClick = useCallback(() => {
     history.push('/fee/account');
   }, [history]);
   return (
-    <IconWrapper isFlex alignItems='flexStart' mt={['6px', '10px']} onClick={handleClick}>
+    <IconWrapper isFlex alignItems='flexStart' mt={['6px', '10px']} bg={active ? '#5635BF' : 'none'} onClick={handleClick}>
       <Fee width='20px' height='20px' color='#F9F3FF'></Fee>
       <Span ml={['10px', '18px']} fontSize={['18px', '22px']} lineHeight={['22px', '26px']} color='#F9F3FF'>회계 관리</Span>
     </IconWrapper>
@@ -87,11 +93,13 @@ const FeeTab = () => {
 
 const ProfileTab = () => {
   const history = useHistory();
+  const location = useLocation();
+  const active = useMemo(() => location.pathname.startsWith('/user'), [location.pathname]);
   const handleClick = useCallback(() => {
     history.push('/user');
   }, [history]);
   return (
-    <IconWrapper isFlex alignItems='flexStart' mt={['6px', '10px']} onClick={handleClick}>
+    <IconWrapper isFlex alignItems='flexStart' mt={['6px', '10px']} bg={active ? '#5635BF' : 'none'} onClick={handleClick}>
       <Profile width='20px' height='20px' color='#F9F3FF'></Profile>
       <Span ml={['10px', '18px']} fontSize={['18px', '22px']} lineHeight={['22px', '26px']} color='#F9F3FF'>내 정보</Span>
     </IconWrapper>
