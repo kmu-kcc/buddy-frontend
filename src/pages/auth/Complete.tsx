@@ -11,7 +11,7 @@ export const Complete = () => {
       <Box isFlex flexDirection='column' justifyContent='center' alignItems='center'>
         <Buddy mb='150px' width='248px' height='140px' mr='17px' />
         <Text fontSize='24px'>가입신청이 완료되었습니다!</Text>
-        <Button mt='200px' height='60px' fontSize='20px' onClick={handleClick}>메인으로 가기</Button>
+        <Button mt={['120px', '200px']} height='60px' fontSize='20px' onClick={handleClick}>메인으로 가기</Button>
       </Box>
     </Box>
   );
