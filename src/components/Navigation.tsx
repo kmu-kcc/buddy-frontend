@@ -102,7 +102,7 @@ export const Navigation = () => {
     const pathname = location.pathname;
     console.log('pathname updated', pathname);
 
-    if (!pathname.match(/\/auth/gi)) {
+    if (pathname.match(/\/auth/gi)) {
       return true;
     }
     return false;
