@@ -10,6 +10,7 @@ import {Input, Button, Box, Check, Popup, Text} from '../components';
 import {Buddy} from '../components/icons';
 import {CommonMessage, SignInMessage} from '../common/wordings';
 import {setCredentialInfo} from '../common/credentials';
+import {createInstance} from '../store/apis';
 
 const LinkText = styled(Link)<SpaceProps & ColorProps>`
   text-decoration: none;
@@ -51,6 +52,8 @@ export const SignIn = () => {
       if (response.type === signInRequest.fulfilled.type) {
         //  signin success
         setCredentialInfo(id, password);
+        //  re-create API Request instsance to include credentials
+        createInstance();
         history.replace('/user');
       } else {
         //  signin error
