@@ -16,3 +16,8 @@ export interface Log {
   description: string;
   created_at: string
 }
+
+export interface Semester {
+  year: number;
+  semester: 1 | 2;
+}
