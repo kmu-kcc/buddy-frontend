@@ -15,50 +15,50 @@ export const createFee = (data: CreateFeeRequest) => {
   });
 };
 
-export interface SearchAmountListRequest {
+export interface SearchAmountRequest {
   id: string;
   year: number;
   semester: number;
 }
 
 // 2. Amount - 회비 납부액 조회
-export const searchAmountList = (data: SearchAmountListRequest) => {
+export const searchAmount = (data: SearchAmountRequest) => {
   return getRequest().post('/fee/amount', {
     ...data,
   });
 }
 
-export interface SearchPayersListRequest {
+export interface SearchPayersRequest {
   year: number;
-  semester: number;
+  semester: 1 | 2;
 }
 
 // 3. Payers - 회비 납부자 목록 조회
-export const searchPayersList = (data: SearchPayersListRequest) => {
+export const searchPayers = (data: SearchPayersRequest) => {
   return getRequest().post('/fee/payers', {
     ...data,
   });
 };
 
-export interface SearchDeptorsListRequest {
+export interface SearchDeptorsRequest {
   year: number;
   semester: number;
 }
 
 // 4. Deptors - 회비 미납자 목록 조회
-export const searchDeptorsList = (data: SearchDeptorsListRequest) => {
+export const searchDeptors = (data: SearchDeptorsRequest) => {
   return getRequest().post('/fee/deptors', {
     ...data,
   });
 };
 
-export interface SearchTransactionRequest {
+export interface SearchAccountRequest {
   year: number;
   semester: number;
 }
 
 // 5. Search - 회비 내역 검색 (해당 학기 내역 출력)
-export const searchTransaction = (data: SearchTransactionRequest) => {
+export const searchAccount = (data: SearchAccountRequest) => {
   return getRequest().post('/fee/search', {
     ...data,
   });

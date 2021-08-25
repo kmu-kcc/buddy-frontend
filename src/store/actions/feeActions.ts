@@ -1,10 +1,11 @@
 import {createAsyncThunk} from '@reduxjs/toolkit';
+import {APIRejectResponse} from '.';
 import {Payers, Deptors, SearchFee} from '../../models/Fee';
 import * as apis from '../apis/fee';
 /**
  * actions for async request
  */
-export const createFee = createAsyncThunk<void, apis.CreateFeeRequest>('fee/createFee', async (data, thunkAPI) => {
+export const createFee = createAsyncThunk<void, apis.CreateFeeRequest, APIRejectResponse>('fee/createFee', async (data, thunkAPI) => {
   try {
     const response = await apis.createFee(data);
     if (response.status === 200) {
@@ -14,13 +15,13 @@ export const createFee = createAsyncThunk<void, apis.CreateFeeRequest>('fee/crea
     }
   } catch (err) {
     console.log(err);
-    thunkAPI.rejectWithValue(err);
+    thunkAPI.rejectWithValue(err?.response?.data?.error ?? '');
   }
 });
 
-export const searchAmountList = createAsyncThunk<number, apis.SearchAmountListRequest>('/fee/amount', async (data, thunkAPI) => {
+export const searchAmount = createAsyncThunk<number, apis.SearchAmountRequest, APIRejectResponse>('/fee/amount', async (data, thunkAPI) => {
   try {
-    const response = await apis.searchAmountList(data);
+    const response = await apis.searchAmount(data);
     if (response.status === 200) {
       return response.data.data.amount;
     } else {
@@ -28,13 +29,13 @@ export const searchAmountList = createAsyncThunk<number, apis.SearchAmountListRe
     }
   } catch (err) {
     console.log(err);
-    thunkAPI.rejectWithValue(err);
+    thunkAPI.rejectWithValue(err?.response?.data?.error ?? '');
   }
 });
 
-export const searchPayersList= createAsyncThunk<Payers[], apis.SearchPayersListRequest>('/fee/payers', async (data, thunkAPI) => {
+export const searchPayers = createAsyncThunk<Payers[], apis.SearchPayersRequest, APIRejectResponse>('/fee/payers', async (data, thunkAPI) => {
   try {
-    const response = await apis.searchPayersList(data);
+    const response = await apis.searchPayers(data);
     if (response.status === 200) {
       return response.data.data.payers;
     } else {
@@ -42,13 +43,13 @@ export const searchPayersList= createAsyncThunk<Payers[], apis.SearchPayersListR
     }
   } catch (err) {
     console.log(err);
-    thunkAPI.rejectWithValue(err);
+    thunkAPI.rejectWithValue(err?.response?.data?.error ?? '');
   }
 });
 
-export const searchDeptorsList= createAsyncThunk<Deptors[], apis.SearchDeptorsListRequest>('/fee/deptors', async (data, thunkAPI) => {
+export const searchDeptorsList = createAsyncThunk<Deptors[], apis.SearchDeptorsRequest, APIRejectResponse>('/fee/deptors', async (data, thunkAPI) => {
   try {
-    const response = await apis.searchDeptorsList(data);
+    const response = await apis.searchDeptors(data);
     if (response.status === 200) {
       return response.data.data.deptors;
     } else {
@@ -56,13 +57,13 @@ export const searchDeptorsList= createAsyncThunk<Deptors[], apis.SearchDeptorsLi
     }
   } catch (err) {
     console.log(err);
-    thunkAPI.rejectWithValue(err);
+    thunkAPI.rejectWithValue(err?.response?.data?.error ?? '');
   }
 });
 
-export const searchTransaction= createAsyncThunk<SearchFee[], apis.SearchTransactionRequest>('/fee/search', async (data, thunkAPI) => {
+export const searchAccount = createAsyncThunk<SearchFee, apis.SearchAccountRequest, APIRejectResponse>('/fee/search', async (data, thunkAPI) => {
   try {
-    const response = await apis.searchTransaction(data);
+    const response = await apis.searchAccount(data);
     if (response.status === 200) {
       return response.data.data;
     } else {
@@ -70,11 +71,11 @@ export const searchTransaction= createAsyncThunk<SearchFee[], apis.SearchTransac
     }
   } catch (err) {
     console.log(err);
-    thunkAPI.rejectWithValue(err);
+    thunkAPI.rejectWithValue(err?.response?.data?.error ?? '');
   }
 });
 
-export const pay= createAsyncThunk<void, apis.PayRequest>('/fee/pay', async (data, thunkAPI) => {
+export const pay = createAsyncThunk<void, apis.PayRequest, APIRejectResponse>('/fee/pay', async (data, thunkAPI) => {
   try {
     const response = await apis.pay(data);
     if (response.status === 200) {
@@ -84,13 +85,13 @@ export const pay= createAsyncThunk<void, apis.PayRequest>('/fee/pay', async (dat
     }
   } catch (err) {
     console.log(err);
-    thunkAPI.rejectWithValue(err);
+    thunkAPI.rejectWithValue(err?.response?.data?.error ?? '');
   }
 });
 
-export const deposit= createAsyncThunk<void, apis.DepositRequest>('/fee/deposit', async (data, thunkAPI) => {
+export const deposit = createAsyncThunk<void, apis.DepositRequest, APIRejectResponse>('/fee/deposit', async (data, thunkAPI) => {
   try {
-    const response = await apis.searchTransaction(data);
+    const response = await apis.searchAccount(data);
     if (response.status === 200) {
       return;
     } else {
@@ -98,13 +99,13 @@ export const deposit= createAsyncThunk<void, apis.DepositRequest>('/fee/deposit'
     }
   } catch (err) {
     console.log(err);
-    thunkAPI.rejectWithValue(err);
+    thunkAPI.rejectWithValue(err?.response?.data?.error ?? '');
   }
 });
 
-export const exempt= createAsyncThunk<void, apis.ExemptRequest>('/fee/exempt', async (data, thunkAPI) => {
+export const exempt = createAsyncThunk<void, apis.ExemptRequest, APIRejectResponse>('/fee/exempt', async (data, thunkAPI) => {
   try {
-    const response = await apis.searchTransaction(data);
+    const response = await apis.searchAccount(data);
     if (response.status === 200) {
       return;
     } else {
@@ -112,6 +113,6 @@ export const exempt= createAsyncThunk<void, apis.ExemptRequest>('/fee/exempt', a
     }
   } catch (err) {
     console.log(err);
-    thunkAPI.rejectWithValue(err);
+    thunkAPI.rejectWithValue(err?.response?.data?.error ?? '');
   }
 });
