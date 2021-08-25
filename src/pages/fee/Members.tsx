@@ -1,11 +1,11 @@
-import React, {useState, useCallback, useEffect, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
 import styled from 'styled-components';
 import {toast} from 'react-toastify';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
 import {searchPayers, searchDeptors} from '../../store/actions/feeActions';
-import {Box, Input, Text, Span, Tab} from '../../components';
-import {Filter, Search} from '../../components/icons';
+import {Box, Text, Span} from '../../components';
+import {Filter} from '../../components/icons';
 import {CommonMessage, FeeMessage} from '../../common/wordings';
 import {getCurrentSemester} from '../../utils/semester';
 
@@ -41,11 +41,6 @@ const MemberCard = (MemberCardProps: MemberCardProps) => {
 export const Members = () => {
   const dispatch = useDispatch();
   const {loadingPayers, loadingDeptors, payers, deptors} = useSelector((state: RootState) => state.fee);
-  const [InputTextValue, setInputTextValue] = useState('');
-  const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputTextValue(event.target.value);
-  }, [setInputTextValue]);
-  const empty = useMemo(() => InputTextValue === '', [InputTextValue]);
   const totalUserCount = useMemo(() => payers.length + deptors.length, [payers.length, deptors.length]);
   const paidPercent = useMemo(() => {
     return payers.length / totalUserCount * 100;
@@ -112,12 +107,7 @@ export const Members = () => {
   // ));
 
   return (
-    <Box width='100%' py='48px' px='60px'>
-      <Text color='#454440' fontSize='40px' fontWeight={700} lineHeight='50px'>회계관리</Text>
-      <Box isFlex width='100%' mt='32px' alignItems='flex-end' justifyContent='space-between'>
-        <Tab tabs={['입출금내역 목록', '동아리원 목록']} />
-        <Input empty={empty} logo={<Search mr='27px' width='24px' height='24px' color='#CBC8BE' />} onChange={handleInputChange} value={InputTextValue} placeholder='search' />
-      </Box>
+    <Box>
       <Box ml='7px' isFlex width='100%' height='30px' mt='64px' alignItems='baseline'>
         <Span color='#454440' fontSize='28px' lineHeight='34px' fontWeight={700}>{payers.length}명 /</Span>
         <Span ml='10px' color='rgba(69, 68, 64, 0.5)' fontSize='24px' lineHeight='29px'>{totalUserCount}명</Span>
