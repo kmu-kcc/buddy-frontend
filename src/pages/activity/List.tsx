@@ -1,8 +1,14 @@
-import React, {useState, useCallback} from 'react';
-import {useHistory} from 'react-router-dom';
+import React, {useState, useCallback, useEffect} from 'react';
 import styled from 'styled-components';
+import {toast} from 'react-toastify';
+import {useHistory} from 'react-router-dom';
+import {useSelector} from 'react-redux';
+import {RootState, useDispatch} from '../../store';
+import {setCurrentActivity, searchActivity} from '../../store/actions/activityActions';
 import {Text, Button, Box, SearchInput} from '../../components';
 import {Buddy} from '../../components/icons';
+import {CommonMessage} from '../../common/wordings';
+import {Activity} from '../../models/Activity';
 
 const FloatButton = styled(Button)`
   width: 245px;
@@ -19,52 +25,55 @@ const ActivityCardWrapper = styled(Box)`
   border-radius: 15px;
 `;
 
-const Dummy = [
+const Dummy: Activity[] = [
   {
     id: '610d458b79e122ea1d150cd6',
-    titls: 'it is long night',
+    title: 'it is long night',
     start: '1628249722',
     end: '1628249722',
     place: '성곡도서관 2층 스터디룸',
     type: 1,
+    private: true,
     description: '2021년 2차 알고리즘 스터디',
+    participants: [],
   },
   {
     id: '610d458b79e122ea1d150888',
-    titls: 'really long night',
+    title: 'really long night',
     start: '1628249722',
     end: '1628249722',
     place: '성곡도서관 2층 스터디룸',
     type: 1,
+    private: true,
     description: '2021년 2차 로아 스터디',
+    participants: [],
   },
   {
     id: '610d458b79e122ea1d150777',
-    titls: 'very long night',
+    title: 'very long night',
     start: '1628249722',
     end: '1628249722',
     place: '성곡도서관 2층 스터디룸',
     type: 1,
+    private: true,
     description: '2021년 2차 ㅠㅠ 스터디',
+    participants: [],
   },
 ];
 
-interface CardProps {
-  id?: string;
-  title?: string;
-  start?: string;
-  end?: string;
-  place?: string;
-  type?: 0 | 1 | 2;
-  description?: string;
-}
+type CardProps = Activity;
 
 const ActivityCard = (props: CardProps) => {
+  const dispatch = useDispatch();
   const {title, start} = props;
   const history = useHistory();
   const handleClick = useCallback(() => {
-    history.push('/activity/status');
-  }, [history]);
+    dispatch(setCurrentActivity({
+      ...props,
+    }));
+    history.push('/activity/detail');
+  }, [dispatch, history, props]);
+
   return (
     <Box isFlex flexDirection='column' mr='30px' onClick={handleClick} cursor='pointer'>
       <ActivityCardWrapper isFlex justifyContent='center' width='226px' height='147px'>
@@ -77,28 +86,69 @@ const ActivityCard = (props: CardProps) => {
 };
 
 export const List = () => {
+  const dispatch = useDispatch();
+  const {loading} = useSelector((state: RootState) => state.activity);
+
   const [InputTextValue, setInputTextValue] = useState('');
-  const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputTextValue(event.target.value);
-  }, [setInputTextValue]);
+
+    if (loading) {
+      return;
+    }
+
+    try {
+      const response = await dispatch(searchActivity({
+        keyword: event.target.value,
+      }));
+
+      if (response.type === searchActivity.fulfilled.type) {
+        return;
+      } else {
+        toast.error(response.payload);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch, loading]);
   const history = useHistory();
   const handleClick = useCallback(() => {
     history.push('/activity/create');
   }, [history]);
 
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await dispatch(searchActivity({
+          keyword: '',
+        }));
+
+        if (response.type === searchActivity.fulfilled.type) {
+          return;
+        } else {
+          toast.error(response.payload);
+        }
+      } catch (err) {
+        console.log(err);
+        toast.error(CommonMessage.error);
+      }
+    })();
+  }, [dispatch]);
+
   const FoundAnniversary = Dummy.map((info, idx) => (
     <Box key={idx}>
-      <ActivityCard title={info.titls} start={info.start} />
+      <ActivityCard {...info} />
     </Box>
   ));
   const Study = Dummy.map((info, idx) => (
     <Box key={idx}>
-      <ActivityCard title={info.titls} start={info.start} />
+      <ActivityCard {...info} />
     </Box>
   ));
   const EtCetera = Dummy.map((info, idx) => (
     <Box key={idx}>
-      <ActivityCard title={info.titls} start={info.start} />
+      <ActivityCard {...info} />
     </Box>
   ));
 
