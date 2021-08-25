@@ -2,7 +2,7 @@ export {Landing} from './Landing';
 export {Organization} from './organization';
 export {User} from './user';
 export {Fee} from './fee';
-export {SignUp} from './SignUp';
+export {Signup} from './signup';
 export {SignIn} from './SignIn';
 export {Fallback} from './Fallback';
 export {Activity} from './activity';

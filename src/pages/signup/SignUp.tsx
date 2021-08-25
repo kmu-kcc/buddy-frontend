@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import {toast} from 'react-toastify';
 // import {useHistory} from 'react-router-dom';
 import {useSelector} from 'react-redux';
-import {RootState, useDispatch} from '../store';
-import {signUpRequest} from '../store/actions/userActions';
-import {Input, Select, Button, Box} from '../components';
-import {Buddy} from '../components/icons';
-import {Attendance} from '../models/User';
-import {CommonMessage, SignUpMessage} from '../common/wordings';
+import {RootState, useDispatch} from '../../store';
+import {signUpRequest} from '../../store/actions/userActions';
+import {Input, Select, Button, Box} from '../../components';
+import {Buddy} from '../../components/icons';
+import {Attendance} from '../../models/User';
+import {CommonMessage, SignUpMessage} from '../../common/wordings';
 
 const Text = styled.p`
   margin-left: 19px;
