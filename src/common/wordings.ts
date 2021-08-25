@@ -36,3 +36,8 @@ export const ActivityMessage = {
   successCreate: '활동을 생성했습니다.',
   empty: '모든 필드를 입력해주세요.',
 };
+
+export const FeeMessage = {
+  successTransaction: '회비 내역을 불러왔습니다.',
+  successPayers: '납부자 목록을 불러왔습니다.',
+};
