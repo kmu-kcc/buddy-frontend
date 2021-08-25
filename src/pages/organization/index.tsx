@@ -55,9 +55,7 @@ const Container = ({children}: Props) => {
 
   return (
     <Box isFlex flexDirection='column' width='100%' px='60px'>
-      <Box mt='60px' mb='58px' isFlex>
-        <Text color='#454440;' fontSize='40px' fontWeight={700}>조직관리</Text>
-      </Box>
+      <Text mt='60px' mb='58px' color='#454440;' fontSize='40px' fontWeight={700}>조직관리</Text>
       <Box isFlex alignItems='start'>
         <Tab tabs={['동아리원 목록', '입부 신청내역', '퇴부 신청내역']} onTabChange={handleTabChange} />
         {searchInputShow && <Input ml='auto' height='59px' width='433px' value={search}
