@@ -17,14 +17,13 @@ export const createActivity = (data: CreateActivityRequest) => {
   });
 };
 
-// 2. Search - 활동 검색 (랜딩 페이지)
-export const searchLanding = () => {
-
-};
+export interface SearchActivityRequest {
+  keyword: string;
+}
 
 // 3. Private Search - 활동 검색 (백오피스)
-export const searchPrivate = () => {
-
+export const searchActivity = ({keyword}: SearchActivityRequest) => {
+  return getRequest().get(`/activity/private?query=${keyword}`);
 };
 
 // 4. Update - 활동 정보 수정
