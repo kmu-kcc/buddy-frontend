@@ -97,6 +97,7 @@ export const WithdrawRequests = () => {
               univnumber={info.id}
               major={info.department.split(' ').slice(1).join(' ')}
               phone={info.phone}
+              date={info.updated_at}
               checked={info.checked}
               onClick={handleCheck(idx)} />
           </Box>

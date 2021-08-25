@@ -124,6 +124,7 @@ export const SignUpRequests = () => {
               univnumber={info.id}
               major={info.department.split(' ').slice(1).join(' ')}
               phone={info.phone}
+              date={info.created_at}
               checked={info.checked}
               onClick={handleCheck(idx)} />
           </Box>
