@@ -1,57 +1,18 @@
-export enum Attendance {
-    ATTENDING = 0,
-    LEAVE_OF_ABSENCE = 1,
-    GRADUATED = 2,
-  }
-  
-  export interface UserRole {
-    activity_management: boolean;
-    member_management: boolean;
-    fee_management: boolean;
-  }  
+import {User} from './User';
 
-export interface Payers {
-    id: string;
-    password?: string;
-    name: string;
-    department: string;
-    phone: string;
-    email: string;
-    grade: number;
-    attendance: Attendance;
-    role?: UserRole;
-    approved?: boolean;
-    on_delete?: boolean;
-    created_at?: boolean;
-    updated_at?: boolean;
-  }
-
-export interface Deptors {
-    id: string;
-    password?: string;
-    name: string;
-    department: string;
-    phone: string;
-    email: string;
-    grade: number;
-    attendance: Attendance;
-    role?: UserRole;
-    approved?: boolean;
-    on_delete?: boolean;
-    created_at?: boolean;
-    updated_at?: boolean;
-    dept?: number;
-  }
-
-export interface SearchFee {
-    carry_over: number;
-    logs: Logs;
-    total: number;
+export interface Deptors extends User {
+  dept?: number;
 }
 
-export interface Logs {
+export interface Account {
+  carry_over: number;
+  logs: Log[];
+  total: number;
+}
+
+export interface Log {
   amount: number;
   type: number;
-  description?: string;
-  created_at?: string
+  description: string;
+  created_at: string
 }
