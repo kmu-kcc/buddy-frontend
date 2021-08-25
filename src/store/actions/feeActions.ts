@@ -48,7 +48,7 @@ export const searchPayers = createAsyncThunk<User[], apis.SearchPayersRequest, A
   }
 });
 
-export const searchDeptorsList = createAsyncThunk<Deptors[], apis.SearchDeptorsRequest, APIRejectResponse>('/fee/deptors', async (data, thunkAPI) => {
+export const searchDeptors = createAsyncThunk<Deptors[], apis.SearchDeptorsRequest, APIRejectResponse>('/fee/deptors', async (data, thunkAPI) => {
   try {
     const response = await apis.searchDeptors(data);
     if (response.status === 200) {
