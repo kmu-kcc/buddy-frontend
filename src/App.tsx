@@ -16,8 +16,7 @@ const App = () => {
           <ErrorBoundary FallbackComponent={pages.Fallback}>
             <Router>
               <Route path='/' exact component={pages.Landing} />
-              <Route path='/signup' component={pages.SignUp} />
-              <Route path='/signin' component={pages.SignIn} />
+              <Route path='/auth' component={pages.Auth} />
               <Route path='/organization' component={pages.Organization} />
               <Route path='/user' component={pages.User} />
               <Route path='/activity' component={pages.Activity} />

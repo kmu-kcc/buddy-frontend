@@ -51,7 +51,7 @@ const ColorText = styled(Text)<{amount: number}>`
 `;
 
 const comma = (num: number) =>{
-  const res = num.toString();
+  const res = num.toLocaleString();
   return (num >= 0 ? '+'+res : res);
 };
 

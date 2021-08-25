@@ -3,6 +3,6 @@ import {Redirect} from 'react-router-dom';
 
 export const Landing: React.FC = () => {
   return (
-    <Redirect to='/signin' />
+    <Redirect to='/auth/signin' />
   );
 };

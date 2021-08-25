@@ -4,12 +4,12 @@ import {color, ColorProps, space, SpaceProps} from 'styled-system';
 import {toast} from 'react-toastify';
 import {Link, useHistory} from 'react-router-dom';
 import {useSelector} from 'react-redux';
-import {RootState, useDispatch} from '../store';
-import {signInRequest} from '../store/actions/userActions';
-import {Input, Button, Box, Check, Popup, Text} from '../components';
-import {Buddy} from '../components/icons';
-import {CommonMessage, SignInMessage} from '../common/wordings';
-import {setCredentialInfo} from '../common/credentials';
+import {RootState, useDispatch} from '../../store';
+import {signInRequest} from '../../store/actions/userActions';
+import {Input, Button, Box, Check, Popup, Text} from '../../components';
+import {Buddy} from '../../components/icons';
+import {CommonMessage, SignInMessage} from '../../common/wordings';
+import {setCredentialInfo} from '../../common/credentials';
 
 const LinkText = styled(Link)<SpaceProps & ColorProps>`
   text-decoration: none;
@@ -96,7 +96,7 @@ export const SignIn = () => {
         <Button mt='65px' width='100%' height='70px' onClick={handleSignInClick}>로그인</Button>
         <Check mt='24px' mr='auto' boxShape='circle' size='20px' fontSize='16px' lineHeight='19px' onCheck={handleCheck} label='아이디 저장' checked={idSaved} />
         <Box isFlex mt='40px' width='100%'>
-          <LinkText to='/signup' color='#6D48E5'>회원가입</LinkText>
+          <LinkText to='/auth/signup' color='#6D48E5'>회원가입</LinkText>
           <LinkText to='#' ml='auto' onClick={handleFIndAccountPopupClick}>아이디/비밀번호 찾기</LinkText>
           <Popup type='danger' confirmLabel='확인' hideCancelButton cancelLabel='거절' show={withdrawalPopupShow}
             onConfirm={() => {}}

@@ -13,7 +13,8 @@ const CarriedData = {
 };
 
 const comma = (num: number) =>{
-  return num.toString();
+  const res = num.toLocaleString();
+  return (num >= 0 ? '+'+res : res);
 };
 
 const FullBudget = styled.div<{Budget: number;}>`
