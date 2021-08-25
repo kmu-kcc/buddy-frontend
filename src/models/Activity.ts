@@ -9,6 +9,7 @@ export interface Activity {
   start: string;
   end: string;
   place: string;
+  title: string;
   type: ActivityType;
   description: string;
   participants: string[];
