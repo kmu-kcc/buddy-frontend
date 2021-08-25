@@ -26,6 +26,20 @@ export const SignUpRequests = () => {
 
   const [signUpPopupShow, setSignUpPopupShow] = useState(false);
   const [deleteMemberPopupShow, setDeleteMemberPopupShow] = useState(false);
+
+  const fetchSignUpRequest = useCallback(async () => {
+    try {
+      const response = await dispatch(getSignUpRequests());
+      if (response.type === getSignUpRequests.fulfilled.type) {
+        toast.success(MemberRequestsMessage.loadingSuccess);
+      } else {
+        toast.error(response.payload);
+      }
+    } catch (err) {
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch]);
+
   const handleDeleteMemberPopupClick = useCallback(() => {
     setDeleteMemberPopupShow(true);
   }, []);
@@ -41,6 +55,7 @@ export const SignUpRequests = () => {
       }));
       if (response.type === deleteMember.fulfilled.type) {
         toast.success(MemberRequestsMessage.deleteSuccess);
+        fetchSignUpRequest();
       } else {
         toast.error(response.payload as unknown as string);
       }
@@ -48,7 +63,7 @@ export const SignUpRequests = () => {
       console.log(err);
       toast.error(CommonMessage.error);
     }
-  }, [dispatch, loadingDeleteMemberRequests, signUpRequests]);
+  }, [dispatch, fetchSignUpRequest, loadingDeleteMemberRequests, signUpRequests]);
   const handleDeleteMemberClose = useCallback(() => {
     setDeleteMemberPopupShow(false);
   }, []);
@@ -80,19 +95,8 @@ export const SignUpRequests = () => {
   }, []);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const response = await dispatch(getSignUpRequests());
-        if (response.type === getSignUpRequests.fulfilled.type) {
-          toast.success(MemberRequestsMessage.loadingSuccess);
-        } else {
-          toast.error(response.payload);
-        }
-      } catch (err) {
-        toast.error(CommonMessage.error);
-      }
-    })();
-  }, [dispatch]);
+    fetchSignUpRequest();
+  }, [fetchSignUpRequest]);
 
   return (
     <Box>
