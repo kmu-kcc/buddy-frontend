@@ -1,5 +1,6 @@
 import React, {useCallback} from 'react';
 import styled from 'styled-components';
+import {format} from 'date-fns';
 import {Box, Button, Text} from '../components';
 
 const CardLine = styled.div`
@@ -38,17 +39,18 @@ border-color: ${({checked}) => checked ? '#6D48E5' : '#EFEBFC'};
 `;
 
 interface MemberCardProps {
-  username?: string;
-  univnumber?: string;
-  major?: string;
+  username: string;
+  univnumber: string;
+  major: string;
   group?: string;
-  phone?: string;
+  phone: string;
+  date?: string;
   checked?: boolean;
   onClick?: () => void;
 }
 
 export const MemberCard = (MemberCardProps: MemberCardProps) => {
-  const {checked, group, username, univnumber, major, phone, onClick} = MemberCardProps;
+  const {checked, group, date, username, univnumber, major, phone, onClick} = MemberCardProps;
   const handleClick = useCallback(() => {
     if (onClick) {
       onClick();
@@ -58,6 +60,7 @@ export const MemberCard = (MemberCardProps: MemberCardProps) => {
     <Wrapper maxWidth='300px' isFlex flexDirection='column' pt='44px' pb='34px' alignItems='center' border='2px solid #EBEBEB' borderRadius='37px' checked={checked || false} onClick={handleClick}>
       <Box isFlex width='100%' alignItems='baseline' px='34px'>
         <Text flex={1} fontWeight={700} fontSize='18px' lineHeight='22px'>{group}</Text>
+        <Text color='#CBC8BE' fontWeight={400} fontSize='14px' lineHeight='17px'>{format(Number(date) ?? 0, 'yyyy-MM-dd')}</Text>
       </Box>
       <CardLine />
       <Box isFlex mt='28px' px='44px' flexDirection='column'>
