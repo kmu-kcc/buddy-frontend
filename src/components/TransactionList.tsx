@@ -51,7 +51,7 @@ const ColorText = styled(Text)<{amount: number}>`
 `;
 
 const comma = (num: number) =>{
-  const res = num.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+  const res = num.toString();
   return (num >= 0 ? '+'+res : res);
 };
 
