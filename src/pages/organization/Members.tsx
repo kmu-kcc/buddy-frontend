@@ -46,17 +46,15 @@ interface MemberCardProps {
   username?: string;
   univnumber?: string;
   major?: string;
-  date?: string;
   group?: string;
 }
 
 const MemberCard = (MemberCardProps: MemberCardProps) => {
-  const {group, username, univnumber, major, date} = MemberCardProps;
+  const {group, username, univnumber, major} = MemberCardProps;
   return (
     <Box maxWidth='300px' isFlex flexDirection='column' pt='44px' pb='34px' alignItems='center'>
       <Box isFlex width='100%' alignItems='baseline' px='34px'>
         <Text flex={1} fontWeight={700} fontSize='18px' lineHeight='22px'>{group}</Text>
-        <Text color='#CBC8BE;'>{date}</Text>
       </Box>
       <CardLine />
       <Box isFlex mt='28px' px='44px' flexDirection='column'>
@@ -87,17 +85,17 @@ export const Members = () => {
   }), [members]);
   const normalUsers = useMemo(() => members.filter((member) => {
     const role = member.role;
-    return role?.activity_management && role.fee_management && role.member_management;
+    return !(role?.activity_management || role?.fee_management || role?.member_management);
   }), [members]);
 
   const CardListAdmin = adminUsers.map((info, idx) => (
     <Box border='2px solid #6D48E5' borderRadius='37px' key={idx}>
-      <MemberCard group='운영자' username={info.name} univnumber={info.id} major={info.department.slice(1)} date={'info.date'} />
+      <MemberCard group='운영자' username={info.name} univnumber={info.id} major={info.department.split(' ').slice(1).join(' ')} />
     </Box>
   ));
   const CardListMember = normalUsers.map((info, idx) => (
     <Box border='2px solid #FFD646' borderRadius='37px' key={idx}>
-      <MemberCard group='동아리원' username={info.name} univnumber={info.id} major={info.department.slice(1)} date={'info.date'} />
+      <MemberCard group='동아리원' username={info.name} univnumber={info.id} major={info.department.split(' ').slice(1).join(' ')} />
     </Box>
   ));
 

@@ -5,8 +5,8 @@ import * as actions from '../actions/memberActions';
 interface State {
   members: User[];
   currentMember: User | null;
-  signUpRequests: User[];
-  withdrawalRequests: User[];
+  signUpRequests: User[] | null;
+  withdrawalRequests: User[] | null;
   loading: boolean,
   loadingSignUpRequests: boolean,
   loadingWithdrawalRequests: boolean,
@@ -66,12 +66,27 @@ export const memberReducer = createReducer(initialState, (builder) => {
         }
         state.currentMember.attendance = payload;
       })
+      .addCase(actions.changeCheckedInSignUpRequests, (state, {payload}) => {
+        if (!state.signUpRequests) {
+          return;
+        }
+        state.signUpRequests[payload.index].checked = payload.checked;
+      })
+      .addCase(actions.changeCheckedInWithdrawalRequests, (state, {payload}) => {
+        if (!state.withdrawalRequests) {
+          return;
+        }
+        state.withdrawalRequests[payload.index].checked = payload.checked;
+      })
       .addCase(actions.getSignUpRequests.pending, (state, action) => {
         state.loadingSignUpRequests = true;
       })
       .addCase(actions.getSignUpRequests.fulfilled, (state, {payload}) => {
         state.loadingSignUpRequests = false;
-        state.signUpRequests = payload;
+        state.signUpRequests = payload?.map((req) => ({
+          ...req,
+          checked: false,
+        }));
       })
       .addCase(actions.getSignUpRequests.rejected, (state, action) => {
         state.loadingSignUpRequests = false;
@@ -82,7 +97,10 @@ export const memberReducer = createReducer(initialState, (builder) => {
       })
       .addCase(actions.getWithdrawalRequests.fulfilled, (state, {payload}) => {
         state.loadingWithdrawalRequests = false;
-        state.withdrawalRequests = payload;
+        state.withdrawalRequests = payload?.map((req) => ({
+          ...req,
+          checked: false,
+        }));
       })
       .addCase(actions.getWithdrawalRequests.rejected, (state, action) => {
         state.loadingWithdrawalRequests = false;

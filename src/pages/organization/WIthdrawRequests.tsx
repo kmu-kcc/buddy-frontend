@@ -1,10 +1,11 @@
-import React, {useCallback, useState, useEffect, useMemo} from 'react';
+import React, {useCallback, useState, useEffect} from 'react';
 import {toast} from 'react-toastify';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
-import {getWithdrawalRequests, deleteMember} from '../../store/actions/memberActions';
+import {getWithdrawalRequests, deleteMember, changeCheckedInWithdrawalRequests} from '../../store/actions/memberActions';
 import {Box, Button, MemberCard, Popup, Text, Span} from '../../components';
 import {CommonMessage, MemberRequestsMessage} from '../../common/wordings';
+import {User} from '../../models/User';
 
 // const ReverseButton = styled(Button)`
 //   background: #FF6845;
@@ -14,17 +15,13 @@ import {CommonMessage, MemberRequestsMessage} from '../../common/wordings';
 export const WithdrawRequests = () => {
   const dispatch = useDispatch();
   const {withdrawalRequests, loadingDeleteMemberRequests} = useSelector((state: RootState) => state.member);
-  const requests = useMemo(() => {
-    return withdrawalRequests.map((req) => ({
-      ...req,
-      checked: false,
-    }));
-  }, [withdrawalRequests]);
 
-  const [check, setCheck] = useState(false);
-  const handleCheck = useCallback(() => {
-    setCheck(!check);
-  }, [check, setCheck]);
+  const handleCheck = useCallback((index: number) => () => {
+    dispatch(changeCheckedInWithdrawalRequests({
+      index,
+      checked: !((withdrawalRequests as User[])[index].checked),
+    }));
+  }, [dispatch, withdrawalRequests]);
 
   const [withdrawalPopupShow, setWithdrawalPopupShow] = useState(false);
   const handleWithdrawalRequestPopupClick = useCallback(() => {
@@ -38,7 +35,7 @@ export const WithdrawRequests = () => {
 
     try {
       const response = await dispatch(deleteMember({
-        ids: requests.filter((req) => req.checked).map((req) => req.id),
+        ids: withdrawalRequests?.filter((req) => req.checked).map((req) => req.id) ?? [],
       }));
       if (response.type === deleteMember.fulfilled.type) {
         toast.success(MemberRequestsMessage.deleteSuccess);
@@ -49,18 +46,10 @@ export const WithdrawRequests = () => {
       console.log(err);
       toast.error(CommonMessage.error);
     }
-  }, [dispatch, loadingDeleteMemberRequests, requests]);
+  }, [dispatch, loadingDeleteMemberRequests, withdrawalRequests]);
   const handleWithdrawalClose = useCallback(() => {
     setWithdrawalPopupShow(false);
   }, []);
-
-  const CardList = requests.map((info, idx) => (
-    <Box key={idx} mr='30px' mb='30px'>
-      <MemberCard group='퇴부 신청' username={info.name} univnumber={info.id} major={info.department.slice(1)} date={'info.date'} phone={info.phone} onCheck={handleCheck}>
-        {check ? info.checked : !info.checked}
-      </MemberCard>
-    </Box>
-  ));
 
   useEffect(() => {
     (async () => {
@@ -101,7 +90,18 @@ export const WithdrawRequests = () => {
         </Box>
       </Box>
       <Box isFlex mt='33px' mb='50px' flexWrap='wrap'>
-        {requests.length > 0 ? CardList : <Text width='100%' textAlign='center' fontWeight={400} fontSize='20px'>퇴부 신청이 없습니다.</Text>}
+        {(withdrawalRequests?.length ?? 0) > 0 ? withdrawalRequests?.map((info, idx) => (
+          <Box key={idx} mr='30px' mb='30px'>
+            <MemberCard group='퇴부 신청'
+              username={info.name}
+              univnumber={info.id}
+              major={info.department.split(' ').slice(1).join(' ')}
+              phone={info.phone}
+              date={info.updated_at}
+              checked={info.checked}
+              onClick={handleCheck(idx)} />
+          </Box>
+        )) : <Text width='100%' textAlign='center' fontWeight={400} fontSize='20px'>퇴부 신청이 없습니다.</Text>}
       </Box>
     </Box>
   );

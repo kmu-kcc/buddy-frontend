@@ -13,6 +13,8 @@ export const changeGrade = createAction<number>('member/changeGrade');
 export const changeCollege = createAction<string>('member/changeCollege');
 export const changeMajor = createAction<string>('member/changeMajor');
 export const changeAttendance = createAction<Attendance>('member/changeAttendance');
+export const changeCheckedInSignUpRequests = createAction<{index: number; checked: boolean;}>('member/changeCheckedInSignUpRequests');
+export const changeCheckedInWithdrawalRequests = createAction<{index: number; checked: boolean;}>('member/changeCheckedInWithdrawalRequests');
 
 /**
  * actions for async request

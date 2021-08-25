@@ -30,3 +30,7 @@ export const MemberRequestsMessage = {
   deleteSuccess: '선택한 회원을 삭제했습니다.',
   approveSuccess: '선택한 회원을 가입 승인했습니다.',
 };
+
+export const ActivityMessage = {
+  invalid: '잘못된 접근입니다.',
+};

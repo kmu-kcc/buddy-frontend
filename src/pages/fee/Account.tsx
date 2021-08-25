@@ -1,7 +1,7 @@
 import React, {useState, useCallback, useMemo} from 'react';
 import styled from 'styled-components';
 import {position, PositionProps} from 'styled-system';
-import {Text, Button, Box, Tab, Input, TransactionList} from '../../components';
+import {Text, Button, Box, Tab, Input, TransactionList, Popup} from '../../components';
 import {Filter, Search} from '../../components/icons';
 
 const TempBudget = 1000000;
@@ -13,7 +13,7 @@ const CarriedData = {
 };
 
 const comma = (num: number) =>{
-  return num.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
+  return num.toString();
 };
 
 const FullBudget = styled.div<{Budget: number;}>`
@@ -109,6 +109,50 @@ export const Account = () => {
     setExportClick(!ExportClicked);
   }, [ExportClicked, setExportClick]);
 
+  const [depositPopupShow, setDepositPopupShow] = useState(false);
+  const handleDepositRequestPopupClick = useCallback(() => {
+    setDepositPopupShow(true);
+  }, []);
+  const handleDepositConfirm = useCallback(() => {
+    setDepositPopupShow(false);
+  }, [setDepositPopupShow]);
+  const handleDepositCancel = useCallback(() => {
+    setDepositPopupShow(false);
+  }, [setDepositPopupShow]);
+  const handleDepositClose = useCallback(() => {
+    setDepositPopupShow(false);
+  }, []);
+  const [inputDepositValue, setInputDepositValue] = useState('');
+  const handleDepositChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputDepositValue(event.target.value);
+  }, [setInputDepositValue]);
+  const [inputDepositDescriptionValue, setInputDepositDescriptionValue] = useState('');
+  const handleDepositDescriptionChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputDepositDescriptionValue(event.target.value);
+  }, [setInputDepositDescriptionValue]);
+
+  const [WithdrawPopupShow, setWithdrawPopupShow] = useState(false);
+  const handleWithdrawRequestPopupClick = useCallback(() => {
+    setWithdrawPopupShow(true);
+  }, []);
+  const handleWithdrawConfirm = useCallback(() => {
+    setWithdrawPopupShow(false);
+  }, [setWithdrawPopupShow]);
+  const handleWithdrawCancel = useCallback(() => {
+    setWithdrawPopupShow(false);
+  }, [setWithdrawPopupShow]);
+  const handleWithdrawClose = useCallback(() => {
+    setWithdrawPopupShow(false);
+  }, []);
+  const [inputWithdrawValue, setInputWithdrawValue] = useState('');
+  const handleWithdrawChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputWithdrawValue(event.target.value);
+  }, [setInputWithdrawValue]);
+  const [inputWithdrawDescriptionValue, setInputWithdrawDescriptionValue] = useState('');
+  const handleWithdrawDescriptionChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputWithdrawDescriptionValue(event.target.value);
+  }, [setInputWithdrawDescriptionValue]);
+
   return (
     <Box width='100%' py='48px' px='60px'>
       <Box isBlock>
@@ -167,8 +211,30 @@ export const Account = () => {
           <TransactionList />
         </Box>
         <Box isFlex alignItems='flex-end' justifyContent='space-between' right='50px'>
-          <FloatButton right='303px'>입금 내역 추가</FloatButton>
-          <FloatButton right='50px' background='#FF6845' border='none'>출금 내역 추가</FloatButton>
+          <FloatButton right='303px' onClick={handleDepositRequestPopupClick}>입금 내역 추가</FloatButton>
+          <Popup width='500px' height='390px' type='primary' confirmLabel='추가' cancelLabel='닫기' show={depositPopupShow}
+            onConfirm={handleDepositConfirm}
+            onCancel={handleDepositCancel}
+            onClose={handleDepositClose}>
+            <Box isFlex flexDirection='column' justifyItems='center'>
+              <Text fontSize='20px' lineHeight='25px' mb='6px'>입금 내역 입력</Text>
+              <Input onChange={handleDepositDescriptionChange} value={inputDepositDescriptionValue}></Input>
+              <Text fontSize='20px' lineHeight='25px' mt='25px' mb='6px'>입금 금액 입력</Text>
+              <Input onChange={handleDepositChange} value={inputDepositValue}></Input>
+            </Box>
+          </Popup>
+          <FloatButton right='50px' onClick={handleWithdrawRequestPopupClick} background='#FF6845' border='none'>출금 내역 추가</FloatButton>
+          <Popup width='500px' height='390px' type='danger' confirmLabel='추가' cancelLabel='닫기' show={WithdrawPopupShow}
+            onConfirm={handleWithdrawConfirm}
+            onCancel={handleWithdrawCancel}
+            onClose={handleWithdrawClose}>
+            <Box isFlex flexDirection='column'>
+              <Text fontSize='20px' lineHeight='25px' mb='6px'>출금 내역 입력</Text>
+              <Input onChange={handleWithdrawDescriptionChange} value={inputWithdrawDescriptionValue}></Input>
+              <Text fontSize='20px' lineHeight='25px' mt='25px' mb='6px'>출금 금액 입력</Text>
+              <Input onChange={handleWithdrawChange} value={inputWithdrawValue}></Input>
+            </Box>
+          </Popup>
         </Box>
       </Box>
     </Box>
