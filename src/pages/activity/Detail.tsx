@@ -1,11 +1,12 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
 import styled from 'styled-components';
 import {useHistory} from 'react-router-dom';
+import Markdown from 'react-markdown';
 import {toast} from 'react-toastify';
 import {useSelector} from 'react-redux';
 import {format} from 'date-fns';
 import {RootState} from '../../store';
-import {Text, Button, Box, Textarea} from '../../components';
+import {Text, Button, Box} from '../../components';
 import {ActivityMessage} from '../../common/wordings';
 
 const FloatButton = styled(Button)`
@@ -73,7 +74,11 @@ export const Detail = () => {
         <Text color='#454440' fontSize='16px' lineHeight='20px' pl='29px'>{participants}</Text>
       </Box>
       <UnderBar />
-      <Textarea value={currentActivity?.description ?? ''} backgroundColor='#F8F8F8' width='1147px' height='838px' disabled />
+      <Box width='100%' maxWidth='1147px' minHeight='50vh' p='32px' borderRadius='15px' bg='#F8F8F8'>
+        <Markdown>
+          {currentActivity?.description ?? ''}
+        </Markdown>
+      </Box>
       <FloatButton onClick={handleEditClick}>새로운 활동 추가</FloatButton>
     </Box>
   );
