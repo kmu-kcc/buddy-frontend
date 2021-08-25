@@ -66,14 +66,14 @@ export const feeReducer = createReducer(initialState, (builder) => {
         state.loadingPayers = false;
         state.payers = [];
       })
-      .addCase(actions.searchDeptorsList.pending, (state, action) => {
+      .addCase(actions.searchDeptors.pending, (state, action) => {
         state.loadingDeptors = true;
       })
-      .addCase(actions.searchDeptorsList.fulfilled, (state, {payload}) => {
+      .addCase(actions.searchDeptors.fulfilled, (state, {payload}) => {
         state.loadingDeptors = false;
         state.deptors = payload ?? [];
       })
-      .addCase(actions.searchDeptorsList.rejected, (state, action) => {
+      .addCase(actions.searchDeptors.rejected, (state, action) => {
         state.loadingDeptors = false;
       })
       .addCase(actions.searchAccount.pending, (state, action) => {

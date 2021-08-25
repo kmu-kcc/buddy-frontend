@@ -40,4 +40,5 @@ export const ActivityMessage = {
 export const FeeMessage = {
   successTransaction: '회비 내역을 불러왔습니다.',
   successPayers: '납부자 목록을 불러왔습니다.',
+  successDeptors: '미납부자 목록을 불러왔습니다.',
 };
