@@ -57,7 +57,7 @@ export const deleteActivity = createAsyncThunk<void, apis.DeleteActivityRequest,
     }
   } catch (err) {
     console.log(err);
-    return thunkAPI.rejectWithValue(err);
+    return thunkAPI.rejectWithValue(err?.response?.data?.error ?? '');
   }
 });
 

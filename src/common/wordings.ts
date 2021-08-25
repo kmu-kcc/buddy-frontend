@@ -33,4 +33,6 @@ export const MemberRequestsMessage = {
 
 export const ActivityMessage = {
   invalid: '잘못된 접근입니다.',
+  successCreate: '활동을 생성했습니다.',
+  empty: '모든 필드를 입력해주세요.',
 };
