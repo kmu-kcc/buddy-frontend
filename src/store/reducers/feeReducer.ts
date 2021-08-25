@@ -80,7 +80,7 @@ export const feeReducer = createReducer(initialState, (builder) => {
       })
       .addCase(actions.searchTransaction.fulfilled, (state, {payload}) => {
         state.loadingSearch = false;
-        state.searchfee = [payload];
+        state.searchfee = payload;
       })
       .addCase(actions.searchTransaction.rejected, (state, action) => {
         state.loadingSearch = false;
