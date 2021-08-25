@@ -60,7 +60,7 @@ export const searchDeptorsList= createAsyncThunk<Deptors[], apis.SearchDeptorsLi
   }
 });
 
-export const searchTransaction= createAsyncThunk<SearchFee, apis.SearchTransactionRequest>('/fee/search', async (data, thunkAPI) => {
+export const searchTransaction= createAsyncThunk<SearchFee[], apis.SearchTransactionRequest>('/fee/search', async (data, thunkAPI) => {
   try {
     const response = await apis.searchTransaction(data);
     if (response.status === 200) {
