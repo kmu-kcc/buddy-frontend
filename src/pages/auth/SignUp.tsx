@@ -1,5 +1,6 @@
 import React, {useCallback, useState} from 'react';
 import styled from 'styled-components';
+import {useHistory} from 'react-router-dom';
 import {toast} from 'react-toastify';
 // import {useHistory} from 'react-router-dom';
 import {useSelector} from 'react-redux';
@@ -20,7 +21,7 @@ const Text = styled.p`
 `;
 
 export const SignUp = () => {
-  // const history = useHistory();
+  const history = useHistory();
   const dispatch = useDispatch();
   const {loadingSignUp} = useSelector((state: RootState) => state.user);
   const [name, setName] = useState('');
@@ -80,6 +81,7 @@ export const SignUp = () => {
       console.log('signup request finish', response.type);
       if (response.type === signUpRequest.fulfilled.type) {
         //  TODO show finish page
+        history.push('/auth/signup/complete');
       } else {
         toast.error(response.payload as unknown as string);
       }
@@ -87,13 +89,13 @@ export const SignUp = () => {
       console.log(err);
       toast.error(CommonMessage.error);
     }
-  }, [dispatch, loadingSignUp, name, college, major, grade, phoneNumber, email, studentNumber, attendance]);
+  }, [dispatch, history, loadingSignUp, name, college, major, grade, phoneNumber, email, studentNumber, attendance]);
 
   return (
     <Box isFlex width='100%' pt='100px' pb='96px' justifyContent='center'>
       <Box isFlex flexDirection='column' justifyContent='center' alignItems='center' px={['16px', 0]}>
-        <Box>
-          <Buddy mb='100px' width='248px' height='140px' />
+        <Box mb='100px' cursor='pointer' onClick={() => history.push('/')}>
+          <Buddy width='248px' height='140px' />
         </Box>
         <Box isFlex flexDirection={['column', 'row']}>
           <Box>
