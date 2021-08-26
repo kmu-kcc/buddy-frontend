@@ -10,9 +10,10 @@ import {Members} from './Members';
 import {Router} from '../../common/router';
 import {SignUpRequests} from './SignUpReqeusts';
 import {WithdrawRequests} from './WIthdrawRequests';
+import {Settings} from './Settings';
 import {CommonMessage} from '../../common/wordings';
 
-const paths = ['/organization/members', '/organization/members/request/signup', '/organization/members/request/withdraw'];
+const paths = ['/organization/members', '/organization/members/request/signup', '/organization/members/request/withdraw', '/organization/members/request/update'];
 
 interface Props {
   children: JSX.Element;
@@ -73,6 +74,7 @@ export const Organization = () => (
       <Route path='/organization/members' exact component={Members} />
       <Route path='/organization/members/request/signup' exact component={SignUpRequests} />
       <Route path='/organization/members/request/withdraw' exact component={WithdrawRequests} />
+      <Route path='/organization/members/request/update' exact component={Settings} />
     </Router>
   </Container>
 );

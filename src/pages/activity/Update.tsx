@@ -96,7 +96,7 @@ export const Update = () => {
       </Box>
       <Box isFlex mt='30px' alignItems='center'>
         <Text fontSize='20px' color='#454440' lineHeight='24px'>활동 제목</Text>
-        <Text fontSize='20px' color='#454440' lineHeight='24px' ml='49px'> ID :{id}</Text>
+        <Text fontSize='20px' color='#454440' lineHeight='24px' fontWeight='bold' ml='49px'>ID: {id}</Text>
       </Box>
       <Box isFlex mt='30px' alignItems='center'>
         <Text fontSize='20px' color='#454440' lineHeight='24px'>장소</Text>
