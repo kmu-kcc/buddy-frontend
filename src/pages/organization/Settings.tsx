@@ -30,7 +30,6 @@ export const Settings = () => {
   const [phoneNumber, setPhoneNumber] = useState(user?.phone ?? '');
   const [email, setEmail] = useState(user?.email ?? '');
   const [grade, setGrade] = useState(user?.grade ?? 0);
-  const [name, setName] = useState(user?.name ?? '');
   const [attendance, setAttendance] = useState(user?.attendance ?? -1);
 
   const handleInputChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
@@ -99,9 +98,7 @@ export const Settings = () => {
       <Box width='100%' pl='4px' mt='28px'>
         {/* 이름 */}
         <Box isFlex width='525px' alignItems='center'>
-          <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>이름</Text>
-          <Input value={name} onChange={handleInputChange(setName)} placeholder='홍길동'
-            width='390px' height='63px' />
+          <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>학번 : {studentNumber}</Text>
         </Box>
         {/* 비밀번호 */}
         <Box isFlex width='525px' mt='25px' alignItems='center'>
