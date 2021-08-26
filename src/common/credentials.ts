@@ -16,7 +16,7 @@ export const isExpired = (expiredAt: string) => {
   return Date.now() < Number(expiredAt);
 };
 
-export const getCredentials = (): Credentials => {
+export const getCredentials = (): Credentials | null => {
   const accessToken = localStorage.getItem(ACCESS_TOKEN);
   const expiredAt = localStorage.getItem(EXPIRED_AT);
 
