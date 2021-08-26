@@ -51,8 +51,15 @@ export const Profile = () => {
   }, [history]);
 
   useEffect(() => {
-    dispatch(getMeRequest(getCredentialInfo()));
-  }, [dispatch]);
+    const info = getCredentialInfo();
+
+    if (!info) {
+      history.push('/auth/signin');
+      return;
+    }
+
+    dispatch(getMeRequest(info));
+  }, [dispatch, history]);
 
   return (
     <Box width='100%' pl='60px' pt='48px' pb='48px' position='relative'>

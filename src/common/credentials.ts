@@ -51,10 +51,11 @@ export const getCredentialInfo = () => {
 
   if (!(id && pw)) {
     clearCredentials();
+    return null;
   }
 
   return {
-    id: id as string,
-    password: pw as string,
+    id,
+    password: pw,
   };
 };
