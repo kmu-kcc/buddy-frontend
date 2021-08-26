@@ -5,7 +5,7 @@ import {ErrorBoundary} from 'react-error-boundary';
 import {Provider} from 'react-redux';
 import {Layout} from './components';
 import * as pages from './pages';
-import {Router} from './utils/router';
+import {Router} from './common/router';
 import {store} from './store';
 
 const App = () => {

@@ -1,7 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import {Route, useHistory, useLocation} from 'react-router-dom';
 import {Box, Select, Tab, Button, Input, Text} from '../../components';
-import {Router} from '../../utils/router';
+import {Router} from '../../common/router';
 import {Account} from './Account';
 import {Members} from './Members';
 
@@ -46,7 +46,7 @@ const Container = ({children}: Props) => {
 
 export const Fee = () => (
   <Container>
-    <Router>
+    <Router authentication>
       <Route path='/fee/account' exact component={Account} />
       <Route path='/fee/members' exact component={Members} />
     </Router>
