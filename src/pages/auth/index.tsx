@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {Route, useHistory} from 'react-router-dom';
 import {getCredentials, getCredentialInfo, isExpired} from '../../common/credentials';
-import {Router} from '../../utils/router';
+import {Router} from '../../common/router';
 import {SignIn} from './SignIn';
 import {SignUp} from './SignUp';
 import {Complete} from './Complete';

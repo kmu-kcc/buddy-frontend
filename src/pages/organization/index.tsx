@@ -7,7 +7,7 @@ import {searchMember} from '../../store/actions/memberActions';
 import {Box, Text, Input, Tab} from '../../components';
 import {Search} from '../../components/icons';
 import {Members} from './Members';
-import {Router} from '../../utils/router';
+import {Router} from '../../common/router';
 import {SignUpRequests} from './SignUpReqeusts';
 import {WithdrawRequests} from './WIthdrawRequests';
 import {CommonMessage} from '../../common/wordings';
@@ -69,7 +69,7 @@ const Container = ({children}: Props) => {
 
 export const Organization = () => (
   <Container>
-    <Router>
+    <Router authentication>
       <Route path='/organization/members' exact component={Members} />
       <Route path='/organization/members/request/signup' exact component={SignUpRequests} />
       <Route path='/organization/members/request/withdraw' exact component={WithdrawRequests} />
