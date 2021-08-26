@@ -17,7 +17,7 @@ export const createInstance = () => {
   request = axios.create({
     baseURL,
     headers: {
-      Authorization: getCredentials().access_token,
+      Authorization: getCredentials()?.access_token,
     }
   });
 };
