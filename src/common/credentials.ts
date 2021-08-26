@@ -22,11 +22,12 @@ export const getCredentials = (): Credentials | null => {
 
   if (!(accessToken && expiredAt) || isExpired(expiredAt)) {
     clearCredentials();
+    return null;
   }
 
   return {
-    access_token: accessToken as string,
-    expired_at: expiredAt as string,
+    access_token: accessToken,
+    expired_at: expiredAt,
   };
 };
 
