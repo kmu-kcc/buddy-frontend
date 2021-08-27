@@ -32,10 +32,11 @@ export const searchActivity = ({keyword}: SearchActivityRequest) => {
 export interface UpdateActivityRequest {
   id: string;
   update: {
+    title: string;
     start: string;
     end: string;
     place: string;
-    type: string;
+    type: ActivityType;
     description: string;
     participants: string[];
   }
