@@ -28,44 +28,6 @@ const initialState: State = {
 
 export const memberReducer = createReducer(initialState, (builder) => {
   builder
-      .addCase(actions.changePhoneNumber, (state, {payload}) => {
-        if (!state.currentMember) {
-          return;
-        }
-        state.currentMember.phone = payload;
-      })
-      .addCase(actions.changeEmail, (state, {payload}) => {
-        if (!state.currentMember) {
-          return;
-        }
-        state.currentMember.email = payload;
-      })
-      .addCase(actions.changeGrade, (state, {payload}) => {
-        if (!state.currentMember) {
-          return;
-        }
-        state.currentMember.grade = payload;
-      })
-      .addCase(actions.changeCollege, (state, {payload}) => {
-        if (!state.currentMember) {
-          return;
-        }
-        const departments = state.currentMember.department.split(' ').slice(1);
-        state.currentMember.department = [payload, ...departments].join(' ');
-      })
-      .addCase(actions.changeMajor, (state, {payload}) => {
-        if (!state.currentMember) {
-          return;
-        }
-        const departments = state.currentMember.department.split(' ').slice(0, 1);
-        state.currentMember.department = [...departments, payload].join(' ');
-      })
-      .addCase(actions.changeAttendance, (state, {payload}) => {
-        if (!state.currentMember) {
-          return;
-        }
-        state.currentMember.attendance = payload;
-      })
       .addCase(actions.changeCheckedInSignUpRequests, (state, {payload}) => {
         if (!state.signUpRequests) {
           return;
@@ -77,6 +39,9 @@ export const memberReducer = createReducer(initialState, (builder) => {
           return;
         }
         state.withdrawalRequests[payload.index].checked = payload.checked;
+      })
+      .addCase(actions.setCurrentMember, (state, {payload}) => {
+        state.currentMember = payload;
       })
       .addCase(actions.getSignUpRequests.pending, (state, action) => {
         state.loadingSignUpRequests = true;

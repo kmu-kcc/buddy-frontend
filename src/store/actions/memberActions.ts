@@ -1,20 +1,15 @@
 import {createAction, createAsyncThunk} from '@reduxjs/toolkit';
 import {APIRejectResponse} from '.';
-import {User, Attendance} from '../../models/User';
+import {User} from '../../models/User';
 import * as apis from '../apis/member';
 import {MemberRequestsMessage} from '../../common/wordings';
 
 /**
  * actions for current member information change
  */
-export const changePhoneNumber = createAction<string>('member/changePhoneNumber');
-export const changeEmail = createAction<string>('member/changeEmail');
-export const changeGrade = createAction<number>('member/changeGrade');
-export const changeCollege = createAction<string>('member/changeCollege');
-export const changeMajor = createAction<string>('member/changeMajor');
-export const changeAttendance = createAction<Attendance>('member/changeAttendance');
 export const changeCheckedInSignUpRequests = createAction<{index: number; checked: boolean;}>('member/changeCheckedInSignUpRequests');
 export const changeCheckedInWithdrawalRequests = createAction<{index: number; checked: boolean;}>('member/changeCheckedInWithdrawalRequests');
+export const setCurrentMember = createAction<User>('member/setCurrentMember');
 
 /**
  * actions for async request
