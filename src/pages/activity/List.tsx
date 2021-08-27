@@ -1,6 +1,7 @@
 import React, {useState, useCallback, useEffect, useMemo} from 'react';
 import styled from 'styled-components';
 import {toast} from 'react-toastify';
+import {format} from 'date-fns';
 import {useHistory} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
@@ -44,7 +45,7 @@ const ActivityCard = (props: CardProps) => {
         <Buddy width='38px' height='56px' mt='46px' />
       </ActivityCardWrapper>
       <Text fontSize='18px' lineHeight='22px' color='#454440' pt='20px'>{title}</Text>
-      <Text fontSize='14px' lineHeight='18px' color='#9E9E9E' pt='5px'>{start}</Text>
+      <Text fontSize='14px' lineHeight='18px' color='#9E9E9E' pt='5px'>{format(Number(start), 'yyyy년 MM월 dd일')}</Text>
     </Box>
   );
 };
