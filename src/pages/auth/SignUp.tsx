@@ -10,6 +10,7 @@ import {Input, Select, Button, Box} from '../../components';
 import {Buddy} from '../../components/icons';
 import {Attendance} from '../../models/User';
 import {CommonMessage, SignUpMessage} from '../../common/wordings';
+import {attendances, colleges, grades} from '../../common/common_data.json';
 
 const Text = styled.p`
   margin-left: 19px;
@@ -119,19 +120,7 @@ export const SignUp = () => {
         <Box isFlex flexDirection={['column', 'row']}>
           <Box>
             <Select placeholder='소속대학' width='390px' height='63px' onSelect={handleCollegeSelect}>
-              <option>글로벌인문지역대학</option>
-              <option>사회과학대학</option>
-              <option>법과대학</option>
-              <option>경상대학</option>
-              <option>경영대학</option>
-              <option>창의공과대학</option>
-              <option>과학기술대학</option>
-              <option>예술대학</option>
-              <option>체육대학</option>
-              <option>조형대학</option>
-              <option>소프트웨어융합대학</option>
-              <option>건축대학</option>
-              <option>자동차융합대학</option>
+              {colleges.map((college, i) => <option key={i}>{college}</option>)}
             </Select>
           </Box>
           <Box mt={['28px', 0]} ml={[0, '174px']}>
@@ -142,20 +131,12 @@ export const SignUp = () => {
         <Box isFlex flexDirection={['column', 'row']}>
           <Box isFlex height='63px'>
             <Select placeholder='재학여부' width='390px' height='63px' onSelect={handleAttendanceSelect}>
-              <option>재학</option>
-              <option>휴학</option>
-              <option>졸업</option>
-              <option>기타</option>
+              {attendances.map((attendance, i) => <option key={i}>{attendance}</option>)}
             </Select>
           </Box>
           <Box mt={['28px', 0]} ml={[0, '174px']}>
             <Select placeholder='학년' width='390px' height='63px' onSelect={handleGradeSelect}>
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
+              {grades.map((grade) => <option key={grade}>{grade}</option>)}
             </Select>
           </Box>
         </Box>
