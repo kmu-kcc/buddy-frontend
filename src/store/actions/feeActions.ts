@@ -1,8 +1,14 @@
-import {createAsyncThunk} from '@reduxjs/toolkit';
+import {createAction, createAsyncThunk} from '@reduxjs/toolkit';
 import {APIRejectResponse} from '.';
-import {Deptors, Account} from '../../models/Fee';
+import {Deptors, Account, Semester} from '../../models/Fee';
 import {User} from '../../models/User';
 import * as apis from '../apis/fee';
+
+/**
+ * actions for semester
+ */
+export const setSemester = createAction<Semester>('fee/setSemester');
+
 /**
  * actions for async request
  */
