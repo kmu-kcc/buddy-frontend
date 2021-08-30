@@ -18,7 +18,7 @@ export const Route = (props: RouteProps) => {
   const {role, ...rest} = props;
   const {user} = useSelector((state: RootState) => state.user);
 
-  if ((role && !user) || (role && !user?.role[role])) {
+  if (role && (!user || !user?.role[role])) {
     toast.error(CommonMessage.noPermission);
     history.replace('/user');
     return null;
