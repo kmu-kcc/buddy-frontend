@@ -82,6 +82,7 @@ export const SignUpRequests = () => {
       }));
       if (response.type === approveSignUp.fulfilled.type) {
         toast.success(MemberRequestsMessage.approveSuccess);
+        fetchSignUpRequest();
       } else {
         toast.error(response.payload as unknown as string);
       }
@@ -89,7 +90,7 @@ export const SignUpRequests = () => {
       console.log(err);
       toast.error(CommonMessage.error);
     }
-  }, [dispatch, loadingSignUpApproveRequests, signUpRequests]);
+  }, [dispatch, loadingSignUpApproveRequests, signUpRequests, fetchSignUpRequest]);
   const handleSignUpClose = useCallback(() => {
     setSignUpPopupShow(false);
   }, []);
