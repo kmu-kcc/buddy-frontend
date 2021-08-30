@@ -5,7 +5,7 @@ const EXPIRED_AT = 'expired_at';
 const USER_ID = 'user_id';
 const USER_PW = 'user_pw';
 
-const clearCredentials = () => {
+export const clearCredentials = () => {
   localStorage.removeItem(ACCESS_TOKEN);
   localStorage.removeItem(EXPIRED_AT);
   localStorage.removeItem(USER_ID);
