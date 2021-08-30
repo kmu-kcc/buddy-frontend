@@ -80,7 +80,7 @@ export const MemberCard = (MemberCardProps: MemberCardProps) => {
           <Text color='#8D8C85' fontWeight={500} fontSize='16px' lineHeight='20px'>전화번호</Text>
           <EllipsisText ml='32px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{phone}</EllipsisText>
         </Box>
-        <Inbutton mt='30px' py='0' width='100%' height='40px' fontSize='14px' lineHeight='18px'>자세히 보기</Inbutton>
+        <Inbutton mt='30px' py='0' width='100%' height='40px' fontSize='14px' lineHeight='18px'>더 보기</Inbutton>
       </Box>
     </Wrapper>
   );
