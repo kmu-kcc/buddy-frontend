@@ -32,7 +32,7 @@ const FloatButton = styled(Button)`
 export const Profile = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const {user} = useSelector((state: RootState) => state.user);
+  const {user, loading} = useSelector((state: RootState) => state.user);
   const college = useMemo(() => user?.department.split(' ')[0], [user?.department]);
   const major = useMemo(() => user?.department.split(' ').slice(1).join(' '), [user?.department]);
   const attendance = useMemo(() => {
@@ -51,6 +51,10 @@ export const Profile = () => {
   }, [history]);
 
   useEffect(() => {
+    if (user || loading) {
+      return;
+    }
+
     const info = getCredentialInfo();
 
     if (!info) {
@@ -59,7 +63,7 @@ export const Profile = () => {
     }
 
     dispatch(getMeRequest(info));
-  }, [dispatch, history]);
+  }, [dispatch, history, user, loading]);
 
   return (
     <Box width='100%' pl='60px' pt='48px' pb='48px' position='relative'>
