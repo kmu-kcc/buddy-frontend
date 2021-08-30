@@ -133,7 +133,6 @@ export const Navigation = () => {
   const location = useLocation();
   const hidden = useMemo(() => {
     const pathname = location.pathname;
-    console.log('pathname updated', pathname);
 
     if (pathname.match(/\/auth/gi)) {
       return true;
