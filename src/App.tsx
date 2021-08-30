@@ -21,7 +21,7 @@ const App = () => {
               <Route path='/user' component={pages.User} />
               <Route path='/activity' role='activity_management' component={pages.Activity} />
               <Route path='/fee' component={pages.Fee} />
-              <Route path='/test' component={pages.Test} />
+              <Route path='/test' role='member_management' component={pages.Test} />
             </Router>
           </ErrorBoundary>
         </Layout>
