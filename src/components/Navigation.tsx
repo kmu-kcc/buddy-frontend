@@ -1,6 +1,8 @@
 import React, {useCallback, useMemo} from 'react';
 import styled from 'styled-components';
 import {useHistory, useLocation} from 'react-router-dom';
+import {useSelector} from 'react-redux';
+import {RootState} from '../store';
 import {Box, Span} from '../components';
 import {Activity, Organization, Fee, Profile, Exit} from '../components/icons';
 import {clearCredentials} from '../common/credentials';
@@ -48,14 +50,21 @@ const Logo = () => {
 };
 
 const ActivityTab = () => {
+  const {user} = useSelector((state: RootState) => state.user);
   const history = useHistory();
   const location = useLocation();
   const active = useMemo(() => location.pathname.startsWith('/activity'), [location.pathname]);
   const handleClick = useCallback(() => {
     history.push('/activity');
   }, [history]);
+
+  //  show activity menu only for activity manager
+  if (!user?.role?.activity_management) {
+    return null;
+  }
+
   return (
-    <IconWrapper isFlex alignItems='flexStart' bg={active ? '#5635BF' : 'none'} onClick={handleClick}>
+    <IconWrapper isFlex alignItems='flexStart' mb={['6px', '10px']} bg={active ? '#5635BF' : 'none'} onClick={handleClick}>
       <Activity width='20px' height='20px' color='#F9F3FF' />
       <Span ml={['10px', '18px']} fontSize={['18px', '22px']} lineHeight={['22px', '26px']} color='#F9F3FF'>활동 관리</Span>
     </IconWrapper>
@@ -70,7 +79,7 @@ const OrganizationTab = () => {
     history.push('/organization/members');
   }, [history]);
   return (
-    <IconWrapper isFlex alignItems='flexStart' mt={['6px', '10px']} bg={active ? '#5635BF' : 'none'} onClick={handleClick}>
+    <IconWrapper isFlex alignItems='flexStart' mb={['6px', '10px']} bg={active ? '#5635BF' : 'none'} onClick={handleClick}>
       <Organization width='20px' height='20px' color='#F9F3FF' />
       <Span ml={['10px', '18px']} fontSize={['18px', '22px']} lineHeight={['22px', '26px']} color='#F9F3FF'>조직 관리</Span>
     </IconWrapper>
@@ -85,7 +94,7 @@ const FeeTab = () => {
     history.push('/fee/account');
   }, [history]);
   return (
-    <IconWrapper isFlex alignItems='flexStart' mt={['6px', '10px']} bg={active ? '#5635BF' : 'none'} onClick={handleClick}>
+    <IconWrapper isFlex alignItems='flexStart' mb={['6px', '10px']} bg={active ? '#5635BF' : 'none'} onClick={handleClick}>
       <Fee width='20px' height='20px' color='#F9F3FF' />
       <Span ml={['10px', '18px']} fontSize={['18px', '22px']} lineHeight={['22px', '26px']} color='#F9F3FF'>회계 관리</Span>
     </IconWrapper>
@@ -100,7 +109,7 @@ const ProfileTab = () => {
     history.push('/user');
   }, [history]);
   return (
-    <IconWrapper isFlex alignItems='flexStart' mt={['6px', '10px']} bg={active ? '#5635BF' : 'none'} onClick={handleClick}>
+    <IconWrapper isFlex alignItems='flexStart' bg={active ? '#5635BF' : 'none'} onClick={handleClick}>
       <Profile width='20px' height='20px' color='#F9F3FF' />
       <Span ml={['10px', '18px']} fontSize={['18px', '22px']} lineHeight={['22px', '26px']} color='#F9F3FF'>내 정보</Span>
     </IconWrapper>
