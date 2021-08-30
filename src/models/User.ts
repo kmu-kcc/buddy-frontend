@@ -19,7 +19,7 @@ export interface User {
   email: string;
   grade: number;
   attendance: Attendance;
-  role?: UserRole;
+  role: UserRole;
   approved?: boolean;
   on_delete?: boolean;
   created_at?: string;
