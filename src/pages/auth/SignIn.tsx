@@ -5,7 +5,7 @@ import {toast} from 'react-toastify';
 import {Link, useHistory} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
-import {signInRequest} from '../../store/actions/userActions';
+import {signInRequest, getMeRequest} from '../../store/actions/userActions';
 import {Input, Button, Box, Check, Popup, Text} from '../../components';
 import {Buddy} from '../../components/icons';
 import {CommonMessage, SignInMessage} from '../../common/wordings';
@@ -46,14 +46,13 @@ export const SignIn = () => {
     }
 
     try {
-      const response = await dispatch(signInRequest({
-        id, password,
-      }));
+      const response = await dispatch(signInRequest({id, password}));
       if (response.type === signInRequest.fulfilled.type) {
         //  signin success
         setCredentialInfo(id, password);
         //  re-create API Request instsance to include credentials
         createInstance();
+        await dispatch(getMeRequest({id, password}));
         history.replace('/user');
       } else {
         //  signin error
