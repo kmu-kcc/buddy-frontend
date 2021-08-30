@@ -7,6 +7,7 @@ import {getSignUpRequests, approveSignUp, deleteMember, changeCheckedInSignUpReq
 import {Box, Button, MemberCard, Popup, Text, Span} from '../../components';
 import {CommonMessage, MemberRequestsMessage} from '../../common/wordings';
 import {User} from '../../models/User';
+import {convertToMillis} from '../../utils/time';
 
 const ReverseButton = styled(Button)`
   background: #FF6845;
@@ -129,7 +130,7 @@ export const SignUpRequests = () => {
               univnumber={info.id}
               major={info.department.split(' ').slice(1).join(' ')}
               phone={info.phone}
-              date={info.created_at}
+              date={convertToMillis(info.created_at)}
               checked={info.checked}
               onClick={handleCheck(idx)} />
           </Box>

@@ -8,6 +8,7 @@ import {createActivity} from '../../store/actions/activityActions';
 import {Text, Button, Box, Input, Textarea, Select, Span, ToggleSwitch} from '../../components';
 import {CommonMessage, ActivityMessage} from '../../common/wordings';
 import {ActivityType} from '../../models/Activity';
+import {convertToSec} from '../../utils/time';
 
 const FloatButton = styled(Button)`
   width: 245px;
@@ -31,8 +32,8 @@ export const Create = () => {
   const [type, setType] = useState<ActivityType>(-1);
   const [privateActivity, setPrivate] = useState(true);
 
-  const start = useMemo(() => new Date(startDate).getTime().toString(), [startDate]);
-  const end = useMemo(() => new Date(endDate).getTime().toString(), [endDate]);
+  const start = useMemo(() => convertToSec(new Date(startDate).getTime()).toString(), [startDate]);
+  const end = useMemo(() => convertToSec(new Date(endDate).getTime()).toString(), [endDate]);
 
   const handleInputChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
     return (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {

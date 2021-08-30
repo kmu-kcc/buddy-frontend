@@ -9,6 +9,7 @@ import {Text, Button, Box, Input, Transaction, TransactionHeader, Popup, Span} f
 import {Filter} from '../../components/icons';
 import {CommonMessage, FeeMessage} from '../../common/wordings';
 import {formatCurrency} from '../../utils/currency';
+import {convertToMillis} from '../../utils/time';
 
 const TotalBalanceContainer = styled(Box)`
   width: 380px;
@@ -197,7 +198,7 @@ export const Account = () => {
         <TransactionHeader />
         {(account?.logs.length ?? 0) > 0 ? account?.logs.map((log) => (
           <Transaction key={log.created_at}
-            date={log.created_at}
+            date={convertToMillis(log.created_at)}
             description={log.description}
             amount={log.amount}
             total={100000} />
