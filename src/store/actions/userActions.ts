@@ -58,9 +58,9 @@ export const signUpRequest = createAsyncThunk<void, apis.SignUpRequest, APIRejec
   }
 });
 
-export const updateMeRequest = createAsyncThunk<void, apis.UpdateMeRequest, APIRejectResponse>('user/updateMe', async (data, thunkAPI) => {
+export const updateMemberRequest = createAsyncThunk<void, apis.UpdateMemberRequest, APIRejectResponse>('user/updateMember', async (data, thunkAPI) => {
   try {
-    const response = await apis.updateMe(data);
+    const response = await apis.updateMember(data);
     if (response.status === 200) {
       return;
     } else {

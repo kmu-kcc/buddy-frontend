@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import {toast} from 'react-toastify';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
-import {updateMeRequest} from '../../store/actions/userActions';
+import {updateMemberRequest} from '../../store/actions/userActions';
 import {Input, Select, Button, Box, Text, Popup, Span} from '../../components';
 import {Attendance} from '../../models/User';
 import {CommonMessage, SettingsMessage} from '../../common/wordings';
@@ -82,7 +82,7 @@ export const Settings = () => {
     }
 
     try {
-      const response = await dispatch(updateMeRequest({
+      const response = await dispatch(updateMemberRequest({
         id: studentNumber,
         update: {
           attendance,
@@ -93,7 +93,7 @@ export const Settings = () => {
           phone: phoneNumber,
         },
       }));
-      if (response.type === updateMeRequest.fulfilled.type) {
+      if (response.type === updateMemberRequest.fulfilled.type) {
         toast.success(SettingsMessage.updateSuccess);
         history.replace('/user');
       } else {

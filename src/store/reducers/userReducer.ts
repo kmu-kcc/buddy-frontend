@@ -89,13 +89,13 @@ export const userReducer = createReducer(initialState, (builder) => {
       .addCase(actions.getMeRequest.rejected, (state, action) => {
         state.loading = false;
       })
-      .addCase(actions.updateMeRequest.pending, (state, action) => {
+      .addCase(actions.updateMemberRequest.pending, (state, action) => {
         state.loading = true;
       })
-      .addCase(actions.updateMeRequest.fulfilled, (state, {payload}) => {
+      .addCase(actions.updateMemberRequest.fulfilled, (state, {payload}) => {
         state.loading = false;
       })
-      .addCase(actions.updateMeRequest.rejected, (state, action) => {
+      .addCase(actions.updateMemberRequest.rejected, (state, action) => {
         state.loading = false;
       })
       .addCase(actions.withdraw.pending, (state, action) => {
