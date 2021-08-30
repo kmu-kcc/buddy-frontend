@@ -1,10 +1,12 @@
 import React, {useCallback, useMemo, useState} from 'react';
+import {toast} from 'react-toastify';
 import {useHistory, useLocation} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
-import {setSemester} from '../../store/actions/feeActions';
+import {setSemester, searchAccount, searchDeptors, searchPayers} from '../../store/actions/feeActions';
 import {Box, Select, Tab, Button, Text} from '../../components';
 import {Router, Route} from '../../common/router';
+import {CommonMessage} from '../../common/wordings';
 import {Account} from './Account';
 import {Members} from './Members';
 
@@ -49,11 +51,31 @@ const Container = ({children}: Props) => {
     setCurrentYear(Number(value));
   }, []);
 
-  const handleSemesterChangeClick = useCallback(() => {
+  const handleSemesterChangeClick = useCallback(async () => {
     dispatch(setSemester({
-      year: Number(year),
+      year,
       semester,
     }));
+
+    try {
+      await Promise.all([
+        dispatch(searchAccount({
+          year,
+          semester,
+        })),
+        dispatch(searchPayers({
+          year,
+          semester,
+        })),
+        dispatch(searchDeptors({
+          year,
+          semester,
+        })),
+      ]);
+    } catch (err) {
+      console.log(err);
+      toast.error(CommonMessage.error);
+    }
   }, [dispatch, year, semester]);
 
   return (
