@@ -10,7 +10,7 @@ interface State {
   account: Account | null;
   amounts: number;
   currentSemester: Semester;
-  loadingCreatefee: boolean;
+  loadingCreateFee: boolean;
   loadingAmount: boolean;
   loadingPayers: boolean;
   loadingDeptors: boolean;
@@ -26,7 +26,7 @@ const initialState: State = {
   account: null,
   amounts: 0,
   currentSemester: getCurrentSemester(),
-  loadingCreatefee: false,
+  loadingCreateFee: false,
   loadingAmount: false,
   loadingPayers: false,
   loadingDeptors: false,
@@ -42,13 +42,13 @@ export const feeReducer = createReducer(initialState, (builder) => {
         state.currentSemester = payload;
       })
       .addCase(actions.createFee.pending, (state, action) => {
-        state.loadingCreatefee = true;
+        state.loadingCreateFee = true;
       })
       .addCase(actions.createFee.fulfilled, (state, action) => {
-        state.loadingCreatefee = false;
+        state.loadingCreateFee = false;
       })
       .addCase(actions.createFee.rejected, (state, action) => {
-        state.loadingCreatefee = false;
+        state.loadingCreateFee = false;
       })
       .addCase(actions.searchAmount.pending, (state, action) => {
         state.loadingAmount = true;

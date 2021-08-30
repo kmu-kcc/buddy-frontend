@@ -1,10 +1,10 @@
-import React, {useCallback, useEffect, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import styled from 'styled-components';
 import {toast} from 'react-toastify';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
-import {searchPayers, searchDeptors} from '../../store/actions/feeActions';
-import {Box, Text, Span} from '../../components';
+import {searchPayers, searchDeptors, createFee} from '../../store/actions/feeActions';
+import {Box, Button, Input, Text, Popup, Span} from '../../components';
 import {Filter} from '../../components/icons';
 import {CommonMessage, FeeMessage} from '../../common/wordings';
 
@@ -39,7 +39,9 @@ const MemberCard = (MemberCardProps: MemberCardProps) => {
 
 export const Members = () => {
   const dispatch = useDispatch();
-  const {currentSemester, loadingPayers, loadingDeptors, payers, deptors} = useSelector((state: RootState) => state.fee);
+  const {currentSemester, loadingCreateFee, loadingPayers, loadingDeptors, payers, deptors} = useSelector((state: RootState) => state.fee);
+  const [startFeePopupShow, setStartFeePopupShow] = useState(false);
+  const [amount, setAmount] = useState('0');
   const totalUserCount = useMemo(() => payers.length + deptors.length, [payers.length, deptors.length]);
   const paidPercent = useMemo(() => {
     return payers.length / totalUserCount * 100;
@@ -88,6 +90,34 @@ export const Members = () => {
     }
   }, [dispatch, loadingDeptors, currentSemester]);
 
+  const handleAmountChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setAmount(event.target.value);
+  }, []);
+  const handleStartFeePopupClick = useCallback(() => setStartFeePopupShow(true), []);
+  const handleStartFeePopupClose = useCallback(() => setStartFeePopupShow(false), []);
+  const handleStartFeePopupConfirm = useCallback(async () => {
+    if (loadingCreateFee) {
+      toast.info(CommonMessage.loading);
+      return;
+    }
+
+    if (Number(amount) === NaN) {
+      toast.error(FeeMessage.invalidFeeAmount);
+      return;
+    }
+
+    const response = await dispatch(createFee({
+      amount: Number(amount),
+      ...currentSemester,
+    }));
+
+    if (response.type === createFee.fulfilled.type) {
+      toast.success(FeeMessage.successCreateFee);
+    } else {
+      toast.error(response.payload as unknown as string);
+    }
+  }, [dispatch, loadingCreateFee, amount, currentSemester]);
+
   useEffect(() => {
     fetchPayers();
     fetchDeptors();
@@ -106,12 +136,15 @@ export const Members = () => {
   // ));
 
   return (
-    <Box>
-      <Box ml='7px' isFlex width='100%' height='30px' mt='64px' alignItems='baseline'>
-        <Span color='#454440' fontSize='28px' lineHeight='34px' fontWeight={700}>{payers.length}명 /</Span>
-        <Span ml='10px' color='rgba(69, 68, 64, 0.5)' fontSize='24px' lineHeight='29px'>{totalUserCount}명</Span>
+    <Box isFlex width='100%' flexDirection='column'>
+      <Box isFlex mt='64px' alignItems='center'>
+        <Box ml='7px' isFlex height='30px' alignItems='baseline'>
+          <Span color='#454440' fontSize='28px' lineHeight='34px' fontWeight={700}>{payers.length}명 /</Span>
+          <Span ml='10px' color='rgba(69, 68, 64, 0.5)' fontSize='24px' lineHeight='29px'>{totalUserCount}명</Span>
+        </Box>
+        <Button height='52px' py='0px' lineHeight='52px' ml='auto' mr='10px' onClick={handleStartFeePopupClick}>학기 시작</Button>
       </Box>
-      <Box ml='-10px' mt='15px' isFlex width='100%' height='34px' borderRadius='73px' bg='#EFEBFC'>
+      <Box ml='-10px' mt='15px' isFlex width='100%' height='34px' borderRadius='17px' bg='#EFEBFC'>
         <Box isFlex width={`${paidPercent}%`} height='34px' bg='#6D48E5' borderRadius='73px' />
       </Box>
       <Box mt='62px' isFlex width='100%' flexDirection='column'>
@@ -140,6 +173,18 @@ export const Members = () => {
           )) : <Text mt='32px' width='100%' textAlign='center'>미납부한 회원이 없습니다.</Text>}
         </Box>
       </Box>
+      <Popup type='primary' height='fit-content' show={startFeePopupShow}
+        confirmLabel='시작' cancelLabel='닫기'
+        onConfirm={handleStartFeePopupConfirm}
+        onClose={handleStartFeePopupClose}>
+        <Box isFlex flexDirection='column' alignItems='center'>
+          <Text fontSize='20px' lineHeight='25px'>{currentSemester.year}년도 {currentSemester.semester}학기 회계를 시작할까요?</Text>
+          <Box isFlex mt='24px' alignItems='center' justifyContent='center'>
+            <Text fontSize='20px' lineHeight='25px' mr='24px'>회비 금액</Text>
+            <Input maxWidth='45%' flex={1} type='number' value={amount} placeholder='금액 입력' onChange={handleAmountChange} />
+          </Box>
+        </Box>
+      </Popup>
     </Box>
   );
 };
