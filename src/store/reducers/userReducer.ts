@@ -1,7 +1,7 @@
 import {createReducer} from '@reduxjs/toolkit';
 import {User} from '../../models/User';
 import * as actions from '../actions/userActions';
-import {setCredentials} from '../../common/credentials';
+import {setCredentials, clearCredentials} from '../../common/credentials';
 
 interface State {
   user: User | null;
@@ -88,6 +88,8 @@ export const userReducer = createReducer(initialState, (builder) => {
       })
       .addCase(actions.getMeRequest.rejected, (state, action) => {
         state.loading = false;
+        console.log('invalid credentials');
+        clearCredentials();
       })
       .addCase(actions.updateMemberRequest.pending, (state, action) => {
         state.loading = true;

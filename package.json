@@ -5,6 +5,7 @@
   "scripts": {
     "start": "cross-env REACT_APP_ENV=localhost react-scripts start",
     "build": "react-scripts build",
+    "build-production": "cross-env REACT_APP_ENV=production yarn build",
     "test": "react-scripts test",
     "lint": "eslint . --ext ts,tsx,js,jsx"
   },
