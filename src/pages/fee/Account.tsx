@@ -8,7 +8,6 @@ import {searchAccount, deposit} from '../../store/actions/feeActions';
 import {Text, Button, Box, Input, Transaction, TransactionHeader, Popup, Span} from '../../components';
 import {Filter} from '../../components/icons';
 import {CommonMessage, FeeMessage} from '../../common/wordings';
-import {getCurrentSemester} from '../../utils/semester';
 import {formatCurrency} from '../../utils/currency';
 
 const TotalBalanceContainer = styled(Box)`
@@ -54,7 +53,7 @@ export const Account = () => {
 
     try {
       const response = await dispatch(searchAccount({
-        ...getCurrentSemester(),
+        ...currentSemester,
       }));
 
       if (response.type === searchAccount.fulfilled.type) {
@@ -66,7 +65,7 @@ export const Account = () => {
       console.log(err);
       toast.error(CommonMessage.error);
     }
-  }, [dispatch, loadingTransaction]);
+  }, [dispatch, loadingTransaction, currentSemester]);
 
   const handleFilterClick = useCallback(() => {
     setFilterClick(!FilterClicked);
@@ -167,11 +166,17 @@ export const Account = () => {
         <TotalBalanceContainer mt='40px'>
           <Box isFlex width='100%' flexDirection='column' alignItems='center'>
             <Text color='#fff' fontSize='18px' lineHeight='22px'>잔여 총액</Text>
-            <Text mt='6px' color='#fff' fontSize='28px' fontWeight='bold' lineHeight='34px' textAlign='right'>{account?.total ? `${formatCurrency(account?.total)}` : '-'}원</Text>
+            <Text mt='6px' color='#fff' fontSize='28px' fontWeight='bold' lineHeight='34px' textAlign='right'>
+              {!isNaN(account?.total ?? NaN) ? `${formatCurrency(account?.total as number)}` : '-'}원
+            </Text>
           </Box>
           <Box mt='24px' isFlex width='100%' alignItems='center' justifyContent='flex-end'>
-            <Text color='#fff' fontSize='14px' lineHeight='22px'>이월 금액<Span ml='18px' fontWeight={700}>{account?.carry_over ? `${formatCurrency(account?.carry_over)}` : '-'}원</Span></Text>
-            {/* <Text color='#fff' fontSize='24px' fontWeight='bold' lineHeight='34px' textAlign='right'></Text> */}
+            <Text color='#fff' fontSize='14px' lineHeight='22px'>
+              이월 금액
+              <Span ml='18px' fontWeight={700}>
+                {!isNaN(account?.carry_over ?? NaN) ? `${formatCurrency(account?.carry_over as number)}` : '-'}원
+              </Span>
+            </Text>
           </Box>
         </TotalBalanceContainer>
       </Box>

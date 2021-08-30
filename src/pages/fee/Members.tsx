@@ -7,7 +7,6 @@ import {searchPayers, searchDeptors} from '../../store/actions/feeActions';
 import {Box, Text, Span} from '../../components';
 import {Filter} from '../../components/icons';
 import {CommonMessage, FeeMessage} from '../../common/wordings';
-import {getCurrentSemester} from '../../utils/semester';
 
 const NameText = styled(Text)`
   font-weight: bold;
@@ -40,7 +39,7 @@ const MemberCard = (MemberCardProps: MemberCardProps) => {
 
 export const Members = () => {
   const dispatch = useDispatch();
-  const {loadingPayers, loadingDeptors, payers, deptors} = useSelector((state: RootState) => state.fee);
+  const {currentSemester, loadingPayers, loadingDeptors, payers, deptors} = useSelector((state: RootState) => state.fee);
   const totalUserCount = useMemo(() => payers.length + deptors.length, [payers.length, deptors.length]);
   const paidPercent = useMemo(() => {
     return payers.length / totalUserCount * 100;
@@ -54,7 +53,7 @@ export const Members = () => {
 
     try {
       const response = await dispatch(searchPayers({
-        ...getCurrentSemester(),
+        ...currentSemester,
       }));
 
       if (response.type === searchPayers.fulfilled.type) {
@@ -66,7 +65,7 @@ export const Members = () => {
       console.log(err);
       toast.error(CommonMessage.error);
     }
-  }, [dispatch, loadingPayers]);
+  }, [dispatch, loadingPayers, currentSemester]);
   const fetchDeptors = useCallback(async () => {
     if (loadingDeptors) {
       toast.info(CommonMessage.loading);
@@ -75,7 +74,7 @@ export const Members = () => {
 
     try {
       const response = await dispatch(searchDeptors({
-        ...getCurrentSemester(),
+        ...currentSemester,
       }));
 
       if (response.type === searchDeptors.fulfilled.type) {
@@ -87,7 +86,7 @@ export const Members = () => {
       console.log(err);
       toast.error(CommonMessage.error);
     }
-  }, [dispatch, loadingDeptors]);
+  }, [dispatch, loadingDeptors, currentSemester]);
 
   useEffect(() => {
     fetchPayers();
