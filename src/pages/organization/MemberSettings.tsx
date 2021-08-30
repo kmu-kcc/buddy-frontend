@@ -1,13 +1,14 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useState, useMemo} from 'react';
 import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 import {toast} from 'react-toastify';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
-import {updateMeRequest} from '../../store/actions/userActions';
+import {updateMemberRequest} from '../../store/actions/userActions';
 import {Input, Select, Button, Box, Text} from '../../components';
 import {Attendance} from '../../models/User';
 import {CommonMessage, SettingsMessage} from '../../common/wordings';
+import {attendances, colleges, grades} from '../../common/common_data.json';
 
 const FloatButton = styled(Button)`
   width: 220px;
@@ -19,18 +20,21 @@ const FloatButton = styled(Button)`
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
 `;
 
-export const Settings = () => {
+export const MemberSettings = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const {user, loading} = useSelector((state: RootState) => state.user);
-  const [password, setPassword] = useState('');
-  const [studentNumber, setStudentNumber] = useState(user?.id ?? '');
-  const [college, setCollege] = useState(user?.department.split(' ')[0] ?? '');
-  const [major, setMajor] = useState(user?.department.split(' ').slice(1).join(' ') ?? '');
-  const [phoneNumber, setPhoneNumber] = useState(user?.phone ?? '');
-  const [email, setEmail] = useState(user?.email ?? '');
-  const [grade, setGrade] = useState(user?.grade ?? 0);
-  const [attendance, setAttendance] = useState(user?.attendance ?? -1);
+  const {currentMember, loading} = useSelector((state: RootState) => state.member);
+  const id = currentMember?.id ?? '';
+  const [name, setName] = useState(currentMember?.name ?? '');
+  const [college, setCollege] = useState(currentMember?.department.split(' ')[0] ?? '');
+  const [major, setMajor] = useState(currentMember?.department.split(' ').slice(1).join(' ') ?? '');
+  const [phoneNumber, setPhoneNumber] = useState(currentMember?.phone ?? '');
+  const [email, setEmail] = useState(currentMember?.email ?? '');
+  const [grade, setGrade] = useState(currentMember?.grade ?? 0);
+  const [attendance, setAttendance] = useState<Attendance>(currentMember?.attendance ?? -1);
+  const collegeIndex = useMemo(() => colleges.indexOf(college), [college]);
+
+  console.log(attendance);
 
   const handleInputChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,24 +66,23 @@ export const Settings = () => {
       return;
     }
 
-    if (attendance < 0 || !studentNumber || !college || !major || !email || !phoneNumber || !grade || !password) {
+    if (attendance < 0 || !id || !college || !major || !email || !phoneNumber || !grade) {
       toast.warn(SettingsMessage.empty);
       return;
     }
 
     try {
-      const response = await dispatch(updateMeRequest({
-        id: studentNumber,
+      const response = await dispatch(updateMemberRequest({
+        id,
         update: {
           attendance,
           department: `${college} ${major}`,
           email,
           grade,
-          password,
           phone: phoneNumber,
         },
       }));
-      if (response.type === updateMeRequest.fulfilled.type) {
+      if (response.type === updateMemberRequest.fulfilled.type) {
         toast.success(SettingsMessage.updateSuccess);
         history.replace('/organization/members');
       } else {
@@ -90,51 +93,32 @@ export const Settings = () => {
       console.log(err);
       toast.error(CommonMessage.error);
     }
-  }, [dispatch, history, loading, studentNumber, attendance, college, major, email, grade, password, phoneNumber]);
+  }, [dispatch, history, loading, id, attendance, college, major, email, grade, phoneNumber]);
 
   return (
     <Box width='100%' pl='60px' pt='48px' pb='48px' position='relative'>
       <Text mt='20px' color='#454440' fontSize='24px' lineHeight='30px' fontWeight={700}>수정하기</Text>
       <Box width='100%' pl='4px' mt='28px'>
         {/* 이름 */}
-        <Box isFlex width='525px' alignItems='center'>
-          <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>학번 : {studentNumber}</Text>
-        </Box>
-        {/* 비밀번호 */}
         <Box isFlex width='525px' mt='25px' alignItems='center'>
-          <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>비밀번호</Text>
-          <Input value={password} type='password' onChange={handleInputChange(setPassword)} placeholder='변경하기'
-            width='390px' height='63px' />
+          <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>이름</Text>
+          <Input value={name} onChange={handleInputChange(setName)} placeholder='이름' width='390px' height='63px' />
         </Box>
         {/* 전화번호 */}
         <Box isFlex width='525px' mt='25px' alignItems='center'>
           <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>전화번호</Text>
-          <Input value={phoneNumber} type='tel' onChange={handleInputChange(setPhoneNumber)}
-            placeholder='01012345678' width='390px' height='63px' />
+          <Input value={phoneNumber} type='tel' onChange={handleInputChange(setPhoneNumber)} placeholder='01012345678' width='390px' height='63px' />
         </Box>
         {/* 이메일 */}
         <Box isFlex width='525px' mt='25px' alignItems='center'>
           <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>이메일</Text>
-          <Input value={email} type='email' onChange={handleInputChange(setEmail)} placeholder='abc@gmail.com'
-            width='390px' height='63px' />
+          <Input value={email} type='email' onChange={handleInputChange(setEmail)} placeholder='abc@gmail.com' width='390px' height='63px' />
         </Box>
         {/* 대학 */}
         <Box isFlex width='525px' mt='25px' alignItems='center'>
           <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>대학</Text>
-          <Select placeholder='소속대학' width='390px' height='63px' onSelect={handleCollegeSelect}>
-            <option>글로벌인문지역대학</option>
-            <option>사회과학대학</option>
-            <option>법과대학</option>
-            <option>경상대학</option>
-            <option>경영대학</option>
-            <option>창의공과대학</option>
-            <option>과학기술대학</option>
-            <option>예술대학</option>
-            <option>체육대학</option>
-            <option>조형대학</option>
-            <option>소프트웨어융합대학</option>
-            <option>건축대학</option>
-            <option>자동차융합대학</option>
+          <Select placeholder='소속대학' width='390px' height='63px' initialSelection={collegeIndex} onSelect={handleCollegeSelect}>
+            {colleges.map((college, i) => <option key={i}>{college}</option>)}
           </Select>
         </Box>
         {/* 학과 */}
@@ -146,29 +130,21 @@ export const Settings = () => {
         {/* 학번 */}
         <Box isFlex width='525px' mt='25px' alignItems='center'>
           <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>학번</Text>
-          <Input value={studentNumber} onChange={handleInputChange(setStudentNumber)}
+          <Input value={id} onChange={() => {}}
             placeholder='학번 (ID)' width='390px' height='63px' />
         </Box>
         {/* 학년 */}
         <Box isFlex width='525px' mt='25px' alignItems='center'>
           <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>학년</Text>
-          <Select placeholder='학년' width='390px' height='63px' onSelect={handleGradeSelect}>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>
+          <Select placeholder='학년' width='390px' height='63px' initialSelection={grade} onSelect={handleGradeSelect}>
+            {grades.map((grade) => <option key={grade}>{grade}</option>)}
           </Select>
         </Box>
         {/* 재학여부 */}
         <Box isFlex width='525px' mt='25px' alignItems='center'>
           <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>재학여부</Text>
-          <Select placeholder='재학여부' width='390px' height='63px' onSelect={handleAttendanceSelect}>
-            <option>재학</option>
-            <option>휴학</option>
-            <option>졸업</option>
-            <option>기타</option>
+          <Select placeholder='재학여부' width='390px' height='63px' initialSelection={attendance} onSelect={handleAttendanceSelect}>
+            {attendances.map((attendance, i) => <option key={i}>{attendance}</option>)}
           </Select>
         </Box>
       </Box>

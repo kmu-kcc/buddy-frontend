@@ -1,12 +1,14 @@
-import React, {useEffect, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
+import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 import {background, BackgroundProps} from 'styled-system';
 import {toast} from 'react-toastify';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
-import {searchMember} from '../../store/actions/memberActions';
+import {searchMember, setCurrentMember} from '../../store/actions/memberActions';
 import {Box, Button, Text} from '../../components';
 import {CommonMessage, MemberMessage} from '../../common/wordings';
+import {User} from '../../models/User';
 
 const CardLine = styled.div`
   box-sizing: border-box;
@@ -42,15 +44,36 @@ const EllipsisText = styled(Text)`
   overflow: hidden;
 `;
 
-interface MemberCardProps {
-  username?: string;
-  univnumber?: string;
-  major?: string;
+interface MemberCardProps extends User {
   group?: string;
 }
 
-const MemberCard = (MemberCardProps: MemberCardProps) => {
-  const {group, username, univnumber, major} = MemberCardProps;
+const MemberCard = (props: MemberCardProps) => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const handleMoreClick = useCallback(async () => {
+    try {
+      dispatch(setCurrentMember({
+        id: props.id,
+        name: props.name,
+        department: props.department,
+        attendance: props.attendance,
+        email: props.email,
+        grade: props.grade,
+        phone: props.phone,
+        created_at: props.created_at,
+        password: '',
+        role: props.role,
+      }));
+      history.push('/organization/members/settings');
+    } catch (err) {
+      console.log(err);
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch, history, props]);
+
+  const {group, name, id, department} = props;
   return (
     <Box maxWidth='300px' isFlex flexDirection='column' pt='44px' pb='34px' alignItems='center'>
       <Box isFlex width='100%' alignItems='baseline' px='34px'>
@@ -60,17 +83,17 @@ const MemberCard = (MemberCardProps: MemberCardProps) => {
       <Box isFlex mt='28px' px='44px' flexDirection='column'>
         <Box isFlex>
           <Text color='#8D8C85' fontWeight={500} fontSize='16px' lineHeight='20px'>이름</Text>
-          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{username}</EllipsisText>
+          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{name}</EllipsisText>
         </Box>
         <Box isFlex mt='24px'>
           <Text color='#8D8C85' fontWeight={500} fontSize='16px' lineHeight='20px'>학번</Text>
-          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{univnumber}</EllipsisText>
+          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{id}</EllipsisText>
         </Box>
         <Box isFlex mt='24px'>
           <Text color='#8D8C85' fontWeight={500} fontSize='16px' lineHeight='20px'>학과</Text>
-          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{major}</EllipsisText>
+          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{department.split(' ').slice(0, 1).join(' ')}</EllipsisText>
         </Box>
-        <Button mt='30px' py='0' width='100%' height='40px' fontSize='14px' lineHeight='18px'>더 보기</Button>
+        <Button mt='30px' py='0' width='100%' height='40px' fontSize='14px' lineHeight='18px' onClick={handleMoreClick}>더 보기</Button>
       </Box>
     </Box>
   );
@@ -87,17 +110,6 @@ export const Members = () => {
     const role = member.role;
     return !(role?.activity_management || role?.fee_management || role?.member_management);
   }), [members]);
-
-  const CardListAdmin = adminUsers.map((info, idx) => (
-    <Box border='2px solid #6D48E5' borderRadius='37px' key={idx}>
-      <MemberCard group='운영자' username={info.name} univnumber={info.id} major={info.department.split(' ').slice(1).join(' ')} />
-    </Box>
-  ));
-  const CardListMember = normalUsers.map((info, idx) => (
-    <Box border='2px solid #FFD646' borderRadius='37px' key={idx}>
-      <MemberCard group='동아리원' username={info.name} univnumber={info.id} major={info.department.split(' ').slice(1).join(' ')} />
-    </Box>
-  ));
 
   useEffect(() => {
     (async () => {
@@ -124,14 +136,22 @@ export const Members = () => {
         <GroupNameShadow background='#EFEBFC' />
       </Box>
       <Box isFlex flexWrap='wrap' style={{gap: '30px'}}>
-        {adminUsers.length > 0 ? CardListAdmin : <Text width='100%' textAlign='center' fontWeight={400} fontSize='20px'>회원이 없습니다.</Text>}
+        {adminUsers.length > 0 ? adminUsers.map((info, idx) => (
+          <Box border='2px solid #6D48E5' borderRadius='37px' key={idx}>
+            <MemberCard group='운영자' {...info} />
+          </Box>
+        )) : <Text width='100%' textAlign='center' fontWeight={400} fontSize='20px'>회원이 없습니다.</Text>}
       </Box>
       <Box width='80px' height='30px' mt='62px' position='relative' mb='28px'>
         <GroupName>동아리원</GroupName>
         <GroupNameShadow background='#FFF5D1' />
       </Box>
       <Box isFlex flexWrap='wrap' style={{gap: '30px'}}>
-        {normalUsers.length > 0 ? CardListMember : <Text width='100%' textAlign='center' fontWeight={400} fontSize='20px'>회원이 없습니다.</Text>}
+        {normalUsers.length > 0 ? normalUsers.map((info, idx) => (
+          <Box border='2px solid #FFD646' borderRadius='37px' key={idx}>
+            <MemberCard group='동아리원' {...info} />
+          </Box>
+        )) : <Text width='100%' textAlign='center' fontWeight={400} fontSize='20px'>회원이 없습니다.</Text>}
       </Box>
     </Box>
   );

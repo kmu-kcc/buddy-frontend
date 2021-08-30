@@ -58,10 +58,10 @@ export const getMy = (data: GetMyRequest) => {
 };
 
 // 10. Update(member spec 10번 api) - 회원 정보 갱신
-export interface UpdateMeRequest {
+export interface UpdateMemberRequest {
   id: string;
   update: {
-      password: string;
+      password?: string;
       department: string;
       phone: string;
       email: string;
@@ -70,7 +70,7 @@ export interface UpdateMeRequest {
   }
 }
 
-export const updateMe = (data: UpdateMeRequest) => {
+export const updateMember = (data: UpdateMemberRequest) => {
   return getRequest().put('/member/update', {
     ...data,
   });
