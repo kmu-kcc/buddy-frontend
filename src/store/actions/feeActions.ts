@@ -98,7 +98,7 @@ export const pay = createAsyncThunk<void, apis.PayRequest, APIRejectResponse>('f
 
 export const deposit = createAsyncThunk<void, apis.DepositRequest, APIRejectResponse>('fee/deposit', async (data, thunkAPI) => {
   try {
-    const response = await apis.searchAccount(data);
+    const response = await apis.deposit(data);
     if (response.status === 200) {
       return;
     } else {
