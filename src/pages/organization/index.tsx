@@ -59,8 +59,8 @@ const Container = ({children}: Props) => {
       <Text mt='60px' mb='58px' color='#454440;' fontSize='40px' fontWeight={700}>조직관리</Text>
       <Box isFlex alignItems='start'>
         <Tab tabs={['동아리원 목록', '입부 신청내역', '퇴부 신청내역']} onTabChange={handleTabChange} />
-        {searchInputShow && <Input ml='auto' height='59px' width='433px' value={search}
-          logo={<Search mr='27px' width='24px' height='24px' color='#CBC8BE' />}
+        {searchInputShow && <Input ml='auto' height='59px' maxWidth='433px' value={search}
+          logo={<Search ml='27px' width='24px' height='24px' color='#CBC8BE' />}
           onChange={handleSearchChange} placeholder='Search' />}
       </Box>
       {children}

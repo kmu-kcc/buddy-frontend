@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import {
   color, ColorProps,
   FlexProps, HeightProps, WidthProps,
-  SpaceProps,
+  SpaceProps, MaxWidthProps,
   typography, TypographyProps,
 } from 'styled-system';
 import {Box} from './Box';
 
-interface WrapperProps extends FlexProps, SpaceProps, HeightProps, WidthProps{
+interface WrapperProps extends FlexProps, SpaceProps, HeightProps, WidthProps, MaxWidthProps {
   error?: boolean;
   empty?: boolean;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;

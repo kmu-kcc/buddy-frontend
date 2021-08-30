@@ -6,8 +6,8 @@ import {useHistory} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
 import {setCurrentActivity, searchActivity} from '../../store/actions/activityActions';
-import {Text, Button, Box, SearchInput} from '../../components';
-import {Buddy} from '../../components/icons';
+import {Text, Button, Box, Input} from '../../components';
+import {Buddy, Search} from '../../components/icons';
 import {CommonMessage} from '../../common/wordings';
 import {Activity, ActivityType} from '../../models/Activity';
 
@@ -125,7 +125,9 @@ export const List = () => {
     <Box width='100%' py='48px' px='60px'>
       <Box isFlex width='100%' justifyContent='space-between'>
         <Text color='#454440' fontSize='40px' fontWeight={700} lineHeight='50px'>활동관리</Text>
-        <SearchInput onChange={handleInputChange} value={InputTextValue} placeholder='search' />
+        <Input onChange={handleInputChange} value={InputTextValue}
+          logo={<Search ml='27px' width='24px' height='24px' color='#CBC8BE' />}
+          placeholder='Search' />
       </Box>
       <Text fontSize='24px' lineHeight='29px' color='#454440' pt='60px' pb='20px'>스터디</Text>
       <Box isFlex>
