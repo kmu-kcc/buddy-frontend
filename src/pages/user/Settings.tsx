@@ -4,10 +4,11 @@ import styled from 'styled-components';
 import {toast} from 'react-toastify';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
-import {updateMemberRequest} from '../../store/actions/userActions';
+import {updateMemberRequest, withdraw} from '../../store/actions/userActions';
 import {Input, Select, Button, Box, Text, Popup, Span} from '../../components';
 import {Attendance} from '../../models/User';
 import {CommonMessage, SettingsMessage} from '../../common/wordings';
+import {clearCredentials} from '../../common/credentials';
 import {attendances, colleges, grades} from '../../common/common_data.json';
 
 const FloatButton = styled(Button)`
@@ -23,7 +24,7 @@ const FloatButton = styled(Button)`
 export const Settings = () => {
   const history = useHistory();
   const dispatch = useDispatch();
-  const {user, loading} = useSelector((state: RootState) => state.user);
+  const {user, loading, loadingWithdraw} = useSelector((state: RootState) => state.user);
   const [password, setPassword] = useState('');
   const [studentNumber, setStudentNumber] = useState(user?.id ?? '');
   const [college, setCollege] = useState(user?.department.split(' ')[0] ?? '');
@@ -36,18 +37,36 @@ export const Settings = () => {
   const [withdrawalPopupShow, setWithdrawalPopupShow] = useState(false);
   const collegeIndex = useMemo(() => colleges.indexOf(college), [college]);
 
-  const handleWithdrawalConfirm = useCallback(() => {
-    setWithdrawalPopupShow(false);
-  }, [setWithdrawalPopupShow]);
-  const handleWithdrawalCancel = useCallback(() => {
-    setWithdrawalPopupShow(false);
-  }, [setWithdrawalPopupShow]);
+  const handleWithdrawalConfirm = useCallback(async () => {
+    if (!studentNumber) {
+      toast.warn(SettingsMessage.needReload);
+      return;
+    }
+
+    if (loadingWithdraw) {
+      toast.info(CommonMessage.loading);
+      return;
+    }
+
+    try {
+      const response = await dispatch(withdraw({id: studentNumber}));
+      if (response.type === withdraw.fulfilled.type) {
+        toast.success(SettingsMessage.withdrawSuccess);
+        clearCredentials();
+        history.replace('/');
+      } else {
+        toast.error(response.payload as unknown as string);
+      }
+    } catch (err) {
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch, history, loadingWithdraw, studentNumber]);
   const handleWithdrawalClose = useCallback(() => {
     setWithdrawalPopupShow(false);
   }, []);
   const handleWithdrawalRequestPopupClick = useCallback(() => {
     setWithdrawalPopupShow(true);
-  }, [setWithdrawalPopupShow]);
+  }, []);
   const handleInputChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
       setState(event.target.value);
@@ -175,7 +194,10 @@ export const Settings = () => {
             border='1px solid #FF6845' onClick={handleWithdrawalRequestPopupClick}>
               퇴부신청
           </Button>
-          <Popup type='danger' onConfirm={handleWithdrawalConfirm} onCancel={handleWithdrawalCancel} onClose={handleWithdrawalClose} confirmLabel='확인' cancelLabel='취소' show={withdrawalPopupShow}>
+          <Popup type='danger'
+            confirmLabel='확인' cancelLabel='취소' show={withdrawalPopupShow}
+            onConfirm={handleWithdrawalConfirm}
+            onClose={handleWithdrawalClose}>
             <Text fontSize='20px' lineHeight='25px'>정말 <Span fontWeight={700}>퇴부</Span>하시겠습니까?</Text>
           </Popup>
         </Box>

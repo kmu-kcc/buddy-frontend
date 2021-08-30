@@ -16,9 +16,11 @@ export const SignUpMessage = {
 
 export const SettingsMessage = {
   empty: '모든 필드를 입력해주세요.',
+  needReload: '다시 시도해주세요.',
   updateSuccess: '정보가 저장되었습니다.',
   updateFail: '정보를 저장하는 중 문제가 발생했습니다.',
   loadingFail: '정보를 불러오는 중 문제가 발생했습니다.',
+  withdrawSuccess: '탈퇴 신청이 완료되었습니다.',
 };
 
 export const MemberMessage = {
