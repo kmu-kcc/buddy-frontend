@@ -1,5 +1,5 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {Route, useHistory, useLocation} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 import {toast} from 'react-toastify';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
@@ -7,7 +7,7 @@ import {searchMember} from '../../store/actions/memberActions';
 import {Box, Text, Input, Tab} from '../../components';
 import {Search} from '../../components/icons';
 import {Members} from './Members';
-import {Router} from '../../common/router';
+import {Router, Route} from '../../common/router';
 import {SignUpRequests} from './SignUpReqeusts';
 import {WithdrawRequests} from './WIthdrawRequests';
 import {MemberSettings} from './MemberSettings';
@@ -81,9 +81,9 @@ export const Organization = () => (
   <Container>
     <Router authentication>
       <Route path='/organization/members' exact component={Members} />
-      <Route path='/organization/members/settings' exact component={MemberSettings} />
-      <Route path='/organization/members/request/signup' exact component={SignUpRequests} />
-      <Route path='/organization/members/request/withdraw' exact component={WithdrawRequests} />
+      <Route path='/organization/members/settings' role='member_management' exact component={MemberSettings} />
+      <Route path='/organization/members/request/signup' role='member_management' exact component={SignUpRequests} />
+      <Route path='/organization/members/request/withdraw' role='member_management' exact component={WithdrawRequests} />
     </Router>
   </Container>
 );
