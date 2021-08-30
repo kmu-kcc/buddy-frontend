@@ -42,6 +42,7 @@ export const ActivityMessage = {
 };
 
 export const FeeMessage = {
+  successCreateFee: '회비 내역을 생성했습니다.',
   successTransaction: '회비 내역을 불러왔습니다.',
   successPayers: '납부자 목록을 불러왔습니다.',
   successDeptors: '미납부자 목록을 불러왔습니다.',
@@ -49,4 +50,5 @@ export const FeeMessage = {
   invalidDepositInfo: '입금 내역 정보를 확인해주세요..',
   successWithdraw: '출금 내역을 추가했습니다.',
   invalidWithdrawInfo: '입금 내역 정보를 확인해주세요..',
+  invalidFeeAmount: '회비 금액이 올바르지 않습니다.',
 };
