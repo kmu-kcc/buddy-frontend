@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useCallback, useEffect, useMemo} from 'react';
 import styled from 'styled-components';
 import {toast} from 'react-toastify';
 import {position, PositionProps} from 'styled-system';
@@ -34,6 +34,7 @@ const FloatButton = styled(Button)<PositionProps>`
 export const Account = () => {
   const dispatch = useDispatch();
   const {loadingDeposit, loadingTransaction, account, currentSemester} = useSelector((state: RootState) => state.fee);
+  const {user} = useSelector((state: RootState) => state.user);
 
   const [FilterClicked, setFilterClick] = useState(false);
   const [ExportClicked, setExportClick] = useState(false);
@@ -43,6 +44,7 @@ export const Account = () => {
   const [WithdrawPopupShow, setWithdrawPopupShow] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [withdrawDescription, setWithdrawDescription] = useState('');
+  const depositButtonVisible = useMemo(() => user?.role.fee_management, [user]);
 
   const fetchAccount = useCallback(async () => {
     if (loadingTransaction) {
@@ -196,8 +198,12 @@ export const Account = () => {
             total={100000} />
         )) : <Text mt='48px' width='100%' textAlign='center' fontSize='20px'>입출금 내역이 없습니다.</Text>}
       </Box>
-      <FloatButton right='303px' onClick={handleDepositRequestPopupClick}>입금 내역 추가</FloatButton>
-      <FloatButton right='50px' onClick={handleWithdrawRequestPopupClick} background='#FF6845' border='none'>출금 내역 추가</FloatButton>
+      {depositButtonVisible && (
+        <>
+          <FloatButton right='303px' onClick={handleDepositRequestPopupClick}>입금 내역 추가</FloatButton>
+          <FloatButton right='50px' onClick={handleWithdrawRequestPopupClick} background='#FF6845' border='none'>출금 내역 추가</FloatButton>
+        </>
+      )}
       <Popup width='500px' height='390px' type='primary' confirmLabel='추가' cancelLabel='닫기' show={depositPopupShow}
         onConfirm={handleDepositConfirm}
         onClose={handleDepositClose}>
