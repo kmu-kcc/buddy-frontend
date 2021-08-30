@@ -38,6 +38,9 @@ const initialState: State = {
 
 export const feeReducer = createReducer(initialState, (builder) => {
   builder
+      .addCase(actions.setSemester, (state, {payload}) => {
+        state.currentSemester = payload;
+      })
       .addCase(actions.createFee.pending, (state, action) => {
         state.loadingCreatefee = true;
       })
