@@ -1,6 +1,7 @@
 export const CommonMessage = {
   loading: '처리중입니다. 잠시만 기다려주세요.',
   error: '에러가 발생했습니다. 잠시 후에 다시 시도해주세요.',
+  noPermission: '접근 권한이 없습니다.',
 };
 
 export const SignInMessage = {
