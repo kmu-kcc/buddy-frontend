@@ -1,24 +1,30 @@
 import React, {useCallback, useMemo, useState} from 'react';
 import {useHistory, useLocation} from 'react-router-dom';
 import {useSelector} from 'react-redux';
-import {RootState} from '../../store';
-import {Box, Select, Tab, Button, Input, Text} from '../../components';
+import {RootState, useDispatch} from '../../store';
+import {setSemester} from '../../store/actions/feeActions';
+import {Box, Select, Tab, Button, Text} from '../../components';
 import {Router, Route} from '../../common/router';
 import {Account} from './Account';
 import {Members} from './Members';
 
 const paths = ['/fee/account', '/fee/members'];
 const menus = ['입출금내역 목록', '동아리원 목록'];
+const currentYear = new Date().getFullYear();
+const years = Array<number>(currentYear - 2020).fill(0).map((y) => y + 2021);
 
 interface Props {
   children: JSX.Element;
 }
 
 const Container = ({children}: Props) => {
+  const dispatch = useDispatch();
   const {user} = useSelector((state: RootState) => state.user);
+  const {currentSemester} = useSelector((state: RootState) => state.fee);
   const history = useHistory();
   const location = useLocation();
-  const [InputTextValue, setInputTextValue] = useState('');
+  const [year, setCurrentYear] = useState(currentSemester.year);
+  const [semester, setCurrentSemester] = useState(currentSemester.semester);
   const tabs = useMemo(() => {
     if (user?.role?.fee_management) {
       return menus;
@@ -27,14 +33,28 @@ const Container = ({children}: Props) => {
     }
   }, [user]);
 
-  const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputTextValue(event.target.value);
-  }, [setInputTextValue]);
   const handleTabChange = useCallback((index: number) => {
     if (location.pathname !== paths[index]) {
       history.push(paths[index]);
     }
   }, [history, location]);
+  const handleSemesterSelect = useCallback((index: number, value: string) => {
+    if (value === '1학기') {
+      setCurrentSemester(1);
+    } else {
+      setCurrentSemester(2);
+    }
+  }, []);
+  const handleYearSelect = useCallback((index: number, value: string) => {
+    setCurrentYear(Number(value));
+  }, []);
+
+  const handleSemesterChangeClick = useCallback(() => {
+    dispatch(setSemester({
+      year: Number(year),
+      semester,
+    }));
+  }, [dispatch, year, semester]);
 
   return (
     <Box isFlex flexDirection='column' width='100%' px='60px'>
@@ -42,12 +62,14 @@ const Container = ({children}: Props) => {
       <Box isFlex alignItems='start'>
         <Tab tabs={tabs} onTabChange={handleTabChange} />
         <Box ml='auto' isFlex>
-          <Input width='150px' onChange={handleInputChange} value={InputTextValue} placeholder='연도' />
-          <Select width='150px' ml='20px' placeholder='학기'>
-            <option>1학기</option>
-            <option>2학기</option>
+          <Select width='150px' placeholder='연도' initialSelection={year - 2021} onSelect={handleYearSelect}>
+            {years.map((year) => <option key={year}>{year}</option>)}
           </Select>
-          <Button ml='20px'>조회</Button>
+          <Select width='150px' ml='20px' placeholder='학기' initialSelection={semester - 1} onSelect={handleSemesterSelect}>
+            <option value='1'>1학기</option>
+            <option value='2'>2학기</option>
+          </Select>
+          <Button ml='20px' onClick={handleSemesterChangeClick}>조회</Button>
         </Box>
       </Box>
       {children}
