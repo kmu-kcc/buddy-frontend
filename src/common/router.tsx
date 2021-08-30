@@ -34,11 +34,11 @@ interface RouterProps {
 
 export const Router = ({authentication, children}: RouterProps) => {
   const dispatch = useDispatch();
-  const {user} = useSelector((state: RootState) => state.user);
+  const {user, loading} = useSelector((state: RootState) => state.user);
   const history = useHistory();
 
   useEffect(() => {
-    if (authentication) {
+    if (authentication && !loading) {
       const credentials = getCredentials();
       const credentialInfo = getCredentialInfo();
 
@@ -52,7 +52,7 @@ export const Router = ({authentication, children}: RouterProps) => {
         }));
       }
     }
-  }, [dispatch, history, authentication, user]);
+  }, [dispatch, history, authentication, user, loading]);
 
   return (
     <Switch>
