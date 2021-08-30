@@ -1,6 +1,5 @@
 import React from 'react';
-import {Route} from 'react-router-dom';
-import {Router} from '../../common/router';
+import {Router, Route} from '../../common/router';
 import {Profile} from './Profile';
 import {Settings} from './Settings';
 

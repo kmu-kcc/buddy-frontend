@@ -1,9 +1,9 @@
 import React, {useCallback, useMemo, useState} from 'react';
-import {Route, useHistory, useLocation} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 import {useSelector} from 'react-redux';
 import {RootState} from '../../store';
 import {Box, Select, Tab, Button, Input, Text} from '../../components';
-import {Router} from '../../common/router';
+import {Router, Route} from '../../common/router';
 import {Account} from './Account';
 import {Members} from './Members';
 
@@ -59,7 +59,7 @@ export const Fee = () => (
   <Container>
     <Router authentication>
       <Route path='/fee/account' exact component={Account} />
-      <Route path='/fee/members' exact component={Members} />
+      <Route path='/fee/members' exact role='fee_management' component={Members} />
     </Router>
   </Container>
 );
