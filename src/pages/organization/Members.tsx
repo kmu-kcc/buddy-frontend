@@ -50,7 +50,7 @@ interface MemberCardProps extends User {
 }
 
 const MemberCard = (props: MemberCardProps) => {
-  const {group, name, id, department} = props;
+  const {group, name, id, department, ...rest} = props;
   const dispatch = useDispatch();
   const {user} = useSelector((state: RootState) => state.user);
   const history = useHistory();
@@ -65,23 +65,17 @@ const MemberCard = (props: MemberCardProps) => {
   const handleMoreClick = useCallback(async () => {
     try {
       dispatch(setCurrentMember({
-        id: props.id,
-        name: props.name,
-        department: props.department,
-        attendance: props.attendance,
-        email: props.email,
-        grade: props.grade,
-        phone: props.phone,
-        created_at: props.created_at,
-        password: '',
-        role: props.role,
+        name,
+        id,
+        department,
+        ...rest,
       }));
       history.push('/organization/members/settings');
     } catch (err) {
       console.log(err);
       toast.error(CommonMessage.error);
     }
-  }, [dispatch, history, props]);
+  }, [dispatch, history, name, id, department, rest]);
 
   return (
     <Box maxWidth='300px' isFlex flexDirection='column' pt='44px' pb='34px' alignItems='center'>

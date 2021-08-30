@@ -6,6 +6,7 @@ import {getWithdrawalRequests, deleteMember, changeCheckedInWithdrawalRequests} 
 import {Box, Button, MemberCard, Popup, Text, Span} from '../../components';
 import {CommonMessage, MemberRequestsMessage} from '../../common/wordings';
 import {User} from '../../models/User';
+import {convertToMillis} from '../../utils/time';
 
 export const WithdrawRequests = () => {
   const dispatch = useDispatch();
@@ -85,7 +86,7 @@ export const WithdrawRequests = () => {
               univnumber={info.id}
               major={info.department.split(' ').slice(1).join(' ')}
               phone={info.phone}
-              date={info.updated_at}
+              date={convertToMillis(info.updated_at)}
               checked={info.checked}
               onClick={handleCheck(idx)} />
           </Box>

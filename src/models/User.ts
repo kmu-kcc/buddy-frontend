@@ -22,8 +22,8 @@ export interface User {
   role: UserRole;
   approved?: boolean;
   on_delete?: boolean;
-  created_at?: string;
-  updated_at?: string;
+  created_at: string;
+  updated_at: string;
   //  locally used
   checked?: boolean;
 }
