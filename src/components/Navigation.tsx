@@ -134,7 +134,7 @@ export const Navigation = () => {
   const hidden = useMemo(() => {
     const pathname = location.pathname;
 
-    if (pathname.match(/\/auth/gi)) {
+    if (pathname.match(/\/auth/gi) || pathname === '/') {
       return true;
     }
     return false;
