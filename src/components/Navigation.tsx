@@ -2,7 +2,8 @@ import React, {useCallback, useMemo} from 'react';
 import styled from 'styled-components';
 import {useHistory, useLocation} from 'react-router-dom';
 import {Box, Span} from '../components';
-import {Activity, Organization, Fee, Profile} from '../components/icons';
+import {Activity, Organization, Fee, Profile, Exit} from '../components/icons';
+import {clearCredentials} from '../common/credentials';
 
 const Wrapper = styled(Box)`
   height: 100vh;
@@ -14,7 +15,7 @@ const Wrapper = styled(Box)`
   background-color: #6D48E5;
   border-radius: 0 20px 20px 0;
   padding-top: 60px;
-  padding-bottom: 60px;
+  padding-bottom: 30px;
 `;
 
 const IconWrapper = styled(Box)`
@@ -55,7 +56,7 @@ const ActivityTab = () => {
   }, [history]);
   return (
     <IconWrapper isFlex alignItems='flexStart' bg={active ? '#5635BF' : 'none'} onClick={handleClick}>
-      <Activity width='20px' height='20px' color='#F9F3FF'></Activity>
+      <Activity width='20px' height='20px' color='#F9F3FF' />
       <Span ml={['10px', '18px']} fontSize={['18px', '22px']} lineHeight={['22px', '26px']} color='#F9F3FF'>활동 관리</Span>
     </IconWrapper>
   );
@@ -70,7 +71,7 @@ const OrganizationTab = () => {
   }, [history]);
   return (
     <IconWrapper isFlex alignItems='flexStart' mt={['6px', '10px']} bg={active ? '#5635BF' : 'none'} onClick={handleClick}>
-      <Organization width='20px' height='20px' color='#F9F3FF'></Organization>
+      <Organization width='20px' height='20px' color='#F9F3FF' />
       <Span ml={['10px', '18px']} fontSize={['18px', '22px']} lineHeight={['22px', '26px']} color='#F9F3FF'>조직 관리</Span>
     </IconWrapper>
   );
@@ -85,7 +86,7 @@ const FeeTab = () => {
   }, [history]);
   return (
     <IconWrapper isFlex alignItems='flexStart' mt={['6px', '10px']} bg={active ? '#5635BF' : 'none'} onClick={handleClick}>
-      <Fee width='20px' height='20px' color='#F9F3FF'></Fee>
+      <Fee width='20px' height='20px' color='#F9F3FF' />
       <Span ml={['10px', '18px']} fontSize={['18px', '22px']} lineHeight={['22px', '26px']} color='#F9F3FF'>회계 관리</Span>
     </IconWrapper>
   );
@@ -100,8 +101,21 @@ const ProfileTab = () => {
   }, [history]);
   return (
     <IconWrapper isFlex alignItems='flexStart' mt={['6px', '10px']} bg={active ? '#5635BF' : 'none'} onClick={handleClick}>
-      <Profile width='20px' height='20px' color='#F9F3FF'></Profile>
+      <Profile width='20px' height='20px' color='#F9F3FF' />
       <Span ml={['10px', '18px']} fontSize={['18px', '22px']} lineHeight={['22px', '26px']} color='#F9F3FF'>내 정보</Span>
+    </IconWrapper>
+  );
+};
+
+const SignOut = () => {
+  const handleClick = useCallback(() => {
+    clearCredentials();
+    location.href = '/';
+  }, []);
+  return (
+    <IconWrapper isFlex alignItems='flexStart' mt='auto' onClick={handleClick}>
+      <Exit width='20px' height='20px' color='#F9F3FF' />
+      <Span ml={['10px', '18px']} fontSize={['18px', '22px']} lineHeight={['22px', '26px']} color='#F9F3FF'>로그아웃</Span>
     </IconWrapper>
   );
 };
@@ -125,6 +139,7 @@ export const Navigation = () => {
       <OrganizationTab />
       <FeeTab />
       <ProfileTab />
+      <SignOut />
     </Wrapper>
   );
 };
