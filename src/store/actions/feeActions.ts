@@ -112,7 +112,7 @@ export const deposit = createAsyncThunk<void, apis.DepositRequest, APIRejectResp
 
 export const exempt = createAsyncThunk<void, apis.ExemptRequest, APIRejectResponse>('fee/exempt', async (data, thunkAPI) => {
   try {
-    const response = await apis.searchAccount(data);
+    const response = await apis.exempt(data);
     if (response.status === 200) {
       return;
     } else {
