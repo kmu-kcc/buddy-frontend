@@ -9,6 +9,7 @@ import {searchMember, setCurrentMember} from '../../store/actions/memberActions'
 import {Box, Button, Text} from '../../components';
 import {CommonMessage, MemberMessage} from '../../common/wordings';
 import {User} from '../../models/User';
+import {isMaster} from '../../utils/env';
 
 const CardLine = styled.div`
   box-sizing: border-box;
@@ -45,12 +46,21 @@ const EllipsisText = styled(Text)`
 `;
 
 interface MemberCardProps extends User {
-  group?: string;
+  group: '운영자' | '동아리원';
 }
 
 const MemberCard = (props: MemberCardProps) => {
+  const {group, name, id, department} = props;
   const dispatch = useDispatch();
+  const {user} = useSelector((state: RootState) => state.user);
   const history = useHistory();
+  const editButtonVisible = useMemo(() => {
+    if (group === '운영자') {
+      return isMaster(user);
+    } else {
+      return user?.role.member_management;
+    }
+  }, [group, user]);
 
   const handleMoreClick = useCallback(async () => {
     try {
@@ -73,7 +83,6 @@ const MemberCard = (props: MemberCardProps) => {
     }
   }, [dispatch, history, props]);
 
-  const {group, name, id, department} = props;
   return (
     <Box maxWidth='300px' isFlex flexDirection='column' pt='44px' pb='34px' alignItems='center'>
       <Box isFlex width='100%' alignItems='baseline' px='34px'>
@@ -91,9 +100,9 @@ const MemberCard = (props: MemberCardProps) => {
         </Box>
         <Box isFlex mt='24px'>
           <Text color='#8D8C85' fontWeight={500} fontSize='16px' lineHeight='20px'>학과</Text>
-          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{department.split(' ').slice(0, 1).join(' ')}</EllipsisText>
+          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{department.split(' ').slice(1).join(' ')}</EllipsisText>
         </Box>
-        <Button mt='30px' py='0' width='100%' height='40px' fontSize='14px' lineHeight='18px' onClick={handleMoreClick}>더 보기</Button>
+        {editButtonVisible && <Button mt='30px' py='0' width='100%' height='40px' fontSize='14px' lineHeight='18px' onClick={handleMoreClick}>더 보기</Button>}
       </Box>
     </Box>
   );
