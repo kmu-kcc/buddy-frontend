@@ -81,6 +81,7 @@ export const feeReducer = createReducer(initialState, (builder) => {
       })
       .addCase(actions.searchDeptors.rejected, (state, action) => {
         state.loadingDeptors = false;
+        state.deptors = [];
       })
       .addCase(actions.searchAccount.pending, (state, action) => {
         state.loadingTransaction = true;
