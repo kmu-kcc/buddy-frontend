@@ -62,11 +62,11 @@ export interface UpdateMemberRequest {
   id: string;
   update: {
       password?: string;
-      department: string;
-      phone: string;
-      email: string;
-      grade: number;
-      attendance: Attendance;
+      department?: string;
+      phone?: string;
+      email?: string;
+      grade?: number;
+      attendance?: Attendance;
   }
 }
 

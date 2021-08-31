@@ -4,11 +4,11 @@ import styled from 'styled-components';
 import {toast} from 'react-toastify';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
-import {updateMemberRequest, withdraw} from '../../store/actions/userActions';
+import {getMeRequest, updateMemberRequest, withdraw} from '../../store/actions/userActions';
 import {Input, Select, Button, Box, Text, Popup, Span} from '../../components';
 import {Attendance} from '../../models/User';
 import {CommonMessage, SettingsMessage} from '../../common/wordings';
-import {clearCredentials} from '../../common/credentials';
+import {clearCredentials, getCredentialInfo} from '../../common/credentials';
 import {attendances, colleges, grades} from '../../common/common_data.json';
 
 const FloatButton = styled(Button)`
@@ -91,13 +91,42 @@ export const Settings = () => {
     }
     setAttendance(attendance);
   }, []);
+  const handlePasswordChangeClick = useCallback(async () => {
+    if (loading) {
+      toast.info(CommonMessage.loading);
+      return;
+    }
+
+    if (!studentNumber || !password) {
+      toast.warn(SettingsMessage.empty);
+      return;
+    }
+
+    try {
+      const response = await dispatch(updateMemberRequest({
+        id: studentNumber,
+        update: {
+          password,
+        },
+      }));
+
+      if (response.type === updateMemberRequest.fulfilled.type) {
+        toast.success(SettingsMessage.updatePasswordSuccess);
+      } else {
+        toast.error(response.payload as unknown as string);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch, loading, studentNumber, password]);
   const handleSubmit = useCallback(async () => {
     if (loading) {
       toast.info(CommonMessage.loading);
       return;
     }
 
-    if (attendance < 0 || !studentNumber || !college || !major || !email || !phoneNumber || !grade || !password) {
+    if (attendance < 0 || !studentNumber || !college || !major || !email || !phoneNumber || !grade) {
       toast.warn(SettingsMessage.empty);
       return;
     }
@@ -110,12 +139,18 @@ export const Settings = () => {
           department: `${college} ${major}`,
           email,
           grade,
-          password,
           phone: phoneNumber,
         },
       }));
       if (response.type === updateMemberRequest.fulfilled.type) {
         toast.success(SettingsMessage.updateSuccess);
+        const credentialInfo = getCredentialInfo();
+        if (!credentialInfo) {
+          return;
+        }
+        dispatch(getMeRequest({
+          ...credentialInfo,
+        }));
         history.replace('/user');
       } else {
         toast.error(response.payload as unknown as string);
@@ -125,7 +160,7 @@ export const Settings = () => {
       console.log(err);
       toast.error(CommonMessage.error);
     }
-  }, [dispatch, history, loading, studentNumber, attendance, college, major, email, grade, password, phoneNumber]);
+  }, [dispatch, history, loading, studentNumber, attendance, college, major, email, grade, phoneNumber]);
 
   return (
     <Box width='100%' pl='60px' pt='48px' pb='48px' position='relative'>
@@ -139,10 +174,11 @@ export const Settings = () => {
             width='390px' height='63px' />
         </Box>
         {/* 비밀번호 */}
-        <Box isFlex width='525px' mt='25px' alignItems='center'>
+        <Box isFlex width='680px' mt='25px' alignItems='center'>
           <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>비밀번호</Text>
-          <Input value={password} type='password' onChange={handleInputChange(setPassword)} placeholder='변경하기'
+          <Input value={password} type='password' onChange={handleInputChange(setPassword)} placeholder='변경할 비밀번호 입력'
             width='390px' height='63px' />
+          <Button ml='20px' height='63px' fontSize='20px' py='0' onClick={handlePasswordChangeClick}>변경</Button>
         </Box>
         {/* 전화번호 */}
         <Box isFlex width='525px' mt='25px' alignItems='center'>
@@ -178,7 +214,7 @@ export const Settings = () => {
         {/* 학년 */}
         <Box isFlex width='525px' mt='25px' alignItems='center'>
           <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>학년</Text>
-          <Select placeholder='학년' width='390px' height='63px' initialSelection={grade} onSelect={handleGradeSelect}>
+          <Select placeholder='학년' width='390px' height='63px' initialSelection={grade - 1} onSelect={handleGradeSelect}>
             {grades.map((grade) => <option key={grade}>{grade}</option>)}
           </Select>
         </Box>
