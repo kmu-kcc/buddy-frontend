@@ -8,7 +8,6 @@ import {searchAccount, deposit} from '../../store/actions/feeActions';
 import {Text, Button, Box, Input, Transaction, TransactionHeader, Popup, Span} from '../../components';
 import {Filter} from '../../components/icons';
 import {CommonMessage, FeeMessage} from '../../common/wordings';
-import {formatCurrency} from '../../utils/currency';
 import {convertToMillis} from '../../utils/time';
 
 const TotalBalanceContainer = styled(Box)`
@@ -169,14 +168,14 @@ export const Account = () => {
           <Box isFlex width='100%' flexDirection='column' alignItems='center'>
             <Text color='#fff' fontSize='18px' lineHeight='22px'>잔여 총액</Text>
             <Text mt='6px' color='#fff' fontSize='28px' fontWeight='bold' lineHeight='34px' textAlign='right'>
-              {!isNaN(account?.total ?? NaN) ? `${formatCurrency(account?.total as number)}` : '-'}원
+              {!isNaN(account?.total ?? NaN) ? `${account?.total.toLocaleString()}` : '-'}원
             </Text>
           </Box>
           <Box mt='24px' isFlex width='100%' alignItems='center' justifyContent='flex-end'>
             <Text color='#fff' fontSize='14px' lineHeight='22px'>
               이월 금액
               <Span ml='18px' fontWeight={700}>
-                {!isNaN(account?.carry_over ?? NaN) ? `${formatCurrency(account?.carry_over as number)}` : '-'}원
+                {!isNaN(account?.carry_over ?? NaN) ? `${account?.carry_over.toLocaleString()}` : '-'}원
               </Span>
             </Text>
           </Box>
