@@ -5,10 +5,12 @@ import {toast} from 'react-toastify';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
 import {updateMemberRequest} from '../../store/actions/userActions';
-import {Input, Select, Button, Box, Text} from '../../components';
+import {updateMemberRole} from '../../store/actions/memberActions';
+import {Input, Select, Button, Box, Check, Text} from '../../components';
 import {Attendance} from '../../models/User';
-import {CommonMessage, SettingsMessage} from '../../common/wordings';
+import {CommonMessage, MemberMessage, SettingsMessage} from '../../common/wordings';
 import {attendances, colleges, grades} from '../../common/common_data.json';
+import {isMaster} from '../../utils/env';
 
 const FloatButton = styled(Button)`
   width: 220px;
@@ -23,8 +25,10 @@ const FloatButton = styled(Button)`
 export const MemberSettings = () => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const {user} = useSelector((state: RootState) => state.user);
   const {currentMember, loading} = useSelector((state: RootState) => state.member);
   const id = currentMember?.id ?? '';
+
   const [name, setName] = useState(currentMember?.name ?? '');
   const [college, setCollege] = useState(currentMember?.department.split(' ')[0] ?? '');
   const [major, setMajor] = useState(currentMember?.department.split(' ').slice(1).join(' ') ?? '');
@@ -32,14 +36,18 @@ export const MemberSettings = () => {
   const [email, setEmail] = useState(currentMember?.email ?? '');
   const [grade, setGrade] = useState(currentMember?.grade ?? 0);
   const [attendance, setAttendance] = useState<Attendance>(currentMember?.attendance ?? -1);
+  const [isActivityManager, setActivityManager] = useState(currentMember?.role.activity_management ?? false);
+  const [isFeeManager, setFeeManager] = useState(currentMember?.role.fee_management ?? false);
+  const [isMemberManager, setMemberManager] = useState(currentMember?.role.member_management ?? false);
   const collegeIndex = useMemo(() => colleges.indexOf(college), [college]);
-
-  console.log(attendance);
 
   const handleInputChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
       setState(event.target.value);
     };
+  }, []);
+  const handleCheck = useCallback((setState: React.Dispatch<React.SetStateAction<boolean>>) => {
+    return (checked: boolean) => setState(checked);
   }, []);
   const handleCollegeSelect = useCallback((index: number, value: string) => {
     setCollege(value);
@@ -60,6 +68,28 @@ export const MemberSettings = () => {
     }
     setAttendance(attendance);
   }, []);
+
+  const handleUpdateRoleClick = useCallback(async () => {
+    try {
+      const response = await dispatch(updateMemberRole({
+        id,
+        role: {
+          activity_management: isActivityManager,
+          fee_management: isFeeManager,
+          member_management: isMemberManager,
+        },
+      }));
+
+      if (response.type === updateMemberRole.fulfilled.type) {
+        toast.success(MemberMessage.successUpdateRole);
+      } else {
+        toast.error(response.payload as unknown as string);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch, id, isActivityManager, isFeeManager, isMemberManager]);
   const handleSubmit = useCallback(async () => {
     if (loading) {
       toast.info(CommonMessage.loading);
@@ -147,6 +177,18 @@ export const MemberSettings = () => {
             {attendances.map((attendance, i) => <option key={i}>{attendance}</option>)}
           </Select>
         </Box>
+        {/* 권한 */}
+        {isMaster(user) && (
+          <Box isFlex width='525px' mt='25px' alignItems='center'>
+            <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>권한 설정</Text>
+            <Box isFlex width='250px' flexDirection='column'>
+              <Check boxShape='rectangle' size='16px' fontSize='20px' lineHeight='30px' label='회원 관리자' checked={isMemberManager} onCheck={handleCheck(setMemberManager)} />
+              <Check my='14px' boxShape='rectangle' size='16px' fontSize='20px' lineHeight='30px' label='활동 관리자' checked={isActivityManager} onCheck={handleCheck(setActivityManager)} />
+              <Check boxShape='rectangle' size='16px' fontSize='20px' lineHeight='30px' label='회계 관리자' checked={isFeeManager} onCheck={handleCheck((setFeeManager))} />
+            </Box>
+            <Button onClick={handleUpdateRoleClick}>저장</Button>
+          </Box>
+        )}
       </Box>
       <FloatButton width='220px' height='72px' onClick={handleSubmit}>저장하기</FloatButton>
     </Box>
