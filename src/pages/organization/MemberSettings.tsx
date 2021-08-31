@@ -26,7 +26,7 @@ export const MemberSettings = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const {user} = useSelector((state: RootState) => state.user);
-  const {currentMember, loading} = useSelector((state: RootState) => state.member);
+  const {currentMember, loading, loadingUpdateMemberRole} = useSelector((state: RootState) => state.member);
   const id = currentMember?.id ?? '';
 
   const [name, setName] = useState(currentMember?.name ?? '');
@@ -70,6 +70,11 @@ export const MemberSettings = () => {
   }, []);
 
   const handleUpdateRoleClick = useCallback(async () => {
+    if (loadingUpdateMemberRole) {
+      toast.info(CommonMessage.loading);
+      return;
+    }
+
     try {
       const response = await dispatch(updateMemberRole({
         id,
@@ -89,7 +94,7 @@ export const MemberSettings = () => {
       console.log(err);
       toast.error(CommonMessage.error);
     }
-  }, [dispatch, id, isActivityManager, isFeeManager, isMemberManager]);
+  }, [dispatch, loadingUpdateMemberRole, id, isActivityManager, isFeeManager, isMemberManager]);
   const handleSubmit = useCallback(async () => {
     if (loading) {
       toast.info(CommonMessage.loading);
