@@ -1,5 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
+import {WidthProps, HeightProps, MaxWidthProps, MaxHeightProps, MinWidthProps, MinHeightProps, PaddingProps} from 'styled-system';
 import {CSSTransition} from 'react-transition-group';
 import {Box, Button, ModalPortal} from '.';
 
@@ -29,9 +30,6 @@ const BackgroundWrapper = styled(Box)`
 `;
 
 const PopupWrapper = styled(Box)<{type: PopupType}>`
-  width: 500px;
-  height: 256px;
-  padding: 60px 80px;
   background-color: #fff;
   border: 1px solid ${({type}) => type === 'primary' ? '#6D48E5' : '#FF6845'};
   border-radius: 15px;
@@ -52,7 +50,7 @@ const RejectButton = styled(Button)<{type: PopupType}>`
   }
 `;
 
-interface PopupProps {
+interface PopupProps extends WidthProps, MinWidthProps, MaxWidthProps, HeightProps, MinHeightProps, MaxHeightProps, PaddingProps {
   children: JSX.Element | JSX.Element[];
   show: boolean;
   type: PopupType;
@@ -62,10 +60,22 @@ interface PopupProps {
   onConfirm?: () => void;
   onCancel?: () => void;
   hideCancelButton?: boolean;
+  marginContentBottom?: string;
+  marginButton?: string;
 }
 
-export const Popup = (props: PopupProps) => {
-  const {type, children, onConfirm, onCancel, onClose, confirmLabel, cancelLabel, hideCancelButton} = props;
+const defaultProps = {
+  width: '500px',
+  height: '256px',
+  p: '60px 80px',
+  marginContentBottom: '52px',
+  marginButton: '60px',
+};
+
+type Props = PopupProps & typeof defaultProps;
+
+export const Popup = (props: Props) => {
+  const {type, children, onConfirm, onCancel, onClose, confirmLabel, cancelLabel, hideCancelButton, marginContentBottom, marginButton, ...styles} = props;
   const [show, setShow] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 
@@ -118,14 +128,14 @@ export const Popup = (props: PopupProps) => {
     <ModalPortal>
       <CSSTransition in={show} timeout={300} classNames={fadeTransition} addEndListener={handleTransitionEnd}>
         <BackgroundWrapper>
-          <PopupWrapper type={type} ref={contentRef}>
-            <Box isFlex alignItems='center' justifyContent='center' mb='52px'>
+          <PopupWrapper type={type} ref={contentRef} {...styles}>
+            <Box isFlex alignItems='center' justifyContent='center' mb={marginContentBottom}>
               {children}
             </Box>
             <Box isFlex width='100%' justifyContent='center'>
               <ConfirmButton type={type} width='140px' height='48px' onClick={handleConfirmClick}>{confirmLabel}</ConfirmButton>
               {!hideCancelButton && (
-                <RejectButton type={type} width='140px' height='48px' ml='60px'
+                <RejectButton type={type} width='140px' height='48px' ml={marginButton}
                   onClick={handleCancelClick}>
                   {cancelLabel}
                 </RejectButton>
@@ -137,3 +147,5 @@ export const Popup = (props: PopupProps) => {
     </ModalPortal>
   ) : null;
 };
+
+Popup.defaultProps = defaultProps;

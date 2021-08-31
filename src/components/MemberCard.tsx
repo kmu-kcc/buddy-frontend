@@ -1,5 +1,6 @@
-import React, {useState, useCallback} from 'react';
+import React, {useCallback} from 'react';
 import styled from 'styled-components';
+import {format} from 'date-fns';
 import {Box, Button, Text} from '../components';
 
 const CardLine = styled.div`
@@ -38,31 +39,28 @@ border-color: ${({checked}) => checked ? '#6D48E5' : '#EFEBFC'};
 `;
 
 interface MemberCardProps {
-  username?: string;
-  univnumber?: string;
-  major?: string;
-  date?: string;
+  username: string;
+  univnumber: string;
+  major: string;
   group?: string;
-  phone?: string;
-  onCheck?: (checked: boolean) => void;
-  children?: React.ReactNode
+  phone: string;
+  date?: string;
+  checked?: boolean;
+  onClick?: () => void;
 }
 
 export const MemberCard = (MemberCardProps: MemberCardProps) => {
-  const [checked, setChecked] = useState(false);
-  const {children, group, username, univnumber, major, date, phone, onCheck} = MemberCardProps;
-  const handleCheck = useCallback(() => {
-    setChecked(!checked);
-    if (onCheck) {
-      onCheck(!checked);
+  const {checked, group, date, username, univnumber, major, phone, onClick} = MemberCardProps;
+  const handleClick = useCallback(() => {
+    if (onClick) {
+      onClick();
     }
-  }, [checked, setChecked, onCheck]);
+  }, [onClick]);
   return (
-    <Wrapper maxWidth='300px' isFlex flexDirection='column' pt='44px' pb='34px' alignItems='center' border='2px solid #EBEBEB' borderRadius='37px' checked={checked} onClick={handleCheck}>
-      {children}
+    <Wrapper maxWidth='300px' isFlex flexDirection='column' pt='44px' pb='34px' alignItems='center' border='2px solid #EBEBEB' borderRadius='37px' checked={checked || false} onClick={handleClick}>
       <Box isFlex width='100%' alignItems='baseline' px='34px'>
         <Text flex={1} fontWeight={700} fontSize='18px' lineHeight='22px'>{group}</Text>
-        <Text color='#CBC8BE;'>{date}</Text>
+        <Text color='#CBC8BE' fontWeight={400} fontSize='14px' lineHeight='17px'>{format(Number(date) ?? 0, 'yyyy-MM-dd')}</Text>
       </Box>
       <CardLine />
       <Box isFlex mt='28px' px='44px' flexDirection='column'>
@@ -82,7 +80,7 @@ export const MemberCard = (MemberCardProps: MemberCardProps) => {
           <Text color='#8D8C85' fontWeight={500} fontSize='16px' lineHeight='20px'>전화번호</Text>
           <EllipsisText ml='32px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{phone}</EllipsisText>
         </Box>
-        <Inbutton mt='30px' py='0' width='100%' height='40px' fontSize='14px' lineHeight='18px'>자세히 보기</Inbutton>
+        <Inbutton mt='30px' py='0' width='100%' height='40px' fontSize='14px' lineHeight='18px'>더 보기</Inbutton>
       </Box>
     </Wrapper>
   );

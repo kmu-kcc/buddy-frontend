@@ -1,2 +1,4 @@
 /build
 react-app-env.d.ts
+/src/store/apis/*
+/src/models/*

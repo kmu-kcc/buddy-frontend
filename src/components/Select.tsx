@@ -99,8 +99,8 @@ const defaultProps = {
 type Props = SelectProps & typeof defaultProps;
 
 export const Select = (props: Props) => {
-  const {children, height, placeholder, onSelect, ...styles} = props;
-  const [selected, setSelected] = useState(-1);
+  const {children, height, placeholder, onSelect, initialSelection, ...styles} = props;
+  const [selected, setSelected] = useState(initialSelection ?? -1);
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 

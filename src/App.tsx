@@ -1,29 +1,32 @@
 // import {Header} from 'antd/lib/layout/layout';
 import React from 'react';
-import {BrowserRouter, Route} from 'react-router-dom';
+import {BrowserRouter} from 'react-router-dom';
 import {ErrorBoundary} from 'react-error-boundary';
+import {Provider} from 'react-redux';
 import {Layout} from './components';
 import * as pages from './pages';
-import {Router} from './utils/router';
+import {Router, Route} from './common/router';
+import {store} from './store';
 
 const App = () => {
   return (
-    <BrowserRouter>
-      <Layout>
-        <ErrorBoundary FallbackComponent={pages.Fallback}>
-          <Router>
-            <Route path='/' exact component={pages.Landing} />
-            <Route path='/signup' component={pages.SignUp} />
-            <Route path='/signin' component={pages.SignIn} />
-            <Route path='/organization' component={pages.Organization} />
-            <Route path='/user' component={pages.User} />
-            <Route path='/activity' component={pages.Activity} />
-            <Route path='/fee' component={pages.Fee} />
-            <Route path='/test' component={pages.Test} />
-          </Router>
-        </ErrorBoundary>
-      </Layout>
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Layout>
+          <ErrorBoundary FallbackComponent={pages.Fallback}>
+            <Router>
+              <Route path='/' exact component={pages.Landing} />
+              <Route path='/auth' component={pages.Auth} />
+              <Route path='/organization' component={pages.Organization} />
+              <Route path='/user' component={pages.User} />
+              <Route path='/activity' role='activity_management' component={pages.Activity} />
+              <Route path='/fee' component={pages.Fee} />
+              <Route path='/test' role='member_management' component={pages.Test} />
+            </Router>
+          </ErrorBoundary>
+        </Layout>
+      </BrowserRouter>
+    </Provider>
   );
 };
 

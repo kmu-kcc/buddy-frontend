@@ -1,7 +1,8 @@
 import React, {useCallback, useState, useMemo} from 'react';
 import styled from 'styled-components';
-import {Button, Box, Check, Span, Tab, Text, Textarea, ToggleSwitch, Input, Popup, Select, TransactionList} from '../components';
-import {Arrow, Check as CheckIcon, Buddy, Filter, Search} from '../components/icons';
+import {toast} from 'react-toastify';
+import {Button, Box, Check, Span, Tab, Text, Textarea, ToggleSwitch, Input, Popup, Select} from '../components';
+import {Arrow, Check as CheckIcon, Buddy, Filter, Search, Activity, Organization, Fee, Profile, Exit} from '../components/icons';
 
 const StateLabel = styled.span<{active: boolean;}>`
   padding: 2px 6px;
@@ -116,7 +117,7 @@ export const Test = () => {
       </Box>
       <Box>
         <h2>Button</h2>
-        <Button mr='8px'>Button 1</Button>
+        <Button mr='8px' onClick={() => toast('Sample Toast')}>Button 1</Button>
         <Button mr='8px' onClick={handleClick}>{count} time clicked</Button>
         <Button onClick={handleErrorClick}>Click to occur error</Button>
       </Box>
@@ -190,6 +191,26 @@ export const Test = () => {
             <Search mb='8px' width='30px' height='30px' color='#000' />
             <Span>Search Icon (30x30)</Span>
           </Box>
+          <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+            <Activity mb='8px' width='30px' height='30px' color='#000' />
+            <Span>Activity Icon (30x30)</Span>
+          </Box>
+          <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+            <Fee mb='8px' width='30px' height='30px' color='#000' />
+            <Span>Fee Icon (30x30)</Span>
+          </Box>
+          <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+            <Organization mb='8px' width='30px' height='30px' color='#000' />
+            <Span>Organization Icon (30x30)</Span>
+          </Box>
+          <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+            <Profile mb='8px' width='30px' height='30px' color='#000' />
+            <Span>Profile Icon (30x30)</Span>
+          </Box>
+          <Box ml='4px' isInlineFlex minWidth='100px' height='80px' flexDirection='column' alignItems='center'>
+            <Exit mb='8px' width='30px' height='30px' color='#000' />
+            <Span>Exit Icon (30x30)</Span>
+          </Box>
         </Box>
       </Box>
       <Box>
@@ -197,7 +218,7 @@ export const Test = () => {
         <Box isFlex>
           <Box>
             <Button onClick={handleWSignUpRequestPopupClick}>Click to open popup</Button>
-            <Popup type='primary' confirmLabel='승인' cancelLabel='거절' show={signUpPopupShow}
+            <Popup width='700px' height='1000px' type='primary' confirmLabel='승인' cancelLabel='거절' show={signUpPopupShow}
               onConfirm={handleSignUpConfirm}
               onCancel={handleSignUpCancel}
               onClose={handleSignUpClose}>
@@ -221,10 +242,6 @@ export const Test = () => {
           <Tab tabs={tabs} initialTab={1} onTabChange={handleTabChange} />
           <Text mt='12px'>current active tab is index <Span color='#f00'>{activeTab}</Span></Text>
         </Box>
-      </Box>
-      <Box>
-        <h2>TransactionList</h2>
-        <TransactionList></TransactionList>
       </Box>
     </Box>
   );

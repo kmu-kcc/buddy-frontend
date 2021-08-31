@@ -1,67 +1,23 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState, useCallback, useEffect, useMemo} from 'react';
 import styled from 'styled-components';
+import {toast} from 'react-toastify';
 import {position, PositionProps} from 'styled-system';
-import {Text, Button, Box, Tab, SearchInput, TransactionList} from '../../components';
+import {useSelector} from 'react-redux';
+import {RootState, useDispatch} from '../../store';
+import {searchAccount, deposit} from '../../store/actions/feeActions';
+import {Text, Button, Box, Input, Transaction, TransactionHeader, Popup, Span} from '../../components';
+import {Filter} from '../../components/icons';
+import {CommonMessage, FeeMessage} from '../../common/wordings';
+import {convertToMillis} from '../../utils/time';
 
-const TempBudget = 1000000;
-
-const CarriedData = {
-  fee: 200000,
-  semester: '21년 1학기',
-  date: '21.08.04',
-};
-
-const comma = (num: number) =>{
-  return num.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',');
-};
-
-const FullBudget = styled.div<{Budget: number;}>`
-  width: 382px;
-  height: 90px;
+const TotalBalanceContainer = styled(Box)`
+  width: 380px;
+  display: flex;
+  flex-direction: column;
   background: #6D48E5;
   border-radius: 15px;
-  padding-right: 30px;
-  padding-left: 30px;
-  display: flex;
-  justify-content: space-between;
+  padding: 32px 30px 24px 30px;
   align-items: center;
-  margin-bottom: 58px;
-`;
-
-interface CarriedProps {
-  fee: number;
-  semester?: string;
-  date?: string;
-};
-
-const CarriedBudgetStyles = styled.div`
-  width: 436px;
-  height: 73px;
-  box-sizing: border-box;
-  border: 1px solid #6D48E5;
-  border-radius: 15px;
-  padding-right: 38px;
-  padding-left: 38px;
-  display: flex;
-  align-items: center;
-  margin-top: 14px;
-`;
-
-const Filter = styled.div<{FilterClicked: boolean;}>`
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 25px;
-  color: #8D8C85;
-  cursor: pointer;
-  right: 0;
-  &::after{
-    display: ${({FilterClicked}) => FilterClicked ? 'none': 'block'};
-    border: 1px solid #6D48E5;
-    width: 100px;
-    height: 100px;
-    background: #000000;
-    z-index: 10;
-  }
 `;
 
 const FloatButton = styled(Button)<PositionProps>`
@@ -74,98 +30,206 @@ const FloatButton = styled(Button)<PositionProps>`
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
 `;
 
-const CarriedBudget = (CarriedProps: CarriedProps) => {
-  const {fee, semester, date} = CarriedProps;
-  return (
-    <CarriedBudgetStyles>
-      <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='29px'>{date}</Text>
-      <Text color='#000000' fontSize='20px' fontWeight={500} lineHeight='25px' mr='63px'>{semester}</Text>
-      <Text color='#6D48E5' fontSize='20px' fontWeight='bold' lineHeight='25px'>{fee>=0? '+'+comma(fee):'-'+comma(fee)}</Text>
-    </CarriedBudgetStyles>
-  );
-};
-
-const Line = styled.div`
-  box-sizing: border-box;
-  width: 821px;
-  height: 1px;
-  background-color: #CBC8BE;
-  margin-top: 22px;
-`;
-
 export const Account = () => {
-  const [InputTextValue, setInputTextValue] = useState('');
+  const dispatch = useDispatch();
+  const {loadingDeposit, loadingTransaction, account, currentSemester} = useSelector((state: RootState) => state.fee);
+  const {user} = useSelector((state: RootState) => state.user);
+
   const [FilterClicked, setFilterClick] = useState(false);
   const [ExportClicked, setExportClick] = useState(false);
-  const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputTextValue(event.target.value);
-  }, [setInputTextValue]);
+  const [depositPopupShow, setDepositPopupShow] = useState(false);
+  const [depositAmount, setDepositAmount] = useState('');
+  const [depositDescription, setDepositDescription] = useState('');
+  const [WithdrawPopupShow, setWithdrawPopupShow] = useState(false);
+  const [withdrawAmount, setWithdrawAmount] = useState('');
+  const [withdrawDescription, setWithdrawDescription] = useState('');
+  const depositButtonVisible = useMemo(() => user?.role.fee_management, [user]);
+  const balances = useMemo(() => account?.logs.reduce((acc = [], log) => [...acc, acc[acc.length - 1] + log.amount], [account.carry_over]) ?? [], [account]);
+
+  const fetchAccount = useCallback(async () => {
+    if (loadingTransaction) {
+      toast.info(CommonMessage.loading);
+      return;
+    }
+
+    try {
+      const response = await dispatch(searchAccount({
+        ...currentSemester,
+      }));
+
+      if (response.type === searchAccount.fulfilled.type) {
+        toast.success(FeeMessage.successTransaction);
+      } else {
+        toast.error(response.payload);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch, loadingTransaction, currentSemester]);
+
   const handleFilterClick = useCallback(() => {
     setFilterClick(!FilterClicked);
-  }, [FilterClicked, setFilterClick]);
+  }, [FilterClicked]);
   const handleExportClick = useCallback(() => {
     setExportClick(!ExportClicked);
-  }, [ExportClicked, setExportClick]);
+  }, [ExportClicked]);
+  const handleTextChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
+      setState(event.target.value);
+    };
+  }, []);
+
+  const handleDepositRequestPopupClick = useCallback(() => {
+    setDepositPopupShow(true);
+  }, []);
+  const handleDepositConfirm = useCallback(async () => {
+    if (loadingDeposit) {
+      toast.info(CommonMessage.loading);
+      return;
+    }
+
+    if (Number(depositAmount) === NaN || !depositDescription) {
+      toast.warn(FeeMessage.invalidDepositInfo);
+      return;
+    }
+
+    try {
+      const response = await dispatch(deposit({
+        amount: Number(depositAmount),
+        description: depositDescription,
+        ...currentSemester,
+      }));
+
+      if (response.type === deposit.fulfilled.type) {
+        toast.success(FeeMessage.successDeposit);
+        setDepositAmount('');
+        setDepositDescription('');
+        fetchAccount();
+      } else {
+        toast.error(response.payload as unknown as string);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch, loadingDeposit, depositAmount, depositDescription, currentSemester, fetchAccount]);
+  const handleDepositClose = useCallback(() => {
+    setDepositPopupShow(false);
+  }, []);
+  const handleWithdrawRequestPopupClick = useCallback(() => {
+    setWithdrawPopupShow(true);
+  }, []);
+  const handleWithdrawConfirm = useCallback(async () => {
+    if (loadingDeposit) {
+      toast.info(CommonMessage.loading);
+      return;
+    }
+
+    if (Number(withdrawAmount) === NaN || !withdrawDescription) {
+      toast.warn(FeeMessage.invalidWithdrawInfo);
+      return;
+    }
+
+    try {
+      const response = await dispatch(deposit({
+        amount: Number(withdrawAmount) * -1,
+        description: withdrawDescription,
+        ...currentSemester,
+      }));
+
+      if (response.type === deposit.fulfilled.type) {
+        toast.success(FeeMessage.successWithdraw);
+        setWithdrawAmount('');
+        setWithdrawDescription('');
+        fetchAccount();
+      } else {
+        toast.error(response.payload as unknown as string);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch, loadingDeposit, withdrawAmount, withdrawDescription, currentSemester, fetchAccount]);
+  const handleWithdrawClose = useCallback(() => {
+    setWithdrawPopupShow(false);
+  }, []);
+
+  useEffect(() => {
+    fetchAccount();
+  //  eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
-    <Box width='100%' py='48px' px='60px'>
-      <Box isBlock>
-        <Text color='#454440' fontSize='40px' fontWeight={700} lineHeight='50px'>회계관리</Text>
-        <Box isFlex width='100%' mt='32px' alignItems='flex-end' justifyContent='space-between'>
-          <Tab tabs={['입출금내역 목록', '동아리원 목록']} />
-          <SearchInput onChange={handleInputChange} value={InputTextValue} placeholder='search' />
-        </Box>
+    <Box isFlex width='100%' flexDirection='row' flexWrap='wrap'>
+      <Box mr='64px'>
+        <Text mt='48px' ml='12px' color='#454440' fontSize='24px' fontWeight={700} lineHeight='30.05px'>전체금액</Text>
+        <TotalBalanceContainer mt='40px'>
+          <Box isFlex width='100%' flexDirection='column' alignItems='center'>
+            <Text color='#fff' fontSize='18px' lineHeight='22px'>잔여 총액</Text>
+            <Text mt='6px' color='#fff' fontSize='28px' fontWeight='bold' lineHeight='34px' textAlign='right'>
+              {!isNaN(account?.total ?? NaN) ? `${account?.total.toLocaleString()}` : '-'}원
+            </Text>
+          </Box>
+          <Box mt='24px' isFlex width='100%' alignItems='center' justifyContent='flex-end'>
+            <Text color='#fff' fontSize='14px' lineHeight='22px'>
+              이월 금액
+              <Span ml='18px' fontWeight={700}>
+                {!isNaN(account?.carry_over ?? NaN) ? `${account?.carry_over.toLocaleString()}` : '-'}원
+              </Span>
+            </Text>
+          </Box>
+        </TotalBalanceContainer>
       </Box>
-      <Box isFlex flexDirection='row' flexWrap='wrap'>
-        <Box flexBasis='34%'>
-          <Box isFlex mt='49px' mb='39px'>
-            <Text color='#454440' fontSize='24px' fontWeight={700} lineHeight='30.05px'>전체금액</Text>
-          </Box>
-          <FullBudget Budget={TempBudget}>
-            <Box isFlex>
-              <Text color='#ffffff' fontSize='18px' lineHeight='22px'>잔여 총액</Text>
-            </Box>
-            <Text color='#ffffff' fontSize='28px' fontWeight='bold' lineHeight='34px' textAlign='right'>{comma(TempBudget)}원</Text>
-          </FullBudget>
-          <Text color='#454440' fontSize='24px' fontWeight='bold' lineHeight='30px'>이월 목록</Text>
-          <Box isFlex mt='42px' padding='0 38px'>
-            <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='75px'>날짜</Text>
-            <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='122px'>내역</Text>
-            <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='49px'>금액</Text>
-          </Box>
-          <Box>
-            <CarriedBudget date={CarriedData.date} semester={CarriedData.semester} fee={CarriedData.fee} />
-          </Box>
-        </Box>
-        <Box flexBasis='66%' py='48px' px='60px'>
+      <Box flex={1} py='48px'>
+        <Box isFlex minWidth='600px' alignItems='center' justifyContent='space-between'>
           <Box isFlex alignItems='center' justifyContent='space-between'>
-            <Box isFlex alignItems='center' justifyContent='space-between'>
-              <Text color='#454440' fontSize='24px' fontWeight='bold' lineHeight='30px' mr='51px'>입출금내역 목록</Text>
-              <Button background='#FFD646' width='82px' height='27px'
-                fontSize='12px' fontWeight={500} lineHeight='15px' borderColor='#FFD646'
-                color='#000000' border='none' px='18.5px' py='6px' onClick={handleExportClick}>내보내기
-              </Button>
-            </Box>
-            <Filter FilterClicked={FilterClicked} onClick={handleFilterClick}>필터</Filter>
+            <Text color='#454440' fontSize='24px' fontWeight='bold' lineHeight='30px' mr='51px'>입출금 내역</Text>
+            <Button background='#FFD646' width='82px' height='27px'
+              fontSize='12px' fontWeight={500} lineHeight='15px' borderColor='#FFD646'
+              color='#000000' border='none' px='18.5px' py='6px' onClick={handleExportClick}>내보내기
+            </Button>
           </Box>
-          <Box isFlex mt='53px' width='821px'>
-            <Box isFlex justifyContent='space-between'>
-              <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' ml='32px' mr='130px'>날짜</Text>
-              <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px'>내역</Text>
-            </Box>
-            <Box isFlex justifyContent='space-betwen' ml='262px'>
-              <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='104px'>금액</Text>
-              <Text color='#8D8C85' fontSize='20px' fontWeight={500} lineHeight='25px' mr='96px'>잔액</Text>
-            </Box>
+          <Box isFlex alignItems='center' cursor='pointer' onClick={handleFilterClick}>
+            <Filter width='24px' height='24px' />
+            <Span ml='7px' color='#8D8C85' fontSize='20px' lineHeight='25px' fontWeight={500}>필터</Span>
           </Box>
-          <Line />
-          <TransactionList />
         </Box>
-        <Box isFlex alignItems='flex-end' justifyContent='space-between' right='50px'>
-          <FloatButton right='303px'>입금 내역 추가</FloatButton>
-          <FloatButton right='50px' background='#FF6845' border='none'>출금 내역 추가</FloatButton>
-        </Box>
+        <TransactionHeader />
+        {(account?.logs.length ?? 0) > 0 ? account?.logs.map((log, i) => (
+          <Transaction key={log.created_at}
+            date={convertToMillis(log.created_at)}
+            description={log.description}
+            amount={log.amount}
+            total={balances[i + 1]} />
+        )) : <Text mt='48px' width='100%' textAlign='center' fontSize='20px'>입출금 내역이 없습니다.</Text>}
       </Box>
+      {depositButtonVisible && (
+        <>
+          <FloatButton right='303px' onClick={handleDepositRequestPopupClick}>입금 내역 추가</FloatButton>
+          <FloatButton right='50px' onClick={handleWithdrawRequestPopupClick} background='#FF6845' border='none'>출금 내역 추가</FloatButton>
+        </>
+      )}
+      <Popup width='500px' height='390px' type='primary' confirmLabel='추가' cancelLabel='닫기' show={depositPopupShow}
+        onConfirm={handleDepositConfirm}
+        onClose={handleDepositClose}>
+        <Box isFlex flexDirection='column' justifyItems='center'>
+          <Text fontSize='20px' lineHeight='25px' mb='6px'>입금 내역 입력</Text>
+          <Input onChange={handleTextChange(setDepositDescription)} value={depositDescription} />
+          <Text fontSize='20px' lineHeight='25px' mt='25px' mb='6px'>입금 금액 입력</Text>
+          <Input type='number' onChange={handleTextChange(setDepositAmount)} value={depositAmount} />
+        </Box>
+      </Popup>
+      <Popup width='500px' height='390px' type='danger' confirmLabel='추가' cancelLabel='닫기' show={WithdrawPopupShow}
+        onConfirm={handleWithdrawConfirm}
+        onClose={handleWithdrawClose}>
+        <Box isFlex flexDirection='column'>
+          <Text fontSize='20px' lineHeight='25px' mb='6px'>출금 내역 입력</Text>
+          <Input onChange={handleTextChange(setWithdrawDescription)} value={withdrawDescription} />
+          <Text fontSize='20px' lineHeight='25px' mt='25px' mb='6px'>출금 금액 입력</Text>
+          <Input type='number' onChange={handleTextChange(setWithdrawAmount)} value={withdrawAmount} />
+        </Box>
+      </Popup>
     </Box>
   );
 };

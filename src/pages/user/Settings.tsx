@@ -1,6 +1,15 @@
-import React, {useCallback, useState} from 'react';
-import {Input, Select, Button, Box, Text, Popup, Span} from '../../components';
+import React, {useCallback, useMemo, useState} from 'react';
+import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
+import {toast} from 'react-toastify';
+import {useSelector} from 'react-redux';
+import {RootState, useDispatch} from '../../store';
+import {getMeRequest, updateMemberRequest, withdraw} from '../../store/actions/userActions';
+import {Input, Select, Button, Box, Text, Popup, Span} from '../../components';
+import {Attendance} from '../../models/User';
+import {CommonMessage, SettingsMessage} from '../../common/wordings';
+import {clearCredentials, getCredentialInfo} from '../../common/credentials';
+import {attendances, colleges, grades} from '../../common/common_data.json';
 
 const FloatButton = styled(Button)`
   width: 220px;
@@ -13,31 +22,145 @@ const FloatButton = styled(Button)`
 `;
 
 export const Settings = () => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const {user, loading, loadingWithdraw} = useSelector((state: RootState) => state.user);
   const [password, setPassword] = useState('');
-  const [studentNumber, setStudentNumber] = useState('');
-  const [major, setMajor] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
-  const [email, setEmail] = useState('');
-  const [name, setName] = useState('');
+  const [studentNumber, setStudentNumber] = useState(user?.id ?? '');
+  const [college, setCollege] = useState(user?.department.split(' ')[0] ?? '');
+  const [major, setMajor] = useState(user?.department.split(' ').slice(1).join(' ') ?? '');
+  const [phoneNumber, setPhoneNumber] = useState(user?.phone ?? '');
+  const [email, setEmail] = useState(user?.email ?? '');
+  const [grade, setGrade] = useState(user?.grade ?? 0);
+  const [name, setName] = useState(user?.name ?? '');
+  const [attendance, setAttendance] = useState(user?.attendance ?? -1);
   const [withdrawalPopupShow, setWithdrawalPopupShow] = useState(false);
+  const collegeIndex = useMemo(() => colleges.indexOf(college), [college]);
 
-  const handleWithdrawalConfirm = useCallback(() => {
-    setWithdrawalPopupShow(false);
-  }, [setWithdrawalPopupShow]);
-  const handleWithdrawalCancel = useCallback(() => {
-    setWithdrawalPopupShow(false);
-  }, [setWithdrawalPopupShow]);
+  const handleWithdrawalConfirm = useCallback(async () => {
+    if (!studentNumber) {
+      toast.warn(SettingsMessage.needReload);
+      return;
+    }
+
+    if (loadingWithdraw) {
+      toast.info(CommonMessage.loading);
+      return;
+    }
+
+    try {
+      const response = await dispatch(withdraw({id: studentNumber}));
+      if (response.type === withdraw.fulfilled.type) {
+        toast.success(SettingsMessage.withdrawSuccess);
+        clearCredentials();
+        history.replace('/');
+      } else {
+        toast.error(response.payload as unknown as string);
+      }
+    } catch (err) {
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch, history, loadingWithdraw, studentNumber]);
   const handleWithdrawalClose = useCallback(() => {
     setWithdrawalPopupShow(false);
   }, []);
   const handleWithdrawalRequestPopupClick = useCallback(() => {
     setWithdrawalPopupShow(true);
-  }, [setWithdrawalPopupShow]);
+  }, []);
   const handleInputChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
       setState(event.target.value);
     };
   }, []);
+  const handleCollegeSelect = useCallback((index: number, value: string) => {
+    setCollege(value);
+  }, []);
+  const handleGradeSelect = useCallback((index: number) => {
+    setGrade(index + 1);
+  }, []);
+  const handleAttendanceSelect = useCallback((index: number, value: string) => {
+    let attendance: Attendance;
+    if (value === '재학') {
+      attendance = Attendance.ATTENDING;
+    } else if (value === '휴학') {
+      attendance = Attendance.LEAVE_OF_ABSENCE;
+    } else if (value === '졸업') {
+      attendance = Attendance.GRADUATED;
+    } else {
+      attendance = -1;
+    }
+    setAttendance(attendance);
+  }, []);
+  const handlePasswordChangeClick = useCallback(async () => {
+    if (loading) {
+      toast.info(CommonMessage.loading);
+      return;
+    }
+
+    if (!studentNumber || !password) {
+      toast.warn(SettingsMessage.empty);
+      return;
+    }
+
+    try {
+      const response = await dispatch(updateMemberRequest({
+        id: studentNumber,
+        update: {
+          password,
+        },
+      }));
+
+      if (response.type === updateMemberRequest.fulfilled.type) {
+        toast.success(SettingsMessage.updatePasswordSuccess);
+      } else {
+        toast.error(response.payload as unknown as string);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch, loading, studentNumber, password]);
+  const handleSubmit = useCallback(async () => {
+    if (loading) {
+      toast.info(CommonMessage.loading);
+      return;
+    }
+
+    if (attendance < 0 || !studentNumber || !college || !major || !email || !phoneNumber || !grade) {
+      toast.warn(SettingsMessage.empty);
+      return;
+    }
+
+    try {
+      const response = await dispatch(updateMemberRequest({
+        id: studentNumber,
+        update: {
+          attendance,
+          department: `${college} ${major}`,
+          email,
+          grade,
+          phone: phoneNumber,
+        },
+      }));
+      if (response.type === updateMemberRequest.fulfilled.type) {
+        toast.success(SettingsMessage.updateSuccess);
+        const credentialInfo = getCredentialInfo();
+        if (!credentialInfo) {
+          return;
+        }
+        dispatch(getMeRequest({
+          ...credentialInfo,
+        }));
+        history.replace('/user');
+      } else {
+        toast.error(response.payload as unknown as string);
+      }
+      //  go back to user profile page
+    } catch (err) {
+      console.log(err);
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch, history, loading, studentNumber, attendance, college, major, email, grade, phoneNumber]);
 
   return (
     <Box width='100%' pl='60px' pt='48px' pb='48px' position='relative'>
@@ -51,10 +174,11 @@ export const Settings = () => {
             width='390px' height='63px' />
         </Box>
         {/* 비밀번호 */}
-        <Box isFlex width='525px' mt='25px' alignItems='center'>
+        <Box isFlex width='680px' mt='25px' alignItems='center'>
           <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>비밀번호</Text>
-          <Input value={password} type='password' onChange={handleInputChange(setPassword)} placeholder='변경하기'
+          <Input value={password} type='password' onChange={handleInputChange(setPassword)} placeholder='변경할 비밀번호 입력'
             width='390px' height='63px' />
+          <Button ml='20px' height='63px' fontSize='20px' py='0' onClick={handlePasswordChangeClick}>변경</Button>
         </Box>
         {/* 전화번호 */}
         <Box isFlex width='525px' mt='25px' alignItems='center'>
@@ -71,20 +195,8 @@ export const Settings = () => {
         {/* 대학 */}
         <Box isFlex width='525px' mt='25px' alignItems='center'>
           <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>대학</Text>
-          <Select placeholder='소속대학' width='390px' height='63px'>
-            <option value='글로벌인문지역대학'>글로벌인문지역대학</option>
-            <option value='사회과학대학'>사회과학대학</option>
-            <option value='법과대학'>법과대학</option>
-            <option value='경상대학'>경상대학</option>
-            <option value='경영대학'>경영대학</option>
-            <option value='창의공과대학'>창의공과대학</option>
-            <option value='과학기술대학'>과학기술대학</option>
-            <option value='예술대학'>예술대학</option>
-            <option value='체육대학'>체육대학</option>
-            <option value='조형대학'>조형대학</option>
-            <option value='소프트웨어융합대학'>소프트웨어융합대학</option>
-            <option value='건축대학'>건축대학</option>
-            <option value='자동차융합대학'>자동차융합대학</option>
+          <Select placeholder='소속대학' width='390px' height='63px' initialSelection={collegeIndex} onSelect={handleCollegeSelect}>
+            {colleges.map((college, i) => <option key={i}>{college}</option>)}
           </Select>
         </Box>
         {/* 학과 */}
@@ -102,23 +214,15 @@ export const Settings = () => {
         {/* 학년 */}
         <Box isFlex width='525px' mt='25px' alignItems='center'>
           <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>학년</Text>
-          <Select placeholder='학년' width='390px' height='63px'>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-            <option>6</option>
+          <Select placeholder='학년' width='390px' height='63px' initialSelection={grade - 1} onSelect={handleGradeSelect}>
+            {grades.map((grade) => <option key={grade}>{grade}</option>)}
           </Select>
         </Box>
         {/* 재학여부 */}
         <Box isFlex width='525px' mt='25px' alignItems='center'>
           <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>재학여부</Text>
-          <Select placeholder='재학여부' width='390px' height='63px'>
-            <option>재학</option>
-            <option>휴학</option>
-            <option>졸업</option>
-            <option>기타</option>
+          <Select placeholder='재학여부' width='390px' height='63px' initialSelection={attendance} onSelect={handleAttendanceSelect}>
+            {attendances.map((attendance, i) => <option key={i}>{attendance}</option>)}
           </Select>
         </Box>
         <Box>
@@ -126,12 +230,15 @@ export const Settings = () => {
             border='1px solid #FF6845' onClick={handleWithdrawalRequestPopupClick}>
               퇴부신청
           </Button>
-          <Popup type='danger' onConfirm={handleWithdrawalConfirm} onCancel={handleWithdrawalCancel} onClose={handleWithdrawalClose} confirmLabel='확인' cancelLabel='취소' show={withdrawalPopupShow}>
+          <Popup type='danger'
+            confirmLabel='확인' cancelLabel='취소' show={withdrawalPopupShow}
+            onConfirm={handleWithdrawalConfirm}
+            onClose={handleWithdrawalClose}>
             <Text fontSize='20px' lineHeight='25px'>정말 <Span fontWeight={700}>퇴부</Span>하시겠습니까?</Text>
           </Popup>
         </Box>
       </Box>
-      <FloatButton width='220px' height='72px'>저장하기</FloatButton>
+      <FloatButton width='220px' height='72px' onClick={handleSubmit}>저장하기</FloatButton>
     </Box>
   );
 };

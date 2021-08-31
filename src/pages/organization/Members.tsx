@@ -1,8 +1,15 @@
-import React, {useState, useCallback, useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo} from 'react';
+import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 import {background, BackgroundProps} from 'styled-system';
-import {Box, Input, Button, Text, Tab} from '../../components';
-import {Search} from '../../components/icons';
+import {toast} from 'react-toastify';
+import {useSelector} from 'react-redux';
+import {RootState, useDispatch} from '../../store';
+import {searchMember, setCurrentMember} from '../../store/actions/memberActions';
+import {Box, Button, Text} from '../../components';
+import {CommonMessage, MemberMessage} from '../../common/wordings';
+import {User} from '../../models/User';
+import {isMaster} from '../../utils/env';
 
 const CardLine = styled.div`
   box-sizing: border-box;
@@ -38,108 +45,116 @@ const EllipsisText = styled(Text)`
   overflow: hidden;
 `;
 
-const UserProfile = [
-  {
-    id: 1,
-    username: 'seonilKim',
-    univnumber: '20171379',
-    major: 'eletric engineering',
-    date: '2021.08.04',
-  },
-  {
-    id: 2,
-    username: 'hello',
-    univnumber: '20171380',
-    major: 'computer engineering',
-    date: '2021.08.11',
-  },
-  {
-    id: 3,
-    username: 'hellowolrd',
-    univnumber: '20128191',
-    major: 'computer science',
-    date: '2021.08.13',
-  },
-];
-
-interface MemberCardProps {
-  username?: string;
-  univnumber?: string;
-  major?: string;
-  date?: string;
-  group?: string;
+interface MemberCardProps extends User {
+  group: '운영자' | '동아리원';
 }
 
-const MemberCard = (MemberCardProps: MemberCardProps) => {
-  const {group, username, univnumber, major, date} = MemberCardProps;
+const MemberCard = (props: MemberCardProps) => {
+  const {group, name, id, department, ...rest} = props;
+  const dispatch = useDispatch();
+  const {user} = useSelector((state: RootState) => state.user);
+  const history = useHistory();
+  const editButtonVisible = useMemo(() => {
+    if (group === '운영자') {
+      return isMaster(user);
+    } else {
+      return user?.role.member_management;
+    }
+  }, [group, user]);
+
+  const handleMoreClick = useCallback(async () => {
+    try {
+      dispatch(setCurrentMember({
+        name,
+        id,
+        department,
+        ...rest,
+      }));
+      history.push('/organization/members/settings');
+    } catch (err) {
+      console.log(err);
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch, history, name, id, department, rest]);
+
   return (
     <Box maxWidth='300px' isFlex flexDirection='column' pt='44px' pb='34px' alignItems='center'>
       <Box isFlex width='100%' alignItems='baseline' px='34px'>
         <Text flex={1} fontWeight={700} fontSize='18px' lineHeight='22px'>{group}</Text>
-        <Text color='#CBC8BE;'>{date}</Text>
       </Box>
       <CardLine />
       <Box isFlex mt='28px' px='44px' flexDirection='column'>
         <Box isFlex>
           <Text color='#8D8C85' fontWeight={500} fontSize='16px' lineHeight='20px'>이름</Text>
-          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{username}</EllipsisText>
+          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{name}</EllipsisText>
         </Box>
         <Box isFlex mt='24px'>
           <Text color='#8D8C85' fontWeight={500} fontSize='16px' lineHeight='20px'>학번</Text>
-          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{univnumber}</EllipsisText>
+          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{id}</EllipsisText>
         </Box>
         <Box isFlex mt='24px'>
           <Text color='#8D8C85' fontWeight={500} fontSize='16px' lineHeight='20px'>학과</Text>
-          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{major}</EllipsisText>
+          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{department.split(' ').slice(1).join(' ')}</EllipsisText>
         </Box>
-        <Button mt='30px' py='0' width='100%' height='40px' fontSize='14px' lineHeight='18px'>더 보기</Button>
+        {editButtonVisible && <Button mt='30px' py='0' width='100%' height='40px' fontSize='14px' lineHeight='18px' onClick={handleMoreClick}>더 보기</Button>}
       </Box>
     </Box>
   );
 };
 
 export const Members = () => {
-  const [InputTextValue, setInputTextValue] = useState('');
-  const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputTextValue(event.target.value);
-  }, [setInputTextValue]);
-  const empty = useMemo(() => InputTextValue === '', [InputTextValue]);
-  const [activeTab, setActiveTab] = useState(1);
-  const handleTabChange = useCallback((index: number) => {
-    setActiveTab(index);
-  }, []);
-  const tabs = useMemo(() => ['동아리원 목록', '입부 신청내역', '퇴부 신청내역'], []);
-  const CardListAdmin = UserProfile.map((info, idx) => (
-    <Box border='2px solid #6D48E5' borderRadius='37px' key={idx}>
-      <MemberCard group='운영자' username={info.username} univnumber={info.univnumber} major={info.major} date={info.date} />
-    </Box>
-  ));
-  const CardListMember = UserProfile.map((info, idx) => (
-    <Box border='2px solid #FFD646' borderRadius='37px' key={idx}>
-      <MemberCard group='동아리원' username={info.username} univnumber={info.univnumber} major={info.major} date={info.date} />
-    </Box>
-  ));
+  const dispatch = useDispatch();
+  const {members} = useSelector((state: RootState) => state.member);
+  const adminUsers = useMemo(() => members.filter((member) => {
+    const role = member.role;
+    return role?.activity_management || role?.fee_management || role?.member_management;
+  }), [members]);
+  const normalUsers = useMemo(() => members.filter((member) => {
+    const role = member.role;
+    return !(role?.activity_management || role?.fee_management || role?.member_management);
+  }), [members]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await dispatch(searchMember({
+          keyword: '',
+        }));
+        if (response.type === searchMember.fulfilled.type) {
+          toast.success(MemberMessage.success);
+        } else {
+          toast.error(response.payload);
+        }
+      } catch (err) {
+        console.log(err);
+        toast(CommonMessage.error);
+      }
+    })();
+  }, [dispatch]);
 
   return (
-    <Box width='100%' py='48px' px='60px'>
-      <Text color='#454440' fontSize='40px' fontWeight={700} lineHeight='50px'>조직관리</Text>
-      <Box isFlex width='100%' mt='32px' alignItems='flex-end' justifyContent='space-between'>
-        <Tab tabs={tabs} initialTab={activeTab} onTabChange={handleTabChange} />
-        <Input empty={empty} logo={<Search mr='27px' width='24px' height='24px' color='#CBC8BE' />} onChange={handleInputChange} value={InputTextValue} placeholder='Search' />
-      </Box>
+    <Box>
       <Box isBlock width='80px' height='30px' mt='64px' position='relative' mb='28px'>
         <GroupName>운영자</GroupName>
         <GroupNameShadow background='#EFEBFC' />
       </Box>
       <Box isFlex flexWrap='wrap' style={{gap: '30px'}}>
-        {CardListAdmin}
+        {adminUsers.length > 0 ? adminUsers.map((info, idx) => (
+          <Box border='2px solid #6D48E5' borderRadius='37px' key={idx}>
+            <MemberCard group='운영자' {...info} />
+          </Box>
+        )) : <Text width='100%' textAlign='center' fontWeight={400} fontSize='20px'>회원이 없습니다.</Text>}
       </Box>
       <Box width='80px' height='30px' mt='62px' position='relative' mb='28px'>
         <GroupName>동아리원</GroupName>
         <GroupNameShadow background='#FFF5D1' />
       </Box>
       <Box isFlex flexWrap='wrap' style={{gap: '30px'}}>
-        {CardListMember}
+        {normalUsers.length > 0 ? normalUsers.map((info, idx) => (
+          <Box border='2px solid #FFD646' borderRadius='37px' key={idx}>
+            <MemberCard group='동아리원' {...info} />
+          </Box>
+        )) : <Text width='100%' textAlign='center' fontWeight={400} fontSize='20px'>회원이 없습니다.</Text>}
       </Box>
     </Box>
   );
