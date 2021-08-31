@@ -4,6 +4,15 @@ const ACCESS_TOKEN = 'access_token';
 const EXPIRED_AT = 'expired_at';
 const USER_ID = 'user_id';
 const USER_PW = 'user_pw';
+const SIGNIN_USER_ID = 'signin_user_id';
+
+export const setSignInUserId = (userId: string) => {
+  localStorage.setItem(SIGNIN_USER_ID, userId);
+};
+
+export const getSignInUserId = () => localStorage.getItem(SIGNIN_USER_ID) ?? '';
+
+export const clearSignInUserId = () => localStorage.removeItem(SIGNIN_USER_ID);
 
 export const clearCredentials = () => {
   localStorage.removeItem(ACCESS_TOKEN);

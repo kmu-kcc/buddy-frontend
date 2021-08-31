@@ -9,7 +9,7 @@ import {signInRequest, getMeRequest} from '../../store/actions/userActions';
 import {Input, Button, Box, Check, Popup, Text} from '../../components';
 import {Buddy} from '../../components/icons';
 import {CommonMessage, SignInMessage} from '../../common/wordings';
-import {setCredentialInfo} from '../../common/credentials';
+import {setCredentialInfo, setSignInUserId, getSignInUserId, clearSignInUserId} from '../../common/credentials';
 import {createInstance} from '../../store/apis';
 
 const LinkText = styled(Link)<SpaceProps & ColorProps>`
@@ -28,11 +28,13 @@ const UrlText = styled(Text)`
   `.withComponent('a');
 
 export const SignIn = () => {
-  const history = useHistory();
   const dispatch = useDispatch();
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
   const {loadingSignIn} = useSelector((state: RootState) => state.user);
+
+  const history = useHistory();
+  const [id, setId] = useState(getSignInUserId());
+  const [password, setPassword] = useState('');
+  const [idSaved, setIdSaved] = useState(false);
 
   const handleSignInClick = useCallback(async () => {
     if (loadingSignIn) {
@@ -49,6 +51,11 @@ export const SignIn = () => {
       const response = await dispatch(signInRequest({id, password}));
       if (response.type === signInRequest.fulfilled.type) {
         //  signin success
+        if (idSaved) {
+          setSignInUserId(id);
+        } else {
+          clearSignInUserId();
+        }
         setCredentialInfo(id, password);
         //  re-create API Request instsance to include credentials
         createInstance();
@@ -62,7 +69,8 @@ export const SignIn = () => {
       console.log(err);
       toast.error(CommonMessage.error);
     }
-  }, [history, dispatch, loadingSignIn, id, password]);
+  }, [history, dispatch, loadingSignIn, idSaved, id, password]);
+
   const handleInputChange = useCallback((setState: React.Dispatch<React.SetStateAction<string>>) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
       setState(event.target.value);
@@ -71,16 +79,11 @@ export const SignIn = () => {
   const handleInputEnterPress = useCallback(() => {
     handleSignInClick();
   }, [handleSignInClick]);
-  const [idSaved, setIdSaved] = useState(false);
   const handleCheck = useCallback(() => {
     setIdSaved(!idSaved);
   }, [idSaved, setIdSaved]);
-  const handleFIndAccountPopupClick = useCallback(() => {
-    setWithdrawalPopupShow(true);
-  }, []);
-  const handleWithdrawalClose = useCallback(() => {
-    setWithdrawalPopupShow(false);
-  }, []);
+  const handleFIndAccountPopupClick = useCallback(() => setWithdrawalPopupShow(true), []);
+  const handleWithdrawalClose = useCallback(() => setWithdrawalPopupShow(false), []);
 
   const [withdrawalPopupShow, setWithdrawalPopupShow] = useState(false);
   return (
