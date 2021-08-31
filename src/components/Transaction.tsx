@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import {format} from 'date-fns';
 import {Box} from './Box';
 import {Text} from './Text';
-import {formatCurrency} from '../utils/currency';
 
 const ColoredText = styled(Text)<{amount: number;}>`
   font-size: 20px;
@@ -34,10 +33,10 @@ export const Transaction = (props: TransactionProps) => {
   const {date, description, amount, total} = props;
   return (
     <Box isFlex py='27px' borderBottom='1px solid #CBC8BE'>
-      <Text flex={1} width='114px' color='#8D8C85' fontSize='20px' lineHeight='25px' fontWeight={500}>{format(Number(date), 'yy.MM.dd')}</Text>
-      <Text flex={3} color='#000' fontSize='20px' lineHeight='25px' fontWeight={500} width='198px'>{description}</Text>
-      <ColoredText flex={1} width='100px' amount={amount}>{formatCurrency(amount)}</ColoredText>
-      <Text flex={1} color='#8D8C85' fontSize='20px' lineHeight='25px' fontWeight={500}>{formatCurrency(total)}</Text>
+      <Text flex={1} ml='calc(100% / 18)' color='#8D8C85' fontSize='20px' lineHeight='25px' fontWeight={500}>{format(Number(date), 'yy.MM.dd')}</Text>
+      <Text flex={3} color='#000' fontSize='20px' lineHeight='25px' fontWeight={500}>{description}</Text>
+      <ColoredText flex={1} mr='12px' textAlign='right' amount={amount}>{amount > 0 ? '+' : ''}{amount.toLocaleString()}</ColoredText>
+      <Text flex={1} mr='calc(100% / 24)' color='#8D8C85' textAlign='right' fontSize='20px' lineHeight='25px' fontWeight={500}>{total.toLocaleString()}</Text>
     </Box>
   );
 };
