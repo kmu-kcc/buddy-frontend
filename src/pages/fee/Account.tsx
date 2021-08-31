@@ -45,6 +45,7 @@ export const Account = () => {
   const [withdrawAmount, setWithdrawAmount] = useState('');
   const [withdrawDescription, setWithdrawDescription] = useState('');
   const depositButtonVisible = useMemo(() => user?.role.fee_management, [user]);
+  const balances = useMemo(() => account?.logs.reduce((acc = [], log) => [...acc, acc[acc.length - 1] + log.amount], [account.carry_over]) ?? [], [account]);
 
   const fetchAccount = useCallback(async () => {
     if (loadingTransaction) {
@@ -196,12 +197,12 @@ export const Account = () => {
           </Box>
         </Box>
         <TransactionHeader />
-        {(account?.logs.length ?? 0) > 0 ? account?.logs.map((log) => (
+        {(account?.logs.length ?? 0) > 0 ? account?.logs.map((log, i) => (
           <Transaction key={log.created_at}
             date={convertToMillis(log.created_at)}
             description={log.description}
             amount={log.amount}
-            total={100000} />
+            total={balances[i + 1]} />
         )) : <Text mt='48px' width='100%' textAlign='center' fontSize='20px'>입출금 내역이 없습니다.</Text>}
       </Box>
       {depositButtonVisible && (
