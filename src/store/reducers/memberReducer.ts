@@ -7,11 +7,13 @@ interface State {
   currentMember: User | null;
   signUpRequests: User[] | null;
   withdrawalRequests: User[] | null;
+  signUpActivated: boolean;
   loading: boolean,
   loadingSignUpRequests: boolean,
   loadingWithdrawalRequests: boolean,
   loadingSignUpApproveRequests: boolean;
   loadingDeleteMemberRequests: boolean;
+  loadingactivateSignUp: boolean;
 };
 
 const initialState: State = {
@@ -19,11 +21,13 @@ const initialState: State = {
   currentMember: null,
   signUpRequests: [],
   withdrawalRequests: [],
+  signUpActivated: false,
   loading: false,
   loadingSignUpRequests: false,
   loadingWithdrawalRequests: false,
   loadingSignUpApproveRequests: false,
   loadingDeleteMemberRequests: false,
+  loadingactivateSignUp: false,
 };
 
 export const memberReducer = createReducer(initialState, (builder) => {
@@ -99,5 +103,19 @@ export const memberReducer = createReducer(initialState, (builder) => {
       .addCase(actions.searchMember.rejected, (state, action) => {
         state.loading = false;
         state.members = [];
+      })
+      .addCase(actions.getSignUpActivated.fulfilled, (state, {payload}) => {
+        state.signUpActivated = payload;
+      })
+      .addCase(actions.activateSignUp.pending, (state) => {
+        state.loadingactivateSignUp = true;
+      })
+      .addCase(actions.activateSignUp.fulfilled, (state, {payload}) => {
+        state.loadingactivateSignUp = false;
+        state.signUpActivated = payload;
+      })
+      .addCase(actions.activateSignUp.rejected, (state) => {
+        state.loadingactivateSignUp = false;
+        state.signUpActivated = false;
       });
 });
