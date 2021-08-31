@@ -25,6 +25,7 @@ export const SettingsMessage = {
 
 export const MemberMessage = {
   success: '데이터를 불러왔습니다.',
+  errorActivateSignUp: '회원가입 활성화 상태를 변경할 수 없습니다..',
 };
 
 export const MemberRequestsMessage = {
