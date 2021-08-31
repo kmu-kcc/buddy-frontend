@@ -13,6 +13,7 @@ interface State {
   loadingWithdrawalRequests: boolean,
   loadingSignUpApproveRequests: boolean;
   loadingDeleteMemberRequests: boolean;
+  loadingUpdateMemberRole: boolean;
   loadingSignUpActivated: boolean;
   loadingActivateSignUp: boolean;
 };
@@ -28,6 +29,7 @@ const initialState: State = {
   loadingWithdrawalRequests: false,
   loadingSignUpApproveRequests: false,
   loadingDeleteMemberRequests: false,
+  loadingUpdateMemberRole: false,
   loadingSignUpActivated: false,
   loadingActivateSignUp: false,
 };
@@ -105,6 +107,15 @@ export const memberReducer = createReducer(initialState, (builder) => {
       .addCase(actions.searchMember.rejected, (state, action) => {
         state.loading = false;
         state.members = [];
+      })
+      .addCase(actions.updateMemberRole.pending, (state) => {
+        state.loadingUpdateMemberRole = true;
+      })
+      .addCase(actions.updateMemberRole.fulfilled, (state) => {
+        state.loadingUpdateMemberRole = false;
+      })
+      .addCase(actions.updateMemberRole.rejected, (state) => {
+        state.loadingUpdateMemberRole = false;
       })
       .addCase(actions.activateSignUp.pending, (state) => {
         state.loadingActivateSignUp = true;

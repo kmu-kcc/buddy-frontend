@@ -98,6 +98,20 @@ export const searchMember = createAsyncThunk<User[], apis.SearchMemberRequest, A
   }
 });
 
+export const updateMemberRole = createAsyncThunk<void, apis.UpdateMemberRoleRequest, APIRejectResponse>('member/updateMemberRole', async (data, thunkAPI) => {
+  try {
+    const response = await apis.updateMemberRole(data);
+    if (response.status === 200) {
+      return;
+    } else {
+      return thunkAPI.rejectWithValue(response.data.error);
+    }
+  } catch (err) {
+    console.log(err);
+    return thunkAPI.rejectWithValue(err?.response?.data?.error);
+  }
+});
+
 export const getSignUpActivated = createAsyncThunk<boolean, void, APIRejectResponse>('member/getSignUpActivated', async (data, thunkAPI) => {
   try {
     const response = await apis.getSignUpActivated();

@@ -66,12 +66,12 @@ export const activateSignUp = (data: ActivateSignUpRequest) => {
 
 // 14. Update Role(member spec 14번 api) - 회원 권한 수정 (KCC 마스터 계정으로 권한 조정을 위해 필요)
 // 아직 구현은 안되어 있지만 이건 오가니제이션에서 나와야함 일단 권한 수정은 몽고 디비를 통해서도 가능하긴함.
-export interface UpdateUserRoleRequest {
+export interface UpdateMemberRoleRequest {
   id: string;
   role: UserRole;
 }
 
-export const updateUserRole = (data: UpdateUserRoleRequest) => {
+export const updateMemberRole = (data: UpdateMemberRoleRequest) => {
   return getRequest().put('/member/updaterole', {
     ...data,
   });
