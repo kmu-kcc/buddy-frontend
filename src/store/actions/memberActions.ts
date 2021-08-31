@@ -97,3 +97,31 @@ export const searchMember = createAsyncThunk<User[], apis.SearchMemberRequest, A
     return thunkAPI.rejectWithValue(err?.response?.data?.error);
   }
 });
+
+export const getSignUpActivated = createAsyncThunk<boolean, void, APIRejectResponse>('member/getSignUpActivated', async (data, thunkAPI) => {
+  try {
+    const response = await apis.getSignUpActivated();
+    if (response.status === 200) {
+      return response.data.data.active;
+    } else {
+      return thunkAPI.rejectWithValue(response.data.error);
+    }
+  } catch (err) {
+    console.log(err);
+    return thunkAPI.rejectWithValue(err?.response?.data?.error);
+  }
+});
+
+export const activateSignUp = createAsyncThunk<boolean, apis.ActivateSignUpRequest, APIRejectResponse>('member/activateSignUp', async (data, thunkAPI) => {
+  try {
+    const response = await apis.activateSignUp(data);
+    if (response.status === 200) {
+      return response.data.data.active;
+    } else {
+      return thunkAPI.rejectWithValue(response.data.error);
+    }
+  } catch (err) {
+    console.log(err);
+    return thunkAPI.rejectWithValue(err?.response?.data?.error);
+  }
+});
