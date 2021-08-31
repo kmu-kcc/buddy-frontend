@@ -3,9 +3,12 @@ import styled from 'styled-components';
 import {toast} from 'react-toastify';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
-import {getSignUpRequests, approveSignUp, deleteMember, changeCheckedInSignUpRequests} from '../../store/actions/memberActions';
-import {Box, Button, MemberCard, Popup, Text, Span} from '../../components';
-import {CommonMessage, MemberRequestsMessage} from '../../common/wordings';
+import {
+  getSignUpRequests, approveSignUp, deleteMember,
+  changeCheckedInSignUpRequests, getSignUpActivated, activateSignUp,
+} from '../../store/actions/memberActions';
+import {Box, Button, MemberCard, Popup, Text, ToggleSwitch, Span} from '../../components';
+import {CommonMessage, MemberMessage, MemberRequestsMessage} from '../../common/wordings';
 import {User} from '../../models/User';
 import {convertToMillis} from '../../utils/time';
 
@@ -16,15 +19,7 @@ const ReverseButton = styled(Button)`
 
 export const SignUpRequests = () => {
   const dispatch = useDispatch();
-  const {signUpRequests, loadingDeleteMemberRequests, loadingSignUpApproveRequests} = useSelector((state: RootState) => state.member);
-
-  const handleCheck = useCallback((index: number) => () => {
-    dispatch(changeCheckedInSignUpRequests({
-      index,
-      checked: !(signUpRequests as User[])[index].checked,
-    }));
-  }, [dispatch, signUpRequests]);
-
+  const {signUpRequests, signUpActivated, loadingDeleteMemberRequests, loadingSignUpApproveRequests, loadingactivateSignUp} = useSelector((state: RootState) => state.member);
   const [signUpPopupShow, setSignUpPopupShow] = useState(false);
   const [deleteMemberPopupShow, setDeleteMemberPopupShow] = useState(false);
 
@@ -37,13 +32,27 @@ export const SignUpRequests = () => {
         toast.error(response.payload);
       }
     } catch (err) {
+      console.log(err);
       toast.error(CommonMessage.error);
     }
   }, [dispatch]);
 
-  const handleDeleteMemberPopupClick = useCallback(() => {
-    setDeleteMemberPopupShow(true);
-  }, []);
+  const fetchSignUpActivated = useCallback(async () => {
+    try {
+      await dispatch(getSignUpActivated());
+    } catch (err) {
+      console.log(err);
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch]);
+
+  const handleCheck = useCallback((index: number) => () => {
+    dispatch(changeCheckedInSignUpRequests({
+      index,
+      checked: !(signUpRequests as User[])[index].checked,
+    }));
+  }, [dispatch, signUpRequests]);
+  const handleDeleteMemberPopupClick = useCallback(() => setDeleteMemberPopupShow(true), []);
   const handleDeleteMemberConfirm = useCallback(async () => {
     if (loadingDeleteMemberRequests) {
       toast.info(CommonMessage.loading);
@@ -65,12 +74,8 @@ export const SignUpRequests = () => {
       toast.error(CommonMessage.error);
     }
   }, [dispatch, fetchSignUpRequest, loadingDeleteMemberRequests, signUpRequests]);
-  const handleDeleteMemberClose = useCallback(() => {
-    setDeleteMemberPopupShow(false);
-  }, []);
-  const handleWSignUpPopupClick = useCallback(() => {
-    setSignUpPopupShow(true);
-  }, []);
+  const handleDeleteMemberClose = useCallback(() => setDeleteMemberPopupShow(false), []);
+  const handleWSignUpPopupClick = useCallback(() => setSignUpPopupShow(true), []);
   const handleSignUpConfirm = useCallback(async () => {
     if (loadingSignUpApproveRequests) {
       toast.info(CommonMessage.loading);
@@ -92,35 +97,39 @@ export const SignUpRequests = () => {
       toast.error(CommonMessage.error);
     }
   }, [dispatch, loadingSignUpApproveRequests, signUpRequests, fetchSignUpRequest]);
-  const handleSignUpClose = useCallback(() => {
-    setSignUpPopupShow(false);
-  }, []);
+  const handleSignUpClose = useCallback(() => setSignUpPopupShow(false), []);
+  const handleSignUpActiveChange = useCallback(async (toggled: boolean) => {
+    if (loadingactivateSignUp) {
+      toast.info(CommonMessage.loading);
+      return;
+    }
+
+    try {
+      const response = await dispatch(activateSignUp({
+        activate: toggled,
+      }));
+
+      if (response.type !== activateSignUp.fulfilled.type) {
+        toast.error(MemberMessage.errorActivateSignUp);
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(CommonMessage.error);
+    }
+  }, [dispatch, loadingactivateSignUp]);
 
   useEffect(() => {
     fetchSignUpRequest();
-  }, [fetchSignUpRequest]);
+    fetchSignUpActivated();
+  }, [fetchSignUpRequest, fetchSignUpActivated]);
 
   return (
     <Box>
-      <Box isFlex flexDirection='row-reverse' mt='36px'>
-        <Box>
-          <ReverseButton ml='21px' width='149px' height='54px' onClick={handleDeleteMemberPopupClick}>거부</ReverseButton>
-          <Popup type='danger' confirmLabel='거절' cancelLabel='닫기'
-            onClose={handleDeleteMemberClose}
-            onConfirm={handleDeleteMemberConfirm}
-            show={deleteMemberPopupShow}>
-            <Text fontSize='20px' lineHeight='25px'><Span fontWeight={700}>입부</Span>를 거절하시겠습니까?</Text>
-          </Popup>
-        </Box>
-        <Box>
-          <Button width='149px' height='54px' onClick={handleWSignUpPopupClick}>승인</Button>
-          <Popup type='primary' confirmLabel='승인' cancelLabel='닫기'
-            onClose={handleSignUpClose}
-            onConfirm={handleSignUpConfirm}
-            show={signUpPopupShow}>
-            <Text fontSize='20px' lineHeight='25px'><Span fontWeight={700}>입부</Span>를 승인하시겠습니까?</Text>
-          </Popup>
-        </Box>
+      <Box isFlex mt='36px' alignItems='center'>
+        <Text fontSize='18px' lineHeight='22px'>회원가입 활성화</Text>
+        <ToggleSwitch ml='16px' active={signUpActivated} onToggleClick={handleSignUpActiveChange} />
+        <Button ml='auto' width='149px' height='54px' onClick={handleWSignUpPopupClick}>승인</Button>
+        <ReverseButton ml='21px' width='149px' height='54px' onClick={handleDeleteMemberPopupClick}>거부</ReverseButton>
       </Box>
       <Box isFlex mt='33px' mb='50px' flexWrap='wrap'>
         {(signUpRequests?.length ?? 0) > 0 ? signUpRequests?.map((info, idx) => (
@@ -136,6 +145,18 @@ export const SignUpRequests = () => {
           </Box>
         )) : <Text width='100%' textAlign='center' fontWeight={400} fontSize='20px'>입부 신청이 없습니다.</Text>}
       </Box>
+      <Popup type='danger' confirmLabel='거절' cancelLabel='닫기'
+        onClose={handleDeleteMemberClose}
+        onConfirm={handleDeleteMemberConfirm}
+        show={deleteMemberPopupShow}>
+        <Text fontSize='20px' lineHeight='25px'><Span fontWeight={700}>입부</Span>를 거절하시겠습니까?</Text>
+      </Popup>
+      <Popup type='primary' confirmLabel='승인' cancelLabel='닫기'
+        onClose={handleSignUpClose}
+        onConfirm={handleSignUpConfirm}
+        show={signUpPopupShow}>
+        <Text fontSize='20px' lineHeight='25px'><Span fontWeight={700}>입부</Span>를 승인하시겠습니까?</Text>
+      </Popup>
     </Box>
   );
 };
