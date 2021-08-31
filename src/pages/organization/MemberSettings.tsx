@@ -171,7 +171,7 @@ export const MemberSettings = () => {
         {/* 학년 */}
         <Box isFlex width='525px' mt='25px' alignItems='center'>
           <Text flex={1} color='#454440' fontSize='20px' lineHeight='25px' fontWeight={700}>학년</Text>
-          <Select placeholder='학년' width='390px' height='63px' initialSelection={grade} onSelect={handleGradeSelect}>
+          <Select placeholder='학년' width='390px' height='63px' initialSelection={grade - 1} onSelect={handleGradeSelect}>
             {grades.map((grade) => <option key={grade}>{grade}</option>)}
           </Select>
         </Box>
