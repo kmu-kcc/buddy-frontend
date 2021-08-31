@@ -19,7 +19,7 @@ const ReverseButton = styled(Button)`
 
 export const SignUpRequests = () => {
   const dispatch = useDispatch();
-  const {signUpRequests, signUpActivated, loadingDeleteMemberRequests, loadingSignUpApproveRequests, loadingactivateSignUp} = useSelector((state: RootState) => state.member);
+  const {signUpRequests, signUpActivated, loadingDeleteMemberRequests, loadingSignUpApproveRequests, loadingActivateSignUp} = useSelector((state: RootState) => state.member);
   const [signUpPopupShow, setSignUpPopupShow] = useState(false);
   const [deleteMemberPopupShow, setDeleteMemberPopupShow] = useState(false);
 
@@ -99,7 +99,7 @@ export const SignUpRequests = () => {
   }, [dispatch, loadingSignUpApproveRequests, signUpRequests, fetchSignUpRequest]);
   const handleSignUpClose = useCallback(() => setSignUpPopupShow(false), []);
   const handleSignUpActiveChange = useCallback(async (toggled: boolean) => {
-    if (loadingactivateSignUp) {
+    if (loadingActivateSignUp) {
       toast.info(CommonMessage.loading);
       return;
     }
@@ -116,7 +116,7 @@ export const SignUpRequests = () => {
       console.log(err);
       toast.error(CommonMessage.error);
     }
-  }, [dispatch, loadingactivateSignUp]);
+  }, [dispatch, loadingActivateSignUp]);
 
   useEffect(() => {
     fetchSignUpRequest();

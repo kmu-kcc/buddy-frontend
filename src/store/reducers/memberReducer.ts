@@ -13,7 +13,8 @@ interface State {
   loadingWithdrawalRequests: boolean,
   loadingSignUpApproveRequests: boolean;
   loadingDeleteMemberRequests: boolean;
-  loadingactivateSignUp: boolean;
+  loadingSignUpActivated: boolean;
+  loadingActivateSignUp: boolean;
 };
 
 const initialState: State = {
@@ -27,7 +28,8 @@ const initialState: State = {
   loadingWithdrawalRequests: false,
   loadingSignUpApproveRequests: false,
   loadingDeleteMemberRequests: false,
-  loadingactivateSignUp: false,
+  loadingSignUpActivated: false,
+  loadingActivateSignUp: false,
 };
 
 export const memberReducer = createReducer(initialState, (builder) => {
@@ -104,18 +106,26 @@ export const memberReducer = createReducer(initialState, (builder) => {
         state.loading = false;
         state.members = [];
       })
-      .addCase(actions.getSignUpActivated.fulfilled, (state, {payload}) => {
-        state.signUpActivated = payload;
-      })
       .addCase(actions.activateSignUp.pending, (state) => {
-        state.loadingactivateSignUp = true;
+        state.loadingActivateSignUp = true;
       })
       .addCase(actions.activateSignUp.fulfilled, (state, {payload}) => {
-        state.loadingactivateSignUp = false;
+        state.loadingActivateSignUp = false;
         state.signUpActivated = payload;
       })
       .addCase(actions.activateSignUp.rejected, (state) => {
-        state.loadingactivateSignUp = false;
+        state.loadingActivateSignUp = false;
+        state.signUpActivated = false;
+      })
+      .addCase(actions.getSignUpActivated.pending, (state) => {
+        state.loadingSignUpActivated = true;
+      })
+      .addCase(actions.getSignUpActivated.fulfilled, (state, {payload}) => {
+        state.loadingSignUpActivated = false;
+        state.signUpActivated = payload ?? false;
+      })
+      .addCase(actions.getSignUpActivated.rejected, (state) => {
+        state.loadingSignUpActivated = false;
         state.signUpActivated = false;
       });
 });
