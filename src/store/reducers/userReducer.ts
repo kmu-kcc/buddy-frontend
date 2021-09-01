@@ -13,7 +13,7 @@ interface State {
 
 const initialState: State = {
   user: null,
-  loading: false,
+  loading: true,
   loadingSignIn: false,
   loadingSignUp: false,
   loadingWithdraw: false,
@@ -84,10 +84,11 @@ export const userReducer = createReducer(initialState, (builder) => {
       })
       .addCase(actions.getMeRequest.fulfilled, (state, {payload}) => {
         state.loading = false;
-        state.user = payload;
+        state.user = payload ?? null;
       })
       .addCase(actions.getMeRequest.rejected, (state, action) => {
         state.loading = false;
+        state.user = null;
         console.log('invalid credentials');
         clearCredentials();
       })
