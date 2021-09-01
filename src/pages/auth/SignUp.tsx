@@ -6,11 +6,21 @@ import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
 import {signUpRequest} from '../../store/actions/userActions';
 import {getSignUpActivated} from '../../store/actions/memberActions';
-import {Input, Select, Button, Box, Text} from '../../components';
+import {Input, Select, Button, Box, Text, Loading} from '../../components';
 import {Buddy} from '../../components/icons';
 import {Attendance} from '../../models/User';
 import {CommonMessage, SignUpMessage} from '../../common/wordings';
 import {attendances, colleges, grades} from '../../common/common_data.json';
+
+const NotAvailable = () => (
+  <Box isFlex width='100%' pt='100px' pb='96px' justifyContent='center'>
+    <Box isFlex flexDirection='column' justifyContent='center' alignItems='center'>
+      <Buddy mb='150px' width='248px' height='140px' mr='17px' />
+      <Text fontSize='24px'>회원가입 기간이 아닙니다.</Text>
+      <Button mt={['120px', '200px']} height='60px' fontSize='20px' onClick={() => window.location.href = '/'}>메인으로 가기</Button>
+    </Box>
+  </Box>
+);
 
 export const SignUp = () => {
   const dispatch = useDispatch();
@@ -105,14 +115,7 @@ export const SignUp = () => {
 
 
   if (loadingSignUpActivated) {
-    return (
-      <Box isFlex width='100%' pt='100px' pb='96px' justifyContent='center'>
-        <Box isFlex flexDirection='column' justifyContent='center' alignItems='center'>
-          <Buddy mb='150px' width='248px' height='140px' mr='17px' />
-          <Text fontSize='24px'>Loading...</Text>
-        </Box>
-      </Box>
-    );
+    return <Loading />;
   }
 
   return signUpActivated ? (
@@ -167,13 +170,5 @@ export const SignUp = () => {
         <Button mt='30px' width='388px' height='70px' onClick={handleSignUpClick}>회원가입</Button>
       </Box>
     </Box>
-  ) : (
-    <Box isFlex width='100%' pt='100px' pb='96px' justifyContent='center'>
-      <Box isFlex flexDirection='column' justifyContent='center' alignItems='center'>
-        <Buddy mb='150px' width='248px' height='140px' mr='17px' />
-        <Text fontSize='24px'>회원가입 기간이 아닙니다.</Text>
-        <Button mt={['120px', '200px']} height='60px' fontSize='20px' onClick={() => window.location.href = '/'}>메인으로 가기</Button>
-      </Box>
-    </Box>
-  );
+  ) : <NotAvailable />;
 };
