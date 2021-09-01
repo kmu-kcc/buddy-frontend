@@ -7,7 +7,7 @@ import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
 import {searchMember, setCurrentMember} from '../../store/actions/memberActions';
 import {Box, Button, Text} from '../../components';
-import {CommonMessage, MemberMessage} from '../../common/wordings';
+import {CommonMessage} from '../../common/wordings';
 import {User} from '../../models/User';
 import {isMaster} from '../../utils/env';
 
@@ -121,7 +121,7 @@ export const Members = () => {
           keyword: '',
         }));
         if (response.type === searchMember.fulfilled.type) {
-          toast.success(MemberMessage.success);
+          return;
         } else {
           toast.error(response.payload);
         }
@@ -133,8 +133,8 @@ export const Members = () => {
   }, [dispatch]);
 
   return (
-    <Box>
-      <Box isBlock width='80px' height='30px' mt='64px' position='relative' mb='28px'>
+    <Box py='64px'>
+      <Box isBlock width='80px' height='30px' position='relative' mb='28px'>
         <GroupName>운영자</GroupName>
         <GroupNameShadow background='#EFEBFC' />
       </Box>

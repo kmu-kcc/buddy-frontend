@@ -58,7 +58,7 @@ export const Account = () => {
       }));
 
       if (response.type === searchAccount.fulfilled.type) {
-        toast.success(FeeMessage.successTransaction);
+        return;
       } else {
         toast.error(response.payload);
       }
