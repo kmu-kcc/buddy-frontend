@@ -14,3 +14,4 @@ export {Tab} from './Tab';
 export {Popup} from './Popup';
 export {ModalPortal} from './ModalPortal';
 export {Transaction, TransactionHeader} from './Transaction';
+export {Loading} from './Loading';
