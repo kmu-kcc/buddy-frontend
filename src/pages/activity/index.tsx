@@ -8,7 +8,7 @@ import {Edit} from './Edit';
 
 export const Activity = () => {
   return (
-    <Router authentication>
+    <Router authentication role='activity_management'>
       <Route path='/activity' exact component={List} />
       <Route path='/activity/create' exact component={Create} />
       <Route path='/activity/detail' exact component={Detail} />
