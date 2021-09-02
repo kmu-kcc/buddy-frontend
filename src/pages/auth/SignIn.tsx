@@ -1,4 +1,5 @@
 import React, {useCallback, useState} from 'react';
+import {captureException} from '@sentry/react';
 import styled from 'styled-components';
 import {color, ColorProps, space, SpaceProps} from 'styled-system';
 import {toast} from 'react-toastify';
@@ -66,6 +67,7 @@ export const SignIn = () => {
         toast.error(response.payload);
       }
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }

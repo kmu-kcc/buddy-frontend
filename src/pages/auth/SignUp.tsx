@@ -1,4 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react';
+import {captureException} from '@sentry/react';
 import {useHistory} from 'react-router-dom';
 import {toast} from 'react-toastify';
 // import {useHistory} from 'react-router-dom';
@@ -45,6 +46,7 @@ export const SignUp = () => {
     try {
       await dispatch(getSignUpActivated());
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }
@@ -102,6 +104,7 @@ export const SignUp = () => {
         toast.error(response.payload as unknown as string);
       }
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }

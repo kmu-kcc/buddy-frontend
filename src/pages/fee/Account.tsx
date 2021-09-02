@@ -1,4 +1,5 @@
 import React, {useState, useCallback, useEffect, useMemo} from 'react';
+import {captureException} from '@sentry/react';
 import styled from 'styled-components';
 import {toast} from 'react-toastify';
 import {position, PositionProps} from 'styled-system';
@@ -63,6 +64,7 @@ export const Account = () => {
         toast.error(response.payload);
       }
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }
@@ -110,6 +112,7 @@ export const Account = () => {
         toast.error(response.payload as unknown as string);
       }
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }
@@ -147,6 +150,7 @@ export const Account = () => {
         toast.error(response.payload as unknown as string);
       }
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }

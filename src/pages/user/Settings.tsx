@@ -1,4 +1,5 @@
 import React, {useCallback, useMemo, useState} from 'react';
+import {captureException} from '@sentry/react';
 import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 import {toast} from 'react-toastify';
@@ -58,6 +59,8 @@ export const Settings = () => {
         toast.error(response.payload as unknown as string);
       }
     } catch (err) {
+      captureException(err);
+      console.log(err);
       toast.error(CommonMessage.error);
     }
   }, [dispatch, history, loadingWithdraw, studentNumber]);
@@ -116,6 +119,7 @@ export const Settings = () => {
         toast.error(response.payload as unknown as string);
       }
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }
@@ -157,6 +161,7 @@ export const Settings = () => {
       }
       //  go back to user profile page
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }

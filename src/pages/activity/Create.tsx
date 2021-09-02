@@ -1,4 +1,5 @@
 import React, {useState, useCallback, useMemo} from 'react';
+import {captureException} from '@sentry/react';
 import styled from 'styled-components';
 import {useHistory} from 'react-router-dom';
 import {toast} from 'react-toastify';
@@ -87,6 +88,7 @@ export const Create = () => {
         toast.error(response.payload as unknown as string);
       }
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }

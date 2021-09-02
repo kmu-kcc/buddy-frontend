@@ -1,4 +1,5 @@
 import React, {useCallback, useEffect, useMemo} from 'react';
+import {captureException} from '@sentry/react';
 import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 import {background, BackgroundProps} from 'styled-system';
@@ -72,6 +73,7 @@ const MemberCard = (props: MemberCardProps) => {
       }));
       history.push('/organization/members/settings');
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }
@@ -126,6 +128,7 @@ export const Members = () => {
           toast.error(response.payload);
         }
       } catch (err) {
+        captureException(err);
         console.log(err);
         toast(CommonMessage.error);
       }
