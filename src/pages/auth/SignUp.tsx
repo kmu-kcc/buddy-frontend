@@ -95,7 +95,6 @@ export const SignUp = () => {
         department: `${college} ${major}`,
         attendance,
       }));
-      console.log('signup request finish', response.type);
       if (response.type === signUpRequest.fulfilled.type) {
         //  TODO show finish page
         history.push('/auth/signup/complete');

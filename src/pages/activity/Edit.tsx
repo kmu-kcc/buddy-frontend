@@ -63,7 +63,6 @@ export const Edit = () => {
     }
 
     if (type < 0 || !title || !place || start === 'NaN' || end === 'NaN' || !description) {
-      console.log(type, title, place, start, end, description);
       toast.warn(ActivityMessage.empty);
       return;
     }

@@ -49,7 +49,6 @@ export const ToggleSwitch = (props: Props) => {
 
   useEffect(() => {
     if (props.active !== undefined && active !== props.active) {
-      console.log('change toggle state to', props.active);
       setToggle(props.active);
     }
   }, [props.active, active]);
