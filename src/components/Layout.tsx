@@ -1,7 +1,9 @@
 import React from 'react';
+import preval from 'preval.macro';
 import {useLocation} from 'react-router-dom';
 import styled from 'styled-components';
 import {ToastContainer} from 'react-toastify';
+import {format} from 'date-fns';
 import {Box} from './Box';
 import {Text} from './Text';
 import {Buddy} from './icons';
@@ -18,6 +20,23 @@ const Wrapper = styled(Box)`
 
 const Content = styled(Box)`
   flex: 1;
+  flex-direction: column;
+  min-height: 100vh;
+
+  > div {
+    flex: 1;
+    min-height: calc(100% - 30px);
+  }
+`;
+
+const BuildText = styled.p`
+  height: 30px;
+  margin: 0;
+  padding: 8px;
+  text-align: right;
+  color: #ccc;
+  user-select: none;
+  font-size: 14px;
 `;
 
 const Loading = () => {
@@ -42,6 +61,7 @@ export const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
       <Content>
         {location.pathname === '/' && <Loading />}
         {children}
+        <BuildText>Build Date: {format(preval`module.exports = Date.now()`, 'yyyy-MM-dd')}</BuildText>
       </Content>
       <ToastContainer position='top-center' />
     </Wrapper>

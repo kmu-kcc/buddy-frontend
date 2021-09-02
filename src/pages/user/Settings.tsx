@@ -164,7 +164,7 @@ export const Settings = () => {
 
   return (
     <Box width='100%' pl='60px' pt='48px' pb='48px' position='relative'>
-      <Text color='#454440' fontSize='40px' lineHeight='50px' fontWeight={700}>마이페이지</Text>
+      <Text color='#454440' fontSize='40px' lineHeight='50px' fontWeight={700}>내 정보</Text>
       <Text mt='20px' color='#454440' fontSize='24px' lineHeight='30px' fontWeight={700}>수정하기</Text>
       <Box width='100%' pl='4px' mt='28px'>
         {/* 이름 */}
