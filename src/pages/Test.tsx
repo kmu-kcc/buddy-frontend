@@ -4,6 +4,7 @@ import {toast} from 'react-toastify';
 import {Button, Box, Check, Span, Tab, Text, Textarea, ToggleSwitch, Input, Popup, Select} from '../components';
 import {Arrow, Check as CheckIcon, Buddy, Filter, Search, Activity, Organization, Fee, Profile, Exit} from '../components/icons';
 import {log} from '../utils/logger';
+import {getEnv} from '../utils/env';
 
 const StateLabel = styled.span<{active: boolean;}>`
   padding: 2px 6px;
@@ -87,7 +88,7 @@ export const Test = () => {
   }, []);
 
   const tabs = useMemo(() => ['Tab 1', 'Tab 2', 'Tab 3'], []);
-  const env = useMemo(() => process.env.REACT_APP_ENV, []);
+  const env = useMemo(() => getEnv(), []);
 
   if (error) {
     throw new Error();
