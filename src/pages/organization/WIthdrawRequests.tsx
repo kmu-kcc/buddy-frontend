@@ -1,4 +1,5 @@
 import React, {useCallback, useState, useEffect} from 'react';
+import {captureException} from '@sentry/react';
 import {toast} from 'react-toastify';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
@@ -29,6 +30,8 @@ export const WithdrawRequests = () => {
         toast.error(response.payload);
       }
     } catch (err) {
+      captureException(err);
+      console.log(err);
       toast.error(CommonMessage.error);
     }
   }, [dispatch]);
@@ -53,6 +56,7 @@ export const WithdrawRequests = () => {
         toast.error(response.payload as unknown as string);
       }
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }

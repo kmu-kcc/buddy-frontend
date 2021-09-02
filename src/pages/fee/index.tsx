@@ -1,4 +1,5 @@
 import React, {useCallback, useMemo, useState} from 'react';
+import {captureException} from '@sentry/react';
 import {toast} from 'react-toastify';
 import {useHistory, useLocation} from 'react-router-dom';
 import {useSelector} from 'react-redux';
@@ -73,6 +74,7 @@ const Container = ({children}: Props) => {
         })),
       ]);
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }

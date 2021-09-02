@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import {toast} from 'react-toastify';
 import {Button, Box, Check, Span, Tab, Text, Textarea, ToggleSwitch, Input, Popup, Select} from '../components';
 import {Arrow, Check as CheckIcon, Buddy, Filter, Search, Activity, Organization, Fee, Profile, Exit} from '../components/icons';
+import {log} from '../utils/logger';
+import {getEnv} from '../utils/env';
 
 const StateLabel = styled.span<{active: boolean;}>`
   padding: 2px 6px;
@@ -29,13 +31,13 @@ export const Test = () => {
     setCount(count + 1);
   }, [count, setCount]);
   const handleErrorClick = useCallback(() => {
-    console.log('error button clicked');
+    log('error button clicked');
     setError(true);
   }, [setError]);
   //  toggle and input callbacks
   const handleToggleChange = useCallback((toggle: boolean) => {
     setToggle(toggle);
-    console.log(`current toggle state: ${isToggle} change toggle state: ${toggle}`);
+    log(`current toggle state: ${isToggle} change toggle state: ${toggle}`);
   }, [isToggle, setToggle]);
   const handleTextareaChange = useCallback((event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTextValue(event.target.value);
@@ -86,7 +88,7 @@ export const Test = () => {
   }, []);
 
   const tabs = useMemo(() => ['Tab 1', 'Tab 2', 'Tab 3'], []);
-  const env = useMemo(() => process.env.REACT_APP_ENV, []);
+  const env = useMemo(() => getEnv(), []);
 
   if (error) {
     throw new Error();
