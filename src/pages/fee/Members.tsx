@@ -1,4 +1,5 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import {captureException} from '@sentry/react';
 import styled from 'styled-components';
 import {toast} from 'react-toastify';
 import {useSelector} from 'react-redux';
@@ -71,6 +72,7 @@ export const Members = () => {
         toast.error(response.payload);
       }
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }
@@ -92,6 +94,7 @@ export const Members = () => {
         toast.error(response.payload);
       }
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }
@@ -161,6 +164,7 @@ export const Members = () => {
         toast.error(response.payload as unknown as string);
       }
     } catch (err) {
+      captureException(err);
       console.error(err);
       toast.error(CommonMessage.error);
     }
@@ -191,6 +195,7 @@ export const Members = () => {
         toast.error(response.payload as unknown as string);
       }
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }

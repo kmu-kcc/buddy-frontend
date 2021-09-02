@@ -1,4 +1,5 @@
 import React, {useCallback, useState, useEffect} from 'react';
+import {captureException} from '@sentry/react';
 import styled from 'styled-components';
 import {toast} from 'react-toastify';
 import {useSelector} from 'react-redux';
@@ -32,6 +33,7 @@ export const SignUpRequests = () => {
         toast.error(response.payload);
       }
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }
@@ -41,6 +43,7 @@ export const SignUpRequests = () => {
     try {
       await dispatch(getSignUpActivated());
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }
@@ -70,6 +73,7 @@ export const SignUpRequests = () => {
         toast.error(response.payload as unknown as string);
       }
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }
@@ -93,6 +97,7 @@ export const SignUpRequests = () => {
         toast.error(response.payload as unknown as string);
       }
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }
@@ -113,6 +118,7 @@ export const SignUpRequests = () => {
         toast.error(MemberMessage.errorActivateSignUp);
       }
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }

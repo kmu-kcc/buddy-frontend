@@ -4,15 +4,21 @@ import * as Sentry from '@sentry/react';
 import {BrowserRouter} from 'react-router-dom';
 import {ErrorBoundary} from 'react-error-boundary';
 import {Provider} from 'react-redux';
+import {store} from './store';
 import {Layout} from './components';
 import * as pages from './pages';
 import {Router, Route} from './common/router';
-import {store} from './store';
 
 const App = () => {
   const handleError = useCallback((error, info) => {
+    const {user} = store.getState().user;
     Sentry.captureException(error, {
       extra: info,
+      user: {
+        username: user?.name,
+        id: user?.id,
+        email: user?.email,
+      },
     });
   }, []);
 

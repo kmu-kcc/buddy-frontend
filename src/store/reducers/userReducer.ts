@@ -2,6 +2,7 @@ import {createReducer} from '@reduxjs/toolkit';
 import {User} from '../../models/User';
 import * as actions from '../actions/userActions';
 import {setCredentials, clearCredentials} from '../../common/credentials';
+import {log} from '../../utils/logger';
 
 interface State {
   user: User | null;
@@ -64,7 +65,7 @@ export const userReducer = createReducer(initialState, (builder) => {
       })
       .addCase(actions.signInRequest.fulfilled, (state, {payload}) => {
         state.loadingSignIn = false;
-        console.log('store credentials into localStorage');
+        log('store credentials into localStorage');
         setCredentials(payload);
       })
       .addCase(actions.signInRequest.rejected, (state, action) => {
@@ -89,7 +90,7 @@ export const userReducer = createReducer(initialState, (builder) => {
       .addCase(actions.getMeRequest.rejected, (state, action) => {
         state.loading = false;
         state.user = null;
-        console.log('invalid credentials');
+        log('invalid credentials');
         clearCredentials();
       })
       .addCase(actions.updateMemberRequest.pending, (state, action) => {

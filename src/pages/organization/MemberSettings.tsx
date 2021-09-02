@@ -1,4 +1,5 @@
 import React, {useCallback, useState, useMemo} from 'react';
+import {captureException} from '@sentry/react';
 import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 import {toast} from 'react-toastify';
@@ -91,6 +92,7 @@ export const MemberSettings = () => {
         toast.error(response.payload as unknown as string);
       }
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }
@@ -125,6 +127,7 @@ export const MemberSettings = () => {
       }
       //  go back to user profile page
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }

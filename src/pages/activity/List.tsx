@@ -1,4 +1,5 @@
 import React, {useState, useCallback, useEffect, useMemo} from 'react';
+import {captureException} from '@sentry/react';
 import styled from 'styled-components';
 import {toast} from 'react-toastify';
 import {format} from 'date-fns';
@@ -77,6 +78,7 @@ export const List = () => {
         toast.error(response.payload);
       }
     } catch (err) {
+      captureException(err);
       console.log(err);
       toast.error(CommonMessage.error);
     }
@@ -99,6 +101,7 @@ export const List = () => {
           toast.error(response.payload);
         }
       } catch (err) {
+        captureException(err);
         console.log(err);
         toast.error(CommonMessage.error);
       }
