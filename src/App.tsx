@@ -3,18 +3,24 @@ import React, {useCallback} from 'react';
 import * as Sentry from '@sentry/react';
 import {BrowserRouter} from 'react-router-dom';
 import {ErrorBoundary} from 'react-error-boundary';
-import {Provider} from 'react-redux';
+import {Provider, useSelector} from 'react-redux';
+import {RootState, store} from './store';
 import {Layout} from './components';
 import * as pages from './pages';
 import {Router, Route} from './common/router';
-import {store} from './store';
 
 const App = () => {
+  const {user} = useSelector((state: RootState) => state.user);
   const handleError = useCallback((error, info) => {
     Sentry.captureException(error, {
       extra: info,
+      user: {
+        username: user?.name,
+        id: user?.id,
+        email: user?.email,
+      },
     });
-  }, []);
+  }, [user]);
 
   return (
     <Provider store={store}>
