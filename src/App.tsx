@@ -3,15 +3,15 @@ import React, {useCallback} from 'react';
 import * as Sentry from '@sentry/react';
 import {BrowserRouter} from 'react-router-dom';
 import {ErrorBoundary} from 'react-error-boundary';
-import {Provider, useSelector} from 'react-redux';
-import {RootState, store} from './store';
+import {Provider} from 'react-redux';
+import {store} from './store';
 import {Layout} from './components';
 import * as pages from './pages';
 import {Router, Route} from './common/router';
 
 const App = () => {
-  const {user} = useSelector((state: RootState) => state.user);
   const handleError = useCallback((error, info) => {
+    const {user} = store.getState().user;
     Sentry.captureException(error, {
       extra: info,
       user: {
@@ -20,7 +20,7 @@ const App = () => {
         email: user?.email,
       },
     });
-  }, [user]);
+  }, []);
 
   return (
     <Provider store={store}>
