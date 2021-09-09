@@ -1,7 +1,13 @@
 {
   "name": "kcc-buddy",
   "version": "1.0.1",
-  "private": true,
+  "private": false,
+  "license": "MIT",
+  "homepage": "https://github.com/kmu-kcc/buddy-frontend",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kmu-kcc/buddy-frontend.git"
+  },
   "scripts": {
     "start": "cross-env REACT_APP_ENV=localhost react-scripts start",
     "build": "react-scripts build",
