@@ -50,7 +50,7 @@ const OptionWrapper = styled(Box)`
   background-color: #fff;
   border-radius: 15px;
   border: 1px solid #E5E5E5;
-  filter: drop-shadow(0px 5px 9px #E5E5E5);
+  box-shadow: 0px 5px 9px #E5E5E5;
 
   ::-webkit-scrollbar {
     width: 10px;
@@ -65,7 +65,7 @@ const OptionWrapper = styled(Box)`
   }
 `;
 
-const OptionItem = styled.option<{selected: boolean;}>`
+const OptionItem = styled.div<{selected: boolean;}>`
   width: 100%;
   display: flex;
   align-items: center;
