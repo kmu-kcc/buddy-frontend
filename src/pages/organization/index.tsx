@@ -28,7 +28,7 @@ const Container = ({children}: Props) => {
 
   const history = useHistory();
   const location = useLocation();
-  const [search, setSearch] = useState('');
+  const [searchInput, setSearchInput] = useState('');
   const tabs = useMemo(() => {
     if (user?.role?.member_management) {
       return menus;
@@ -37,16 +37,14 @@ const Container = ({children}: Props) => {
     }
   }, [user]);
   const searchInputShow = useMemo(() => location.pathname === '/organization/members', [location]);
-  const handleSearchChange = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearch(event.target.value);
-
+  const search = useCallback(async () => {
     if (loading) {
       return;
     }
 
     try {
       const response = await dispatch(searchMember({
-        keyword: event.target.value,
+        keyword: searchInput,
       }));
       if (response.type === searchMember.fulfilled.type) {
         return;
@@ -58,7 +56,11 @@ const Container = ({children}: Props) => {
       console.log(err);
       toast.error(CommonMessage.error);
     }
-  }, [dispatch, loading]);
+  }, [dispatch, loading, searchInput]);
+  const handleSearchChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchInput(event.target.value);
+    search();
+  }, [search]);
   const handleTabChange = useCallback((index: number) => {
     if (location.pathname !== paths[index]) {
       history.push(paths[index]);
@@ -70,8 +72,9 @@ const Container = ({children}: Props) => {
       <Text mt='60px' mb='58px' color='#454440;' fontSize='40px' fontWeight={700}>조직관리</Text>
       <Box isFlex alignItems='start'>
         <Tab tabs={tabs} onTabChange={handleTabChange} />
-        {searchInputShow && <Input ml='auto' height='59px' maxWidth='433px' value={search}
+        {searchInputShow && <Input ml='auto' height='59px' maxWidth='433px' value={searchInput}
           logo={<Search ml='27px' width='24px' height='24px' color='#CBC8BE' />}
+          onEnterPress={search}
           onChange={handleSearchChange} placeholder='Search' />}
       </Box>
       {children}
