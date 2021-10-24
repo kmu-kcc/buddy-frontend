@@ -1,7 +1,6 @@
 version: 2.1
 orbs:
   node: circleci/node@4.5.1
-  slack: circleci/slack@4.4.2
 
 jobs:
   build:
@@ -15,13 +14,6 @@ jobs:
       - node/install-packages:
           pkg-manager: yarn
       - run: yarn build
-      - slack/notify:
-          event: pass
-          template: basic_success_1
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-          mentions: '@U01UFTNHPKQ'
   lint:
     executor:
       name: node/default
@@ -31,18 +23,12 @@ jobs:
       - node/install-packages:
           pkg-manager: yarn
       - run: yarn lint
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-          mentions: '<@U01UFTNHPKQ>'
 
 workflows:
   version: 2
   ci:
     jobs:
-      - build:
-          context: slack
+      - build
       - lint:
-          context: slack
           requires:
             - build

@@ -102,7 +102,7 @@ export const memberReducer = createReducer(initialState, (builder) => {
       })
       .addCase(actions.searchMember.fulfilled, (state, {payload}) => {
         state.loading = false;
-        state.members = payload;
+        state.members = payload ?? [];
       })
       .addCase(actions.searchMember.rejected, (state, action) => {
         state.loading = false;
