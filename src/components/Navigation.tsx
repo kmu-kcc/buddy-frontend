@@ -1,8 +1,6 @@
 import React, {useCallback, useMemo} from 'react';
 import styled from 'styled-components';
 import {useHistory, useLocation} from 'react-router-dom';
-import {useSelector} from 'react-redux';
-import {RootState} from '../store';
 import {Box, Span} from '../components';
 import {Activity, Organization, Fee, Profile, Exit} from '../components/icons';
 import {clearCredentials} from '../common/credentials';
@@ -50,18 +48,12 @@ const Logo = () => {
 };
 
 const ActivityTab = () => {
-  const {user} = useSelector((state: RootState) => state.user);
   const history = useHistory();
   const location = useLocation();
   const active = useMemo(() => location.pathname.startsWith('/activity'), [location.pathname]);
   const handleClick = useCallback(() => {
     history.push('/activity');
   }, [history]);
-
-  //  show activity menu only for activity manager
-  if (!user?.role?.activity_management) {
-    return null;
-  }
 
   return (
     <IconWrapper isFlex alignItems='flexStart' mb={['6px', '10px']} bg={active ? '#5635BF' : 'none'} onClick={handleClick}>

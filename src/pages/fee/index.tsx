@@ -14,7 +14,7 @@ import {Members} from './Members';
 const paths = ['/fee/account', '/fee/members'];
 const menus = ['입출금내역 목록', '동아리원 목록'];
 const currentYear = new Date().getFullYear();
-const years = Array<number>(currentYear - 2020).fill(0).map((y) => y + 2021);
+const years = Array<number>(currentYear - 2020).fill(0).map((y, i) => i + 2021);
 
 interface Props {
   children: JSX.Element;
