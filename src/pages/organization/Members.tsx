@@ -80,12 +80,12 @@ const MemberCard = (props: MemberCardProps) => {
   }, [dispatch, history, name, id, department, rest]);
 
   return (
-    <Box maxWidth='300px' isFlex flexDirection='column' pt='44px' pb='34px' alignItems='center'>
+    <Box width='300px' isFlex flexDirection='column' pt='44px' pb='34px' alignItems='center'>
       <Box isFlex width='100%' alignItems='baseline' px='34px'>
         <Text flex={1} fontWeight={700} fontSize='18px' lineHeight='22px'>{group}</Text>
       </Box>
       <CardLine />
-      <Box isFlex mt='28px' px='44px' flexDirection='column'>
+      <Box isFlex width='100%' mt='28px' px='44px' flexDirection='column'>
         <Box isFlex>
           <Text color='#8D8C85' fontWeight={500} fontSize='16px' lineHeight='20px'>이름</Text>
           <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{name}</EllipsisText>
