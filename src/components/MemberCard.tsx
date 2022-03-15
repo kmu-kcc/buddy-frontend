@@ -74,11 +74,11 @@ export const MemberCard = (MemberCardProps: MemberCardProps) => {
         </Box>
         <Box isFlex mt='24px'>
           <Text color='#8D8C85' fontWeight={500} fontSize='16px' lineHeight='20px'>학과</Text>
-          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{major}</EllipsisText>
+          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px' data-tip={major}>{major}</EllipsisText>
         </Box>
         <Box isFlex mt='24px'>
           <Text color='#8D8C85' fontWeight={500} fontSize='16px' lineHeight='20px'>전화번호</Text>
-          <EllipsisText ml='32px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{phone}</EllipsisText>
+          <EllipsisText ml='32px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px' data-tip={phone}>{phone}</EllipsisText>
         </Box>
         <Inbutton mt='30px' py='0' width='100%' height='40px' fontSize='14px' lineHeight='18px'>더 보기</Inbutton>
       </Box>

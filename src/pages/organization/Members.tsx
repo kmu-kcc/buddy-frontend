@@ -4,6 +4,7 @@ import {useHistory} from 'react-router-dom';
 import styled from 'styled-components';
 import {background, BackgroundProps} from 'styled-system';
 import {toast} from 'react-toastify';
+import Tooltip from 'react-tooltip';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
 import {searchMember, setCurrentMember} from '../../store/actions/memberActions';
@@ -96,7 +97,9 @@ const MemberCard = (props: MemberCardProps) => {
         </Box>
         <Box isFlex mt='24px'>
           <Text color='#8D8C85' fontWeight={500} fontSize='16px' lineHeight='20px'>학과</Text>
-          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px'>{department.split(' ').slice(1).join(' ')}</EllipsisText>
+          <EllipsisText ml='62px' flex={1} fontWeight={500} fontSize='16px' lineHeight='20px' data-tip={department}>
+            {department.split(' ').slice(1).join(' ')}
+          </EllipsisText>
         </Box>
         {editButtonVisible && <Button mt='30px' py='0' width='100%' height='40px' fontSize='14px' lineHeight='18px' onClick={handleMoreClick}>더 보기</Button>}
       </Box>
@@ -134,6 +137,11 @@ export const Members = () => {
       }
     })();
   }, [dispatch]);
+
+  useEffect(() => {
+    Tooltip.rebuild();
+    console.log('tooltip rebuild');
+  }, [members]);
 
   return (
     <Box py='64px'>

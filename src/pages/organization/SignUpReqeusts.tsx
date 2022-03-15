@@ -2,6 +2,7 @@ import React, {useCallback, useState, useEffect} from 'react';
 import {captureException} from '@sentry/react';
 import styled from 'styled-components';
 import {toast} from 'react-toastify';
+import Tooltip from 'react-tooltip';
 import {useSelector} from 'react-redux';
 import {RootState, useDispatch} from '../../store';
 import {
@@ -20,7 +21,13 @@ const ReverseButton = styled(Button)`
 
 export const SignUpRequests = () => {
   const dispatch = useDispatch();
-  const {signUpRequests, signUpActivated, loadingDeleteMemberRequests, loadingSignUpApproveRequests, loadingActivateSignUp} = useSelector((state: RootState) => state.member);
+  const {
+    signUpRequests,
+    signUpActivated,
+    loadingActivateSignUp,
+    loadingDeleteMemberRequests,
+    loadingSignUpApproveRequests,
+  } = useSelector((state: RootState) => state.member);
   const [signUpPopupShow, setSignUpPopupShow] = useState(false);
   const [deleteMemberPopupShow, setDeleteMemberPopupShow] = useState(false);
 
@@ -128,6 +135,11 @@ export const SignUpRequests = () => {
     fetchSignUpRequest();
     fetchSignUpActivated();
   }, [fetchSignUpRequest, fetchSignUpActivated]);
+
+  useEffect(() => {
+    Tooltip.rebuild();
+    console.log('tooltip rebuild');
+  }, [signUpRequests]);
 
   return (
     <Box>

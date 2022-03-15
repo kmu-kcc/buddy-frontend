@@ -3,6 +3,7 @@ import preval from 'preval.macro';
 import {useLocation} from 'react-router-dom';
 import styled from 'styled-components';
 import {ToastContainer} from 'react-toastify';
+import Tooltip from 'react-tooltip';
 import {format} from 'date-fns';
 import {Box} from './Box';
 import {Text} from './Text';
@@ -64,6 +65,7 @@ export const Layout: React.FC<LayoutProps> = (props: LayoutProps) => {
         <BuildText>Build Date: {format(preval`module.exports = Date.now()`, 'yyyy-MM-dd')}</BuildText>
       </Content>
       <ToastContainer position='top-center' />
+      <Tooltip effect='solid' />
     </Wrapper>
   );
 };
